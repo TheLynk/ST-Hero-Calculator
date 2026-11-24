@@ -249,13 +249,13 @@ details.man>summary{cursor:pointer;font-weight:700;color:var(--txt);min-height:3
     <h2>Règles de calcul</h2>
     <ul>
       <li>Puissance = puissance d'attaque + puissance de défense (formule publiée par ST Central).</li>
-      <li>Puissance d'attaque = ATK × (1 + crit % × (multiplicateur crit − 1)) × 0,8. Des ajustements existent pour Ninja, Sensei, Samurai, Daimyo, Dancer, Acrobat, Conquistador, Berserker et Jarl.</li>
+      <li>Puissance d'attaque = ATK × (1 + crit % × (multiplicateur crit − 1)) × 0,8. Des ajustements existent pour Ninja, Sensei, Samurai, Daimyo, Dancer, Acrobat, Conquistador, Berserker et Jarl. Tisse-Sort : +15 % de puissance (compétence innée).</li>
       <li>Puissance de défense = Menace × PV / (1 − Esq) × 0,025 + Menace × DEF × 0,008 + PV / (1 − Esq) × 5 + DEF × 1,2 (esquive max 75 %).</li>
       <li>Stat = (base + graines + objets × (1 + bonus d'objet) + bonus fixes) × (1 + bonus %) × carte de collection. Les enchantements sont inclus dans la valeur des objets.</li>
       <li>Graines : +4 ATK, +4 DEF ou +1 PV par graine, 80 max par stat avec les Blossoms. Carte de collection : chaque exemplaire de la carte de la classe donne de l'XP (commune 1, rare 5, mythique 10). Niveau 1 dès 1 exemplaire (×1,05), niveau 2 à 50 XP (×1,10), niveau 3 à 250 XP (×1,25).</li>
       <li>Menace = menace de la classe + compétence innée + esprits (les esprits identiques se cumulent).</li>
       <li>Stat d'un objet = ((base + bonus de transcendance) × qualité + enchantements) × (1 + % de base de transcendance et starforge) × (1 + bonus d'objet des compétences). Formule vérifiée sur 6 objets réels.</li>
-      <li>Affinité d'élément : +10 de valeur d'élément au tier 14 (+5 avant), +5 seulement pour l'affinité « Tous ». L'affinité et l'élément intégré doublent les stats de l'élément. Élément + esprit : au plus 2 × la stat de base de l'objet. Le Google Sheet compte l'élément intégré dans les stats de base : l'outil reprend les stats du jeu.</li>
+      <li>Affinité d'élément : +10 de valeur d'élément au tier 14 (+5 avant), +5 seulement pour l'affinité « Tous ». L'affinité et l'élément intégré doublent les stats de l'élément. Élément + esprit : au plus 2 × la stat de base de l'objet, sans la qualité. Le Google Sheet compte l'élément intégré dans les stats de base : l'outil reprend les stats du jeu.</li>
       <li>Geomancer et Astramancer : +1 % ATK par point d'élément, tous éléments comptés. Velite et Praetorian : la DEF du bouclier s'ajoute à l'ATK. Spellknight : tout le bonus des objets à élément intégré est multiplié par 1,5 (vérifié en jeu).</li>
       <li>Stats de base : valeurs du jeu aux niveaux 1, 40, 50 et Paragon 50 (niveau 100 ici). Entre les niveaux 1 et 40, courbe ((niveau − 1) / 39)^1,55, vérifiée sur 3 héros. Artefacts : compétence propre de l'objet (ex. Capuchon de réflexion : 50 % du bonus d'XP devient de l'ATQ).</li>
       <li>Vous pouvez entrer les vraies stats de base dans les champs « Stats de base du héros ».</li>
@@ -462,7 +462,8 @@ function evaluate(ctx,picks,skillFams){
   if(n==='Dancer'||n==='Acrobat') ap+=atk*0.2*Math.min(eva,80)/100*(cm-1);
   if(n==='Conquistador') ap+=atk*crit/100*(cm-1)*0.12;
   const dp=threat*hp/(1-e)*0.025+threat*def*0.008+hp/(1-e)*5+def*1.2;
-  const power=ap+dp;
+  // Tisse-Sort (Fateweaver) : « +15 % power bonus » de la compétence innée, compté dans la puissance affichée (vérifié en jeu)
+  const pbm=inn&&/\+(\d+)% power bonus/i.exec(inn.effect||''); const power=(ap+dp)*(pbm?1+pbm[1]/100:1);
   const score=ctx.obj==='threat'? threat*1e9+power : power;
   return {score,power,ap,dp,atk,def,hp,crit,cm,eva,threat,el,anyEl,inn,skills,T,disp,ia,id,ih};
 }
@@ -592,7 +593,7 @@ function makePick(ctx,itemName,elemName,spiritName){
   if(sn){const x=D.enchants.find(z=>z.name===sn);const plus=it.spiritAff===x.skill;s={name:sn,plus,threat:plus?x.threatPlus:x.threat,sfx:parseEffect(plus?x.effectPlus:x.effect),st:it.builtSpirit?add(x,2):add(x,plus?2:1)}}
   const b=itemBase(it,ctx);
   // élément + esprit : au plus 2 × la stat de base de l'objet (vérifié sur les Sabots du père Fouettard et la Couronne pyroclastique)
-  for(const k of ['atk','def_','hp']){const cap=2*b[k],t=e.st[k]+s.st[k];if(t>cap){const x=t-cap,de=Math.min(x,e.st[k]);e.st={...e.st,[k]:e.st[k]-de};s.st={...s.st,[k]:s.st[k]-(x-de)}}}
+  for(const k of ['atk','def_','hp']){const cap=2*b[k]/q,t=e.st[k]+s.st[k];if(t>cap){const x=t-cap,de=Math.min(x,e.st[k]);e.st={...e.st,[k]:e.st[k]-de};s.st={...s.st,[k]:s.st[k]-(x-de)}}}
   return {it,afx:it.artEffect?parseEffect(it.artEffect):null,e,s,val:e.val,anyVal:e.anyVal,sfx:s.sfx,selfP:(s.sfx&&s.sfx.selfP)||0,crit:b.crit,eva:b.eva,st:{atk:(b.atk+e.st.atk+s.st.atk)*b.P,def_:(b.def_+e.st.def_+s.st.def_)*b.P,hp:(b.hp+e.st.hp+s.st.hp)*b.P}};
 }
 function evalBuild(gear,skillNames){
@@ -604,7 +605,7 @@ function evalBuild(gear,skillNames){
 // ---------- résultats stockés ----------
 // PRE : meilleurs builds pré-calculés pour les réglages courants (recalculés quand les données changent)
 const PRE=/*PRECOMP*/{version:'',builds:{}};
-const FORMULA='f3'; // à changer quand une formule de calcul change (invalide les builds stockés)
+const FORMULA='f4'; // à changer quand une formule de calcul change (invalide les builds stockés)
 const DATA_VERSION=DV+'-'+FORMULA;
 function settingsKey(ctx){
   return JSON.stringify([ctx.cls.name,ctx.obj,ctx.lvl,ctx.q,ctx.trans,ctx.star,ctx.eT,ctx.goldWild,$('srcCraft').checked,$('srcChest').checked,$('srcPrem').checked,ctx.base,ctx.card,+$('cardLv').value]);

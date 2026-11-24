@@ -1,5 +1,14 @@
 # Changelog — ST Hero Calculator
 
+## v1.5.3 — 2026-11-24
+
+- Fateweaver: power now includes the +15% bonus of the innate skill (“Chaos Control”). Checked in game: 150,227 vs 150,211 (before: −13%).
+
+## v1.5.2 — 2026-11-24
+
+- Element + spirit limit fixed: at most 2 × the item base stat, without quality. Checked on a 2nd Spellknight hero: HP and the sheets of the 6 items match the game.
+- The stored best builds are recalculated with this rule.
+
 ## v1.5.1 — 2026-11-24
 
 - Calculation fixed and checked on 2 real Spellknight builds and on the sheet of 7 items: the power gap goes from −0.8% to 0.0%.

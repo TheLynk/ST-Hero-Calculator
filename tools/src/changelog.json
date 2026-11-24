@@ -1,6 +1,28 @@
 {
- "version": "1.5.1",
+ "version": "1.5.3",
  "entries": [
+  {
+   "v": "1.5.3",
+   "date": "2026-11-24",
+   "fr": [
+    "Tisse-Sort : la puissance compte le bonus de +15 % de la compétence innée (« Contrôle du chaos »). Vérifié en jeu : 150 227 contre 150 211 (avant : −13 %)."
+   ],
+   "en": [
+    "Fateweaver: power now includes the +15% bonus of the innate skill (“Chaos Control”). Checked in game: 150,227 vs 150,211 (before: −13%)."
+   ]
+  },
+  {
+   "v": "1.5.2",
+   "date": "2026-11-24",
+   "fr": [
+    "Limite élément + esprit corrigée : au plus 2 × la stat de base de l'objet, sans la qualité. Vérifié sur un 2e héros Sorceguerre : les PV et les fiches des 6 objets correspondent au jeu.",
+    "Les meilleurs builds stockés sont recalculés avec cette règle."
+   ],
+   "en": [
+    "Element + spirit limit fixed: at most 2 × the item base stat, without quality. Checked on a 2nd Spellknight hero: HP and the sheets of the 6 items match the game.",
+    "The stored best builds are recalculated with this rule."
+   ]
+  },
   {
    "v": "1.5.1",
    "date": "2026-11-24",

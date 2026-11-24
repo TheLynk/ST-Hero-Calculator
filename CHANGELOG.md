@@ -1,5 +1,14 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.5.3 — 2026-11-24
+
+- Tisse-Sort : la puissance compte le bonus de +15 % de la compétence innée (« Contrôle du chaos »). Vérifié en jeu : 150 227 contre 150 211 (avant : −13 %).
+
+## v1.5.2 — 2026-11-24
+
+- Limite élément + esprit corrigée : au plus 2 × la stat de base de l'objet, sans la qualité. Vérifié sur un 2e héros Sorceguerre : les PV et les fiches des 6 objets correspondent au jeu.
+- Les meilleurs builds stockés sont recalculés avec cette règle.
+
 ## v1.5.1 — 2026-11-24
 
 - Calcul corrigé et vérifié sur 2 builds réels de Sorceguerre et sur la fiche de 7 objets : l'écart de puissance passe de −0,8 % à 0,0 %.
