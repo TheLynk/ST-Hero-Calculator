@@ -4,7 +4,8 @@ Calculateur pour **Shop Titans** : il trouve le meilleur équipement (objets, é
 
 - Versions : `index.html` (français) et `en.html` (anglais).
 - Données : le [Shop Titans Data Spreadsheet](https://docs.google.com/spreadsheets/d/1WLa7X8h3O0-aGKxeAlCL7bnN8-FhGd3t7pz2RCzSg8c) officiel, téléchargé par la page en 1 clic.
-- Mise à jour : la page vérifie la version du sheet à l'ouverture, puis 1 fois par jour.
+- Mise à jour des données : la page vérifie la version du sheet à l'ouverture, puis 1 fois par jour.
+- Mise à jour de l'outil : la page compare sa version avec `tools/src/changelog.json` de la branche `main` de ce dépôt. Si elle est plus récente, un bouton télécharge le zip de la dernière **release**.
 
 ## Fonctions
 
@@ -23,6 +24,8 @@ Calculateur pour **Shop Titans** : il trouve le meilleur équipement (objets, é
 Lancez `make_release.bat`. Le script reconstruit les pages (si Python est installé) et crée `release/STHeroCalculator-vX.Y.Z.zip` (version lue dans `tools/src/changelog.json`).
 
 À chaque modification : ajoutez une entrée en tête de `tools/src/changelog.json` (français et anglais) et changez `version`.
+
+Pour que les utilisateurs reçoivent la mise à jour : poussez sur `main`, puis publiez une release avec le tag `vX.Y.Z` et le zip créé par `make_release.bat`. Publiez la release juste après le push : la page annonce la nouvelle version dès que `main` change.
 
 ## Structure
 

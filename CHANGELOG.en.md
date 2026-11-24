@@ -1,5 +1,11 @@
 # Changelog — ST Hero Calculator
 
+## v1.3.0 — 2026-11-24
+
+- Tool update from GitHub: the page compares its version with the TheLynk/ST-Hero-Calculator repository at start-up, then once a day.
+- When a new version exists: banner with the list of changes, download button for the latest release zip and link to GitHub.
+- "Check for tool updates" button in the changelog, and GitHub link in the header.
+
 ## v1.2.0 — 2026-11-24
 
 - Starforge icon next to the "Starforged items" option.

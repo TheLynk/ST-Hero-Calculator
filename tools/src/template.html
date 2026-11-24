@@ -86,6 +86,9 @@ header .lang{color:var(--acc);font-weight:600;text-decoration:none;border:1px so
 .databar.missing,.databar.update{border-color:var(--acc);background:#3b2f12}
 .databar.error{border-color:var(--acc2)}
 .databar span{color:var(--mut)}
+.toolnotes{width:100%;margin:0;padding-left:20px;color:var(--mut)}
+.databar a.btn{min-height:40px;display:inline-flex;align-items:center;padding:0 14px;border-radius:8px;border:1px solid var(--acc);background:var(--acc);color:#1d1606;font:600 14px system-ui,sans-serif;text-decoration:none}
+.databar a.btn.alt2{background:var(--panel2);color:var(--txt);border-color:var(--line)}
 .databar button{margin-left:auto;min-height:40px;padding:0 14px;border-radius:8px;border:1px solid var(--line);background:var(--panel2);color:var(--txt);font:600 14px system-ui,sans-serif;cursor:pointer}
 .databar button+button{margin-left:0}
 .databar button.big{background:var(--acc);color:#1d1606;border-color:var(--acc)}
@@ -119,8 +122,9 @@ details.man>summary{cursor:pointer;font-weight:700;color:var(--txt);min-height:3
 </style>
 </head>
 <body>
-<header><h1>ST Hero Calculator</h1><button type="button" id="verBtn" class="ver" aria-expanded="false" title="Journal des modifications">v/*VERSTR*/</button><a class="lang" href="en.html">English</a><span>Meilleur équipement et compétences par classe · données : <b>Shop Titans Data Spreadsheet</b> <span id="sheetVer"></span></span></header>
+<header><h1>ST Hero Calculator</h1><button type="button" id="verBtn" class="ver" aria-expanded="false" title="Journal des modifications">v/*VERSTR*/</button><a class="lang" href="en.html">English</a><a class="lang" href="https://github.com/TheLynk/ST-Hero-Calculator" target="_blank" rel="noopener">GitHub</a><span>Meilleur équipement et compétences par classe · données : <b>Shop Titans Data Spreadsheet</b> <span id="sheetVer"></span></span></header>
 <div id="changelog" class="card note clog" hidden></div>
+<div id="toolBar" class="databar update" role="status" aria-live="polite" hidden></div>
 <div id="dataBar" class="databar" role="status" aria-live="polite"></div>
 <main>
 <aside class="card">
@@ -238,11 +242,11 @@ const LANG_UI='fr';
 const TXT={fr:{missing:'Les données du Google Sheet manquent.',missingWhy:'Le calculateur a besoin du « Shop Titans Data Spreadsheet » officiel.',download:'Télécharger les données',
   newVer:'Nouvelle version du Google Sheet :',current:'version actuelle :',update:'Mettre à jour',retry:'Réessayer',ok:'Données du Google Sheet :',checked:'vérifié le',
   checkNow:'Vérifier maintenant',redownload:'Retélécharger',downloading:'Téléchargement',reading:'Lecture des données…',badData:'Les données reçues ne sont pas valides.',
-  noStorage:'Le navigateur refuse de stocker les données.',fail:'Échec du téléchargement :',checking:'Vérification de la version…',embedded:'Page en ligne : données intégrées, version',checkFail:'Vérification impossible (pas de connexion ?).'},
+  noStorage:'Le navigateur refuse de stocker les données.',fail:'Échec du téléchargement :',checking:'Vérification de la version…',toolNew:'Nouvelle version de l’outil disponible :',toolYour:'votre version :',toolDl:'Télécharger la version',toolGh:'Voir sur GitHub',toolHow:'Décompressez le zip et remplacez vos fichiers. Vos données restent dans le navigateur.',toolCheck:'Vérifier les mises à jour de l’outil',toolOk:'L’outil est à jour.',toolFail:'Vérification de l’outil impossible.',embedded:'Page en ligne : données intégrées, version',checkFail:'Vérification impossible (pas de connexion ?).'},
  en:{missing:'The Google Sheet data is missing.',missingWhy:'The calculator needs the official "Shop Titans Data Spreadsheet".',download:'Download the data',
   newVer:'New Google Sheet version:',current:'current version:',update:'Update',retry:'Retry',ok:'Google Sheet data:',checked:'checked on',
   checkNow:'Check now',redownload:'Download again',downloading:'Downloading',reading:'Reading the data…',badData:'The received data is not valid.',
-  noStorage:'The browser refuses to store the data.',fail:'Download failed:',checking:'Checking the version…',embedded:'Online page: built-in data, version',checkFail:'Check failed (no connection?).'}};
+  noStorage:'The browser refuses to store the data.',fail:'Download failed:',checking:'Checking the version…',toolNew:'New tool version available:',toolYour:'your version:',toolDl:'Download version',toolGh:'View on GitHub',toolHow:'Unzip the file and replace your files. Your data stays in the browser.',toolCheck:'Check for tool updates',toolOk:'The tool is up to date.',toolFail:'Tool check failed.',embedded:'Online page: built-in data, version',checkFail:'Check failed (no connection?).'}};
 /*SHEETJS*/
 function startApp(D){
 const DV=dataVersion(D); // avant toute modification de D
@@ -741,8 +745,29 @@ if(current) showBar('ok'); else showBar('missing'); if(manual) showBar('error',T
 if(current){ try{startApp(current)}catch(e){console.error(e);current=null;showBar('error',TXT[LANG_UI].badData)} }
 document.querySelector('main').hidden=!current;
 if(current) showBar('ok'); else showBar('missing');
-if(!EMB){ checkUpdate(false);                         // vérification à l'ouverture
-setInterval(()=>{const m=sget(META)||{};if(!m.lastCheck||Date.now()-m.lastCheck>DAY) checkUpdate(false)},36e5); } // puis 1 fois par jour
+// ===== Mise à jour de l'outil (GitHub) =====
+const REPO='TheLynk/ST-Hero-Calculator', TOOL_VERSION='/*VERSTR*/';
+const vnum=v=>String(v||'').replace(/^v/,'').split('.').map(n=>parseInt(n)||0);
+const newer=(a,b)=>{const x=vnum(a),y=vnum(b);for(let i=0;i<3;i++){if((x[i]||0)!==(y[i]||0)) return (x[i]||0)>(y[i]||0)}return false};
+async function checkTool(manual){
+  const T=TXT[LANG_UI], tb=document.getElementById('toolBar');
+  try{
+    const r=await fetch(`https://raw.githubusercontent.com/${REPO}/main/tools/src/changelog.json?t=${Date.now()}`,{cache:'no-store'});
+    if(!r.ok) throw new Error(r.status);
+    const C=await r.json(); sset(META,{...(sget(META)||{}),toolCheck:Date.now(),toolRemote:C.version});
+    if(!newer(C.version,TOOL_VERSION)){ if(manual){tb.hidden=false;tb.className='databar';tb.innerHTML=`<span>${T.toolOk} (v${esc0(TOOL_VERSION)})</span>`;setTimeout(()=>tb.hidden=true,4000)} return }
+    let url=`https://github.com/${REPO}/releases/latest`, zip=null;
+    try{const a=await fetch(`https://api.github.com/repos/${REPO}/releases/latest`);if(a.ok){const j=await a.json();const z=(j.assets||[]).find(x=>/\.zip$/i.test(x.name));if(z) zip=z.browser_download_url;if(j.html_url) url=j.html_url}}catch(e){}
+    const notes=(C.entries||[]).filter(e=>newer(e.v,TOOL_VERSION)).flatMap(e=>(e[LANG_UI]||e.fr).map(x=>`<li>v${esc0(e.v)} · ${esc0(x)}</li>`)).join('');
+    tb.className='databar update'; tb.hidden=false;
+    tb.innerHTML=`<b>${T.toolNew} v${esc0(C.version)}</b><span>${T.toolYour} v${esc0(TOOL_VERSION)}</span>`+
+      `${zip?`<a class="btn" href="${esc0(zip)}">${T.toolDl} ${esc0(C.version)}</a>`:''}<a class="btn${zip?' alt2':''}" href="${esc0(url)}" target="_blank" rel="noopener">${T.toolGh}</a>`+
+      `<ul class="toolnotes">${notes}</ul><span style="width:100%">${T.toolHow}</span>`;
+  }catch(e){ if(manual){tb.hidden=false;tb.className='databar error';tb.innerHTML=`<span>${T.toolFail}</span>`} }
+}
+{const cl=document.getElementById('changelog');const b=document.createElement('button');b.type='button';b.className='ver';b.style.marginTop='12px';b.textContent=TXT[LANG_UI].toolCheck;b.onclick=()=>checkTool(true);cl.prepend(b)}
+if(!EMB){ checkUpdate(false); checkTool(false);                         // vérification à l'ouverture
+setInterval(()=>{const m=sget(META)||{};if(!m.lastCheck||Date.now()-m.lastCheck>DAY) checkUpdate(false);if(!m.toolCheck||Date.now()-m.toolCheck>DAY) checkTool(false)},36e5); } // puis 1 fois par jour
 </script>
 </body>
 </html>
