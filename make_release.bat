@@ -18,7 +18,7 @@ if %errorlevel%==0 (
 )
 
 rem 2) Verifie les fichiers de la release
-for %%F in (index.html en.html LISEZMOI.txt README.txt CHANGELOG.md CHANGELOG.en.md) do (
+for %%F in (index.html en.html ocr.js LISEZMOI.txt README.txt CHANGELOG.md CHANGELOG.en.md) do (
   if not exist "%%F" ( echo ERREUR : fichier manquant : %%F & pause & exit /b 1 )
 )
 
@@ -32,6 +32,7 @@ if exist release\_tmp rmdir /s /q release\_tmp
 mkdir "%TMP_DIR%"
 copy /y index.html "%TMP_DIR%" >nul
 copy /y en.html "%TMP_DIR%" >nul
+copy /y ocr.js "%TMP_DIR%" >nul
 copy /y LISEZMOI.txt "%TMP_DIR%" >nul
 copy /y README.txt "%TMP_DIR%" >nul
 copy /y CHANGELOG.md "%TMP_DIR%" >nul

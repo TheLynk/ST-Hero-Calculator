@@ -128,6 +128,11 @@ details.man>summary{cursor:pointer;font-weight:700;color:var(--txt);min-height:3
 .gvals label input{grid-column:1/-1}
 .fbtn{display:inline-flex;align-items:center;min-height:40px;padding:0 14px;border-radius:8px;border:1px solid var(--line);background:var(--panel2);color:var(--txt);font:600 14px system-ui,sans-serif;cursor:pointer;margin:0}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.shot{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:6px 0}.shot .note{flex:1;min-width:240px;margin:0}
+.fbtn.acc{border-color:var(--acc);color:var(--acc)}.fbtn.busy{opacity:.6;pointer-events:none}.fbtn.busy::after{content:'';width:14px;height:14px;margin-left:8px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.preset.drop{outline:2px dashed var(--acc);outline-offset:2px}
+.unsure{outline:2px solid #f59e0b!important;outline-offset:1px;border-radius:6px}
 .cmp{display:block;font-size:12px;margin-top:2px}.cmp.ok{color:#5cc28a}.cmp.bad{color:var(--acc2)}
 #busy{color:var(--mut);font-size:13px;min-height:18px}
 </style>
@@ -224,6 +229,8 @@ details.man>summary{cursor:pointer;font-weight:700;color:var(--txt);min-height:3
         <p class="note">41 emplacements, comme le nombre maximum de héros dans Shop Titans. Un preset garde la classe, les réglages de gauche (niveau, qualité, graines, carte…), le build du mode manuel et les valeurs du jeu.</p>
         <div class="prow"><label for="pSlot" class="sr">Emplacement</label><select id="pSlot"></select><input id="pName" type="text" maxlength="40" placeholder="Nom du héros (ex. PartoutV2)" aria-label="Nom du héros"></div>
         <div class="mtools"><button type="button" id="pSave">Enregistrer</button><button type="button" id="pLoad">Charger</button><button type="button" id="pDel">Supprimer</button><button type="button" id="pExp">Exporter tous</button><label class="fbtn">Importer<input type="file" id="pImp" accept=".json,application/json" hidden></label></div>
+        <div class="shot"><label class="fbtn acc" id="pShot">Créer depuis des captures<input type="file" id="pShotIn" accept="image/*" multiple hidden></label>
+        <p class="note">Ajoutez une ou plusieurs captures du jeu : l'onglet Infos du héros et, en option, l'onglet Capacités et la carte de collection. Vous pouvez aussi les glisser ici ou les coller (Ctrl+V). Tout reste dans votre navigateur. Les graines, la transcendance et le starforge ne sont pas visibles : réglez-les à gauche.</p></div>
         <h2 style="margin-top:12px">Valeurs du jeu (pour comparer)</h2>
         <div class="gvals"><label>%%power%% Puissance<input id="gPow" type="number" min="0"></label><label>%%hp%% PV<input id="gHp" type="number" min="0"></label><label>%%atk%% ATQ<input id="gAtk" type="number" min="0"></label><label>%%defense%% DEF<input id="gDef" type="number" min="0"></label><label>%%eva%% ESQ %<input id="gEva" type="number" min="0"></label><label>%%elall%% Élément<input id="gEl" type="number" min="0"></label></div>
         <p id="pMsg" class="note" role="status" aria-live="polite"></p>
@@ -749,6 +756,7 @@ $('manual').addEventListener('change',e=>{const s=e.target.closest('select[data-
   if(k==='e') man.g[i][1]=s.value; else if(k==='s') man.g[i][2]=s.value; else if(k==='sk'){man.s[i]=s.value;renderManual();return}
   manualCompute()});
 $('mCopy').addEventListener('click',()=>{man=null;renderManual()});
+/*SHOTJS*/
 setClass();
 }
 // ===== Données : chargement, détection des mises à jour =====

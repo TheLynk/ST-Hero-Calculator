@@ -16,6 +16,13 @@ Mises à jour
 - Si une nouvelle version existe, un bouton « Mettre à jour » apparaît : 1 clic suffit.
 - Le bouton « Vérifier maintenant » lance une vérification tout de suite.
 
+Créer un preset depuis des captures
+- Dans « Mode manuel », cliquez sur « Créer depuis des captures » (ou glissez / collez les images).
+- Capture conseillée : l'onglet Infos du héros. En option : l'onglet Capacités et la carte de collection.
+- Gardez ocr.js à côté de index.html : c'est le lecteur de texte. Rien n'est envoyé sur Internet.
+- Vérifiez les champs en orange. Réglez à gauche les graines, la transcendance et le starforge.
+
 Source des données : https://docs.google.com/spreadsheets/d/1WLa7X8h3O0-aGKxeAlCL7bnN8-FhGd3t7pz2RCzSg8c
 Les images, les noms français et les stats de base des classes viennent des fichiers du jeu.
+Lecteur de texte : Tesseract.js (licence Apache-2.0).
 Outil non officiel, sans lien avec Kabam.

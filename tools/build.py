@@ -11,7 +11,11 @@ pre=os.path.join(src,'precomp.json')
 if os.path.exists(pre): P=json.load(open(pre,encoding='utf-8'))
 print('builds stockés',len(P['builds']),'version',P.get('version'))
 t=open(tpl,encoding='utf-8').read()
+t=t.replace('/*SHOTJS*/',open(os.path.join(src,'shot.js'),encoding='utf-8').read())
 EN=[
+("Créer depuis des captures","Create from screenshots"),
+("Ajoutez une ou plusieurs captures du jeu : l'onglet Infos du héros et, en option, l'onglet Capacités et la carte de collection. Vous pouvez aussi les glisser ici ou les coller (Ctrl+V). Tout reste dans votre navigateur. Les graines, la transcendance et le starforge ne sont pas visibles : réglez-les à gauche.",
+ "Add one or more game screenshots: the hero Info tab and, optionally, the Abilities tab and the collection card. You can also drop them here or paste them (Ctrl+V). Everything stays in your browser. Seeds, transcendence and starforge are not visible: set them on the left."),
 ('<h2>Mes héros (presets)</h2>','<h2>My heroes (presets)</h2>'),
 ("41 emplacements, comme le nombre maximum de héros dans Shop Titans. Un preset garde la classe, les réglages de gauche (niveau, qualité, graines, carte…), le build du mode manuel et les valeurs du jeu.","41 slots, like the maximum number of heroes in Shop Titans. A preset keeps the class, the settings on the left (level, quality, seeds, card…), the manual build and the game values."),
 ('class="sr">Emplacement</label>','class="sr">Slot</label>'),
@@ -146,7 +150,8 @@ d=open(data,encoding='utf-8').read() if data!='none' else 'null'
 rd=lambda n:open(os.path.join(src,n),encoding='utf-8').read()
 a=rd('atlas.json'); ua=rd('uiatlas.json'); gm=rd('game.json'); sj=rd('sheet.js'); CL=json.loads(rd('changelog.json')); VER=CL['version']
 print('version de l\'outil',VER)
-fill=lambda s:s.replace('/*DATA*/null',d).replace('/*ATLAS*/null',a).replace('/*UIATLAS*/null',ua).replace('/*GAME*/null',gm).replace('/*VERSTR*/',VER).replace('/*CHANGELOG*/null',json.dumps(CL,ensure_ascii=False)).replace('/*SHEETJS*/',sj).replace("/*PRECOMP*/{version:'',builds:{}}",json.dumps(P,separators=(',',':')))
+sa=rd('scanatlas.json')
+fill=lambda s:s.replace('/*SCANATLAS*/null',sa).replace('/*DATA*/null',d).replace('/*ATLAS*/null',a).replace('/*UIATLAS*/null',ua).replace('/*GAME*/null',gm).replace('/*VERSTR*/',VER).replace('/*CHANGELOG*/null',json.dumps(CL,ensure_ascii=False)).replace('/*SHEETJS*/',sj).replace("/*PRECOMP*/{version:'',builds:{}}",json.dumps(P,separators=(',',':')))
 open(os.path.join(outdir,'index.html'),'w',encoding='utf-8').write(fill(t))
 e=t
 for fr_,en in EN:
@@ -163,4 +168,6 @@ for lang,fn,title in (('fr','CHANGELOG.md','Journal des modifications'),('en','C
     md=f'# {title} — ST Hero Calculator\n'
     for e in CL['entries']: md+=f"\n## v{e['v']} — {e['date']}\n\n"+''.join(f'- {x}\n' for x in e[lang])
     open(os.path.join(outdir,fn),'w',encoding='utf-8').write(md)
+import shutil
+if os.path.exists(os.path.join(src,'ocr.js')): shutil.copyfile(os.path.join(src,'ocr.js'),os.path.join(outdir,'ocr.js'))
 print('ok')

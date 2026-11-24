@@ -12,6 +12,7 @@ Calculateur pour **Shop Titans** : il trouve le meilleur équipement (objets, é
 - Optimiseur automatique (puissance ou menace) pour les 42 classes.
 - **Mode manuel** : choix libre des objets (avec leur qualité), éléments, esprits et compétences, avec l'écart avec le meilleur build.
 - **Presets de héros** : 41 emplacements (le maximum de héros du jeu), avec les valeurs du jeu pour comparer. Export / import en `.json`.
+- **Preset depuis des captures** : la page lit les captures du jeu (onglet Infos, onglet Capacités, carte de collection) et remplit le mode manuel. Comparaison d'icônes avec les images du jeu, lecture des chiffres avec [Tesseract.js](https://github.com/naptha/tesseract.js) (Apache-2.0) dans `ocr.js`. Tout reste local.
 - Version de l'outil dans l'en-tête (clic = journal des modifications). Voir `CHANGELOG.md` / `CHANGELOG.en.md`.
 
 ## Utilisation
@@ -33,8 +34,12 @@ Pour que les utilisateurs reçoivent la mise à jour : poussez sur `main`, puis 
 | Chemin | Rôle |
 |---|---|
 | `index.html`, `en.html` | Pages prêtes à l'emploi |
+| `ocr.js` | Lecteur de texte (Tesseract.js + modèle anglais), chargé à la demande |
 | `tools/src/template.html` | Modèle de la page (version française) |
 | `tools/src/sheet.js` | Téléchargement et lecture du Google Sheet |
+| `tools/src/shot.js` | Lecture des captures (icônes et texte) |
+| `tools/src/scanatlas.json` | Icônes des éléments et des esprits, noms Paragon |
+| `tools/src/ocr.js`, `tools/mkocr.py` | Lecteur de texte et son script de création |
 | `tools/src/game.json`, `atlas.json`, `uiatlas.json` | Données et images extraites du jeu |
 | `tools/src/precomp.json` | Meilleurs builds pré-calculés |
 | `tools/src/changelog.json` | Version de l'outil et journal des modifications (FR/EN) |

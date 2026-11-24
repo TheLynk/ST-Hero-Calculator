@@ -1,5 +1,13 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.5.0 — 2026-11-24
+
+- Nouveau bouton « Créer depuis des captures » dans les presets : la page lit une ou plusieurs captures du jeu et remplit le mode manuel.
+- Onglet Infos : classe (aussi le nom Paragon), niveau, nom du héros, puissance, PV, ATQ, DEF, ESQ, élément, les 6 objets avec leur qualité, leur élément et leur esprit, et les compétences.
+- Onglet Capacités et carte de collection : compétences et niveau de la carte.
+- Les champs incertains s'affichent en orange. Vérifiez-les avant d'enregistrer.
+- Tout reste dans le navigateur. Le lecteur de texte (Tesseract.js) est dans le fichier ocr.js, chargé seulement à la première lecture. Glisser-déposer et Ctrl+V acceptés.
+
 ## v1.4.0 — 2026-11-24
 
 - Presets de héros dans le mode manuel : 41 emplacements, le nombre maximum de héros dans Shop Titans.

@@ -1,6 +1,24 @@
 {
- "version": "1.4.0",
+ "version": "1.5.0",
  "entries": [
+  {
+   "v": "1.5.0",
+   "date": "2026-11-24",
+   "fr": [
+    "Nouveau bouton « Créer depuis des captures » dans les presets : la page lit une ou plusieurs captures du jeu et remplit le mode manuel.",
+    "Onglet Infos : classe (aussi le nom Paragon), niveau, nom du héros, puissance, PV, ATQ, DEF, ESQ, élément, les 6 objets avec leur qualité, leur élément et leur esprit, et les compétences.",
+    "Onglet Capacités et carte de collection : compétences et niveau de la carte.",
+    "Les champs incertains s'affichent en orange. Vérifiez-les avant d'enregistrer.",
+    "Tout reste dans le navigateur. Le lecteur de texte (Tesseract.js) est dans le fichier ocr.js, chargé seulement à la première lecture. Glisser-déposer et Ctrl+V acceptés."
+   ],
+   "en": [
+    "New “Create from screenshots” button in presets: the page reads one or more game screenshots and fills the manual mode.",
+    "Info tab: class (Paragon name too), level, hero name, power, HP, ATK, DEF, EVA, element, the 6 items with their quality, element and spirit, and the skills.",
+    "Abilities tab and collection card: skills and card level.",
+    "Uncertain fields show in orange. Check them before you save.",
+    "Everything stays in the browser. The text reader (Tesseract.js) is in the ocr.js file, loaded only at the first reading. Drag and drop and Ctrl+V work."
+   ]
+  },
   {
    "v": "1.4.0",
    "date": "2026-11-24",

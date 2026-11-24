@@ -1,5 +1,13 @@
 # Changelog — ST Hero Calculator
 
+## v1.5.0 — 2026-11-24
+
+- New “Create from screenshots” button in presets: the page reads one or more game screenshots and fills the manual mode.
+- Info tab: class (Paragon name too), level, hero name, power, HP, ATK, DEF, EVA, element, the 6 items with their quality, element and spirit, and the skills.
+- Abilities tab and collection card: skills and card level.
+- Uncertain fields show in orange. Check them before you save.
+- Everything stays in the browser. The text reader (Tesseract.js) is in the ocr.js file, loaded only at the first reading. Drag and drop and Ctrl+V work.
+
 ## v1.4.0 — 2026-11-24
 
 - Hero presets in manual mode: 41 slots, the maximum number of heroes in Shop Titans.
