@@ -10,7 +10,8 @@ Calculateur pour **Shop Titans** : il trouve le meilleur équipement (objets, é
 ## Fonctions
 
 - Optimiseur automatique (puissance ou menace) pour les 42 classes.
-- **Mode manuel** : choix libre des objets, éléments, esprits et compétences, avec l'écart avec le meilleur build.
+- **Mode manuel** : choix libre des objets (avec leur qualité), éléments, esprits et compétences, avec l'écart avec le meilleur build.
+- **Presets de héros** : 41 emplacements (le maximum de héros du jeu), avec les valeurs du jeu pour comparer. Export / import en `.json`.
 - Version de l'outil dans l'en-tête (clic = journal des modifications). Voir `CHANGELOG.md` / `CHANGELOG.en.md`.
 
 ## Utilisation

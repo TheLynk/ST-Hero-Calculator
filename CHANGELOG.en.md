@@ -1,5 +1,12 @@
 # Changelog — ST Hero Calculator
 
+## v1.4.0 — 2026-11-24
+
+- Hero presets in manual mode: 41 slots, the maximum number of heroes in Shop Titans.
+- A preset keeps the hero name, the class, the settings (level, quality, transcendence, starforge, seeds, card, base stats, sources), the manual build and the game values.
+- Game values (power, HP, ATK, DEF, EVA, element): the % gap shows under each stat of the manual build.
+- Export and import of all presets in a .json file (backup or computer change).
+
 ## v1.3.1 — 2026-11-24
 
 - Fix: an empty yellow bar was shown under the header when the tool was up to date.

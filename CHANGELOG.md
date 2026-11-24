@@ -1,5 +1,12 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.4.0 — 2026-11-24
+
+- Presets de héros dans le mode manuel : 41 emplacements, le nombre maximum de héros dans Shop Titans.
+- Un preset garde le nom du héros, la classe, les réglages (niveau, qualité, transcendance, starforge, graines, carte, stats de base, sources), le build manuel et les valeurs du jeu.
+- Valeurs du jeu (puissance, PV, ATQ, DEF, ESQ, élément) : l'écart en % s'affiche sous chaque stat du build manuel.
+- Export et import de tous les presets dans un fichier .json (sauvegarde ou changement d'ordinateur).
+
 ## v1.3.1 — 2026-11-24
 
 - Correction : une barre jaune vide s'affichait sous l'en-tête quand l'outil était à jour.

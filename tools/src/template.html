@@ -119,6 +119,16 @@ details.man>summary{cursor:pointer;font-weight:700;color:var(--txt);min-height:3
 .hero.calc .score .ui,.hero.calc .score>span:not(.ui),.hero.calc .sheet b{will-change:transform,opacity}
 @media (prefers-reduced-motion:reduce){.hero.calc .calcbar::before,.hero.calc .score .ui,.hero.calc .score>span,.hero.calc .sheet b,.hero.done .score>span{animation:none}}
 [hidden]{display:none!important} /* une classe avec display ne doit pas afficher un bloc caché */
+.preset{border:1px solid var(--line);border-radius:10px;padding:12px;margin:10px 0;background:var(--panel2)}
+.prow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}
+@media(max-width:600px){.prow{grid-template-columns:minmax(0,1fr)}}
+.prow input,.gvals input{width:100%;background:var(--panel);color:var(--txt);border:1px solid var(--line);border-radius:6px;padding:8px;font:16px system-ui,sans-serif;min-height:40px}
+.gvals{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
+.gvals label{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;column-gap:6px;row-gap:4px;margin:0}
+.gvals label input{grid-column:1/-1}
+.fbtn{display:inline-flex;align-items:center;min-height:40px;padding:0 14px;border-radius:8px;border:1px solid var(--line);background:var(--panel2);color:var(--txt);font:600 14px system-ui,sans-serif;cursor:pointer;margin:0}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.cmp{display:block;font-size:12px;margin-top:2px}.cmp.ok{color:#5cc28a}.cmp.bad{color:var(--acc2)}
 #busy{color:var(--mut);font-size:13px;min-height:18px}
 </style>
 </head>
@@ -209,6 +219,15 @@ details.man>summary{cursor:pointer;font-weight:700;color:var(--txt);min-height:3
     <details class="man" id="manual">
       <summary>Mode manuel : choisir mes objets et mes compétences</summary>
       <p class="note">Choisissez chaque objet, élément, esprit et compétence. Le calcul utilise les réglages de gauche (niveau, qualité, graines, carte…). Utile pour comparer l'outil avec le jeu.</p>
+      <div class="preset">
+        <h2>Mes héros (presets)</h2>
+        <p class="note">41 emplacements, comme le nombre maximum de héros dans Shop Titans. Un preset garde la classe, les réglages de gauche (niveau, qualité, graines, carte…), le build du mode manuel et les valeurs du jeu.</p>
+        <div class="prow"><label for="pSlot" class="sr">Emplacement</label><select id="pSlot"></select><input id="pName" type="text" maxlength="40" placeholder="Nom du héros (ex. PartoutV2)" aria-label="Nom du héros"></div>
+        <div class="mtools"><button type="button" id="pSave">Enregistrer</button><button type="button" id="pLoad">Charger</button><button type="button" id="pDel">Supprimer</button><button type="button" id="pExp">Exporter tous</button><label class="fbtn">Importer<input type="file" id="pImp" accept=".json,application/json" hidden></label></div>
+        <h2 style="margin-top:12px">Valeurs du jeu (pour comparer)</h2>
+        <div class="gvals"><label>%%power%% Puissance<input id="gPow" type="number" min="0"></label><label>%%hp%% PV<input id="gHp" type="number" min="0"></label><label>%%atk%% ATQ<input id="gAtk" type="number" min="0"></label><label>%%defense%% DEF<input id="gDef" type="number" min="0"></label><label>%%eva%% ESQ %<input id="gEva" type="number" min="0"></label><label>%%elall%% Élément<input id="gEl" type="number" min="0"></label></div>
+        <p id="pMsg" class="note" role="status" aria-live="polite"></p>
+      </div>
       <div class="mtools"><button type="button" id="mCopy">Copier le meilleur build</button></div>
       <div id="mGear"></div>
       <h2 style="margin-top:14px">Compétences</h2>
@@ -268,7 +287,7 @@ const icoClass=(c,sz=36)=>c.icon==null?'':`<span class="cico" style="width:${sz}
 const UIK={power:'icon_global_power',hp:'icon_global_health',atk:'icon_global_attack',defense:'icon_global_defense',eva:'icon_global_evasion',
   q_common:'icon_global_quality_common',q_uncommon:'icon_global_quality_uncommon',q_flawless:'icon_global_quality_flawless',q_epic:'icon_global_quality_epic',q_legendary:'icon_global_quality_legendary',
   seedatk:'seedattack1',seeddef:'seeddef1',seedhp:'seedhp1',xp:'icon_worker_xp_bonus',craft:'icon_global_craft',chest:'icon_global_chest',crown:'icon_achievements_sp_vip01',
-  gold:'icon_global_element_gold',starforge:'icon_global_battlepass_starforge_currency',relic:'icon_global_artifact',paragon:'paragonsoul',book:'icon_global_collection_book_small'};
+  gold:'icon_global_element_gold',starforge:'icon_global_battlepass_starforge_currency',relic:'icon_global_artifact',elall:'icon_global_element_all',paragon:'paragonsoul',book:'icon_global_collection_book_small'};
 const UA=/*UIATLAS*/null;
 const ui=(name,sz=22)=>{const i=UA.ui[UIK[name]||name];if(i==null) return '';const c=UA.uiCols;return `<span class="ui" style="width:${sz}px;height:${sz}px;background-image:url(${UA.uiImg});background-size:${c*sz}px auto;background-position:-${(i%c)*sz}px -${Math.floor(i/c)*sz}px" aria-hidden="true"></span>`};
 {const i=UA.ui[UIK.relic],c=UA.uiCols,s=document.documentElement.style;if(i!=null){s.setProperty('--relic',`url(${UA.uiImg})`);s.setProperty('--relic-size',`${c*18}px auto`);s.setProperty('--relic-pos',`-${(i%c)*18}px -${Math.floor(i/c)*18}px`)}}
@@ -682,7 +701,46 @@ function manualCompute(){
   const best=bestShown.R, isP=ctx.obj==='power', a=isP?R.power:R.threat, b=isP?best.power:best.threat, d=b?((a-b)/b*100):0;
   $('mDelta').className='delta '+(d<-0.05?'neg':d>0.05?'pos':'');
   $('mDelta').textContent=`${uniq.length<fams.length?'Compétence en double ignorée. ':''}Écart avec le meilleur build : ${d>=0?'+':''}${d.toFixed(1).replace('.',',')} % (${isP?'puissance':'menace'} ${fr(a)} contre ${fr(b)})`;
+// comparaison avec les valeurs du jeu
+  const gv={pw:'gPow',hp:'gHp',atk:'gAtk',def:'gDef',eva:'gEva',el:'gEl'}, mv={pw:R.power,hp:R.hp,atk:R.atk,def:R.def,eva:R.eva,el:R.el};
+  document.querySelectorAll('#mSheet > div').forEach(d=>{const k=[...d.classList][0];if(!gv[k]) return;const g=+$(gv[k]).value;if(!g) return;
+    const e=(mv[k]-g)/g*100,c=document.createElement('span');c.className='cmp '+(Math.abs(e)<1?'ok':'bad');c.textContent=`jeu ${fr(g)} · ${e>=0?'+':''}${e.toFixed(1).replace('.',',')} %`;d.appendChild(c)});
 }
+// ===== Presets (1 par héros, 41 au maximum comme dans le jeu) =====
+const PKEY='sthc:presets', PMAX=41;
+const plist=()=>{const a=sget0(PKEY);return Array.isArray(a)?a.concat(Array(PMAX).fill(null)).slice(0,PMAX):Array(PMAX).fill(null)};
+function sget0(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}}
+function psave(a){try{localStorage.setItem(PKEY,JSON.stringify(a));return true}catch(e){return false}}
+const SET_IDS=['obj','lvl','qual','trans','enchTier','sAtk','sDef','sHp','cardLv','bAtk','bDef','bHp'], SET_CHK=['star','srcCraft','srcChest','srcPrem','goldWild'], GV_IDS=['gPow','gHp','gAtk','gDef','gEva','gEl'];
+function pfill(sel){const a=plist(),cur=sel!=null?sel:(+$('pSlot').value||0);
+  $('pSlot').innerHTML=a.map((p,i)=>`<option value="${i}">${i+1}. ${p?esc(p.name||'?')+' · '+esc(nm(D.classes.find(c=>c.name===p.cls))||p.cls):'— vide —'}</option>`).join('');
+  $('pSlot').value=cur; const p=a[cur]; $('pName').value=p?p.name||'':'';}
+function pmsg(s){$('pMsg').textContent=s}
+$('pSlot').addEventListener('change',()=>pfill());
+$('pSave').addEventListener('click',()=>{
+  const i=+$('pSlot').value, ctx=makeCtx(); if(!man) manualReset();
+  const p={name:$('pName').value.trim()||nm(ctx.cls),cls:ctx.cls.name,saved:Date.now(),set:{},chk:{},game:{},man:JSON.parse(JSON.stringify(man))};
+  SET_IDS.forEach(k=>p.set[k]=$(k).value); SET_CHK.forEach(k=>p.chk[k]=$(k).checked); GV_IDS.forEach(k=>p.game[k]=$(k).value);
+  const a=plist(); a[i]=p; if(psave(a)){pfill(i);pmsg(`Preset ${i+1} enregistré : ${p.name}.`)} else pmsg('Le navigateur refuse d’enregistrer le preset.');
+});
+$('pLoad').addEventListener('click',()=>{
+  const i=+$('pSlot').value, p=plist()[i]; if(!p){pmsg('Cet emplacement est vide.');return}
+  const c=D.classes.find(x=>x.name===p.cls); if(!c){pmsg('Classe inconnue dans ces données : '+p.cls);return}
+  SET_IDS.forEach(k=>{if(p.set[k]!=null) $(k).value=p.set[k]}); SET_CHK.forEach(k=>{if(p.chk[k]!=null) $(k).checked=p.chk[k]}); GV_IDS.forEach(k=>$(k).value=p.game&&p.game[k]||'');
+  ['obj','qual'].forEach(k=>$(k).dispatchEvent(new Event('input')));
+  man=JSON.parse(JSON.stringify(p.man)); man.edited=true; manClass=c.name; $('manual').open=true;
+  curBase=c.promoted?D.classes.find(x=>x.evo===c):c; evolved=!!c.promoted; setClass();
+  pmsg(`Preset ${i+1} chargé : ${p.name}.`);
+});
+$('pDel').addEventListener('click',()=>{const i=+$('pSlot').value,a=plist();if(!a[i]){pmsg('Cet emplacement est déjà vide.');return}
+  const n=a[i].name;a[i]=null;psave(a);pfill(i);pmsg(`Preset ${i+1} supprimé : ${n}.`)});
+$('pExp').addEventListener('click',()=>{const a=plist();const blob=new Blob([JSON.stringify({tool:'ST Hero Calculator',version:'/*VERSTR*/',presets:a},null,1)],{type:'application/json'});
+  const u=URL.createObjectURL(blob),l=document.createElement('a');l.href=u;l.download='sthc-presets.json';document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);pmsg(`${a.filter(Boolean).length} preset(s) exporté(s).`)});
+$('pImp').addEventListener('change',async e=>{const f=e.target.files[0];if(!f) return;
+  try{const j=JSON.parse(await f.text()),a=(j.presets||j);if(!Array.isArray(a)) throw 0;psave(a.slice(0,PMAX));pfill(0);pmsg(`${a.filter(Boolean).length} preset(s) importé(s).`)}catch(err){pmsg('Fichier de presets invalide.')}
+  e.target.value=''});
+GV_IDS.forEach(k=>$(k).addEventListener('input',()=>{if($('manual').open) manualCompute()}));
+pfill(0);
 $('manual').addEventListener('toggle',renderManual);
 $('manual').addEventListener('change',e=>{const s=e.target.closest('select[data-k]');if(!s) return;const i=+s.dataset.i,k=s.dataset.k;
   man.edited=true;

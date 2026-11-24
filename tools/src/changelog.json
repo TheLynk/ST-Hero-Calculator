@@ -1,6 +1,22 @@
 {
- "version": "1.3.1",
+ "version": "1.4.0",
  "entries": [
+  {
+   "v": "1.4.0",
+   "date": "2026-11-24",
+   "fr": [
+    "Presets de héros dans le mode manuel : 41 emplacements, le nombre maximum de héros dans Shop Titans.",
+    "Un preset garde le nom du héros, la classe, les réglages (niveau, qualité, transcendance, starforge, graines, carte, stats de base, sources), le build manuel et les valeurs du jeu.",
+    "Valeurs du jeu (puissance, PV, ATQ, DEF, ESQ, élément) : l'écart en % s'affiche sous chaque stat du build manuel.",
+    "Export et import de tous les presets dans un fichier .json (sauvegarde ou changement d'ordinateur)."
+   ],
+   "en": [
+    "Hero presets in manual mode: 41 slots, the maximum number of heroes in Shop Titans.",
+    "A preset keeps the hero name, the class, the settings (level, quality, transcendence, starforge, seeds, card, base stats, sources), the manual build and the game values.",
+    "Game values (power, HP, ATK, DEF, EVA, element): the % gap shows under each stat of the manual build.",
+    "Export and import of all presets in a .json file (backup or computer change)."
+   ]
+  },
   {
    "v": "1.3.1",
    "date": "2026-11-24",

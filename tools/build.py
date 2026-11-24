@@ -12,6 +12,20 @@ if os.path.exists(pre): P=json.load(open(pre,encoding='utf-8'))
 print('builds stockés',len(P['builds']),'version',P.get('version'))
 t=open(tpl,encoding='utf-8').read()
 EN=[
+('<h2>Mes héros (presets)</h2>','<h2>My heroes (presets)</h2>'),
+("41 emplacements, comme le nombre maximum de héros dans Shop Titans. Un preset garde la classe, les réglages de gauche (niveau, qualité, graines, carte…), le build du mode manuel et les valeurs du jeu.","41 slots, like the maximum number of heroes in Shop Titans. A preset keeps the class, the settings on the left (level, quality, seeds, card…), the manual build and the game values."),
+('class="sr">Emplacement</label>','class="sr">Slot</label>'),
+('placeholder="Nom du héros (ex. PartoutV2)" aria-label="Nom du héros"','placeholder="Hero name (e.g. PartoutV2)" aria-label="Hero name"'),
+('>Enregistrer</button><button type="button" id="pLoad">Charger</button><button type="button" id="pDel">Supprimer</button><button type="button" id="pExp">Exporter tous</button><label class="fbtn">Importer<','>Save</button><button type="button" id="pLoad">Load</button><button type="button" id="pDel">Delete</button><button type="button" id="pExp">Export all</button><label class="fbtn">Import<'),
+('Valeurs du jeu (pour comparer)','Game values (to compare)'),
+('%%power%% Puissance<input','%%power%% Power<input'),('%%hp%% PV<input','%%hp%% HP<input'),('%%atk%% ATQ<input','%%atk%% ATK<input'),('%%eva%% ESQ %<input','%%eva%% EVA %<input'),('%%elall%% Élément<input','%%elall%% Element<input'),
+("`jeu ${fr(g)} · ${e>=0?'+':''}${e.toFixed(1).replace('.',',')} %`","`game ${fr(g)} · ${e>=0?'+':''}${e.toFixed(1)}%`"),
+("'— vide —'","'— empty —'"),
+("`Preset ${i+1} enregistré : ${p.name}.`","`Preset ${i+1} saved: ${p.name}.`"),("'Le navigateur refuse d’enregistrer le preset.'","'The browser refuses to save the preset.'"),
+("'Cet emplacement est vide.'","'This slot is empty.'"),("'Classe inconnue dans ces données : '","'Unknown class in this data: '"),
+("`Preset ${i+1} chargé : ${p.name}.`","`Preset ${i+1} loaded: ${p.name}.`"),("'Cet emplacement est déjà vide.'","'This slot is already empty.'"),
+("`Preset ${i+1} supprimé : ${n}.`","`Preset ${i+1} deleted: ${n}.`"),("`${a.filter(Boolean).length} preset(s) exporté(s).`","`${a.filter(Boolean).length} preset(s) exported.`"),
+("`${a.filter(Boolean).length} preset(s) importé(s).`","`${a.filter(Boolean).length} preset(s) imported.`"),("'Fichier de presets invalide.'","'Invalid preset file.'"),
 ("'title=\"Relique\"'","'title=\"Artifact\"'"),
 ('aria-label="Qualité">','aria-label="Quality">'),
 ("[['1','q_common','Normale'],['1.25','q_uncommon','Supérieure'],['1.5','q_flawless','Impeccable'],['2','q_epic','Épique'],['3','q_legendary','Légendaire']]","[['1','q_common','Normal'],['1.25','q_uncommon','Superior'],['1.5','q_flawless','Flawless'],['2','q_epic','Epic'],['3','q_legendary','Legendary']]"),
