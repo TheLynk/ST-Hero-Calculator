@@ -118,6 +118,7 @@ details.man>summary{cursor:pointer;font-weight:700;color:var(--txt);min-height:3
 @keyframes pop{0%{transform:scale(.92);opacity:.4}60%{transform:scale(1.04);opacity:1}100%{transform:scale(1)}}
 .hero.calc .score .ui,.hero.calc .score>span:not(.ui),.hero.calc .sheet b{will-change:transform,opacity}
 @media (prefers-reduced-motion:reduce){.hero.calc .calcbar::before,.hero.calc .score .ui,.hero.calc .score>span,.hero.calc .sheet b,.hero.done .score>span{animation:none}}
+[hidden]{display:none!important} /* une classe avec display ne doit pas afficher un bloc caché */
 #busy{color:var(--mut);font-size:13px;min-height:18px}
 </style>
 </head>

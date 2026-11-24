@@ -1,5 +1,9 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.3.1 — 2026-11-24
+
+- Correction : une barre jaune vide s'affichait sous l'en-tête quand l'outil était à jour.
+
 ## v1.3.0 — 2026-11-24
 
 - Mise à jour de l'outil depuis GitHub : la page compare sa version avec celle du dépôt TheLynk/ST-Hero-Calculator à l'ouverture, puis 1 fois par jour.

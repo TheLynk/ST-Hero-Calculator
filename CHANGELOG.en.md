@@ -1,5 +1,9 @@
 # Changelog — ST Hero Calculator
 
+## v1.3.1 — 2026-11-24
+
+- Fix: an empty yellow bar was shown under the header when the tool was up to date.
+
 ## v1.3.0 — 2026-11-24
 
 - Tool update from GitHub: the page compares its version with the TheLynk/ST-Hero-Calculator repository at start-up, then once a day.
