@@ -1,5 +1,14 @@
 # Changelog — ST Hero Calculator
 
+## v1.5.1 — 2026-11-24
+
+- Calculation fixed and checked on 2 real Spellknight builds and on the sheet of 7 items: the power gap goes from −0.8% to 0.0%.
+- Items with a built-in element: the Google Sheet adds the built-in element to the item base stats. The tool now uses the game stats, then adds the doubled element.
+- Element + spirit: their stats do not go above 2 × the item base stat.
+- Spellknight: the +50% bonus multiplies the whole bonus of items with a built-in element (×1.5).
+- The stored best builds are recalculated with these rules.
+- Screenshot reading: 7 is no longer read as 1, empty slots are detected, a sheet without items is read, skill rarity is more reliable.
+
 ## v1.5.0 — 2026-11-24
 
 - New “Create from screenshots” button in presets: the page reads one or more game screenshots and fills the manual mode.

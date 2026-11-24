@@ -1,5 +1,14 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.5.1 — 2026-11-24
+
+- Calcul corrigé et vérifié sur 2 builds réels de Sorceguerre et sur la fiche de 7 objets : l'écart de puissance passe de −0,8 % à 0,0 %.
+- Objets à élément intégré : le Google Sheet ajoute l'élément intégré aux stats de base de l'objet. L'outil reprend maintenant les stats du jeu, puis ajoute l'élément doublé.
+- Élément + esprit : leurs stats ne dépassent pas 2 × la stat de base de l'objet.
+- Sorceguerre : le bonus de +50 % multiplie tout le bonus des objets à élément intégré (×1,5).
+- Les meilleurs builds stockés sont recalculés avec ces règles.
+- Lecture des captures : le 7 n'est plus lu comme un 1, les cases vides sont reconnues, une fiche sans objets est lue, la rareté des compétences est plus fiable.
+
 ## v1.5.0 — 2026-11-24
 
 - Nouveau bouton « Créer depuis des captures » dans les presets : la page lit une ou plusieurs captures du jeu et remplit le mode manuel.

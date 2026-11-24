@@ -74,7 +74,17 @@ function words(data,scale){const out=[];for(const b of data.blocks||[])for(const
   const x0=w.bbox.x0/scale,y0=w.bbox.y0/scale,x1=w.bbox.x1/scale,y1=w.bbox.y1/scale;out.push({t,c:w.confidence,x0,y0,x1,y1,h:y1-y0,yc:(y0+y1)/2})}return out}
 async function ocrAll(W,c,psm){await W.setParameters({tessedit_pageseg_mode:String(psm),tessedit_char_whitelist:''});const r=await W.recognize(c,{},{blocks:true,text:true});return r.data}
 async function ocrLine(W,I,box,wl,scaleTo=56,mode='white',cut=0){const h=box[3]-box[1],sc=Math.max(1,scaleTo/h),c=whiteMask(I,box[0],box[1],box[2],box[3],sc,16,mode,cut);
-  await W.setParameters({tessedit_pageseg_mode:'7',tessedit_char_whitelist:wl||''});const r=await W.recognize(c,{},{text:true});return {t:(r.data.text||'').trim(),c:r.data.confidence}}
+  await W.setParameters({tessedit_pageseg_mode:'7',tessedit_char_whitelist:wl||''});const r=await W.recognize(c,{},{text:true});let t=(r.data.text||'').trim();
+  if(wl&&/^[\d,.]+$/.test(wl)) t=fix17(c,t);return {t,c:r.data.confidence}}
+// le modèle confond parfois 7 et 1 dans la police du jeu : un « 1 » est étroit, un « 7 » est aussi large que les autres chiffres
+function fix17(c,t){const W=c.width,H=c.height,d=c.getContext('2d').getImageData(0,0,W,H).data,runs=[];let cur=null;
+  for(let i=0;i<W;i++){let y0=-1,y1=-1;for(let j=0;j<H;j++) if(d[(j*W+i)*4]<128){if(y0<0) y0=j;y1=j}
+    if(y0>=0){if(!cur){cur={x0:i,x1:i,y0,y1};runs.push(cur)}else{cur.x1=i;cur.y0=Math.min(cur.y0,y0);cur.y1=Math.max(cur.y1,y1)}}else cur=null}
+  const mh=Math.max(0,...runs.map(r=>r.y1-r.y0)),tall=runs.filter(r=>r.y1-r.y0>=.7*mh),dg=t.replace(/[^\d]/g,'').split('');
+  if(!dg.length||tall.length!==dg.length) return t;
+  const ws=tall.map(r=>r.x1-r.x0+1),oth=ws.filter((w,i)=>dg[i]!=='1'&&dg[i]!=='7').sort((a,b)=>a-b);if(!oth.length) return t;
+  const med=oth[oth.length>>1];dg.forEach((x,i)=>{if(x==='1'&&ws[i]>=.75*med) dg[i]='7';else if(x==='7'&&ws[i]<.55*med) dg[i]='1'});
+  let k=0;return t.replace(/\d/g,()=>dg[k++])}
 const numOf=s=>{const d=String(s).replace(/[Oo]/g,'0').replace(/[^\d]/g,'');return d?+d:null};
 function lev(a,b){const m=a.length,n=b.length,d=Array.from({length:m+1},(_,i)=>[i]);for(let j=1;j<=n;j++) d[0][j]=j;
   for(let i=1;i<=m;i++)for(let j=1;j<=n;j++) d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return d[m][n]}
@@ -85,30 +95,36 @@ function classByName(t){const q=norm(t);if(q.length<3) return null;let best=null
   return best&&best.r<=0.34?best:null}
 // ---- repère : la ligne ESQ (valeur en %) et les valeurs alignées au-dessus ----
 function findAnchor(ws){const nums=ws.filter(w=>/^[\d.,]+$/.test(w.t)&&numOf(w.t)!=null);let best=null;
-  // le haut des chiffres est aligné (les virgules allongent le bas des boîtes)
-  for(const P of ws){if(!/^[\dOo]{1,2}\s?%$/.test(P.t)) continue;const s0=P.h*2.9,rows={};let sk=0,kk=0;
-    for(const w of nums){if(w.x1<P.x1-2.2*s0||w.x1>P.x1+0.3*s0) continue;const dy=P.y0-w.y0,k=Math.round(dy/s0);
-      if([3,2,1,-1].includes(k)&&Math.abs(dy/s0-k)<0.3&&!rows[k]){rows[k]=w;sk+=k*dy;kk+=k*k}}
-    const n=Object.keys(rows).length;if(n>=2&&(!best||n>best.n)) best={P,rows,n,s:sk/kk}}
+  // le haut des chiffres est aligné (les virgules allongent le bas des boîtes) ; le pas des lignes est essayé à partir de chaque valeur au-dessus
+  for(const P of ws){if(!/^[\dOo]{1,2}\s?%$/.test(P.t)) continue;const band=nums.filter(w=>w.x1>=P.x1-6*P.h&&w.x1<=P.x1+P.h);
+    const steps=[];for(const w of band){const dy=P.y0-w.y0;for(const k of [1,2,3]) if(dy>0){const s0=dy/k;if(s0>1.6*P.h&&s0<4*P.h) steps.push(s0)}}
+    for(const s0 of steps){const rows={};let sk=0,kk=0;
+      for(const w of band){if(w.x1<P.x1-2.2*s0||w.x1>P.x1+0.3*s0) continue;const dy=P.y0-w.y0,k=Math.round(dy/s0);
+        if([3,2,1,-1].includes(k)&&Math.abs(dy/s0-k)<0.15&&!rows[k]){rows[k]=w;sk+=k*dy;kk+=k*k}}
+      const n=Object.keys(rows).length;if(n>=2&&(!best||n>best.n)) best={P,rows,n,s:sk/kk}}}
   return best}
 async function analyse(file,W,say){
   const bmp=await createImageBitmap(file),cv=document.createElement('canvas');cv.width=bmp.width;cv.height=bmp.height;const cx=cv.getContext('2d',{willReadFrequently:true});cx.drawImage(bmp,0,0);
   const I=cx.getImageData(0,0,cv.width,cv.height),R={unsure:new Set(),gear:[],skills:null};
   let A=null,ws=[];
   for(const mult of [1,2]){const sc=Math.min(3,Math.max(1,1400/I.height))*mult;if(I.width*I.height*sc*sc>4.2e7) break;
-    const m=whiteMask(I,0,0,I.width,I.height,sc);ws=words(await ocrAll(W,m,11),sc);A=findAnchor(ws);if(A) break}
+    const m=whiteMask(I,0,0,I.width,I.height,sc);ws=words(await ocrAll(W,m,11),sc);window.STC_ws=ws;A=findAnchor(ws);if(A) break}
   if(!A){const sc=Math.min(3,Math.max(1,1400/I.height));const wg=words(await ocrAll(W,grayCanvas(I,sc),11),sc),all=ws.concat(wg);
     return analyseCard(all,R)||await analyseSkills(I,W,R,all)}
   R.dbgA=[A.s,A.P.x1,A.P.yc,A.P.t,Object.entries(A.rows).map(([k,w])=>k+':'+w.t+'@'+w.x1.toFixed(0)+','+w.yc.toFixed(0))];const s=A.s,xE=A.P.x1,yE=A.P.y0+A.P.h/2,xR=xE-0.806*s,yPV=yE-3*s;
   // valeurs du héros
   const rowVal=async(k,key,box)=>{let v=A.rows[k]?numOf(A.rows[k].t):null;
-    const r=await ocrLine(W,I,box,'0123456789,.',56,'white',.24*s);const v2=numOf(r.t);if(v2!=null&&(v==null||String(v2).length>=String(v).length)) v=v2;
-    if(v==null||!A.rows[k]&&r.c<60) R.unsure.add(key);R[key]=v};
+    const r=await ocrLine(W,I,box,'0123456789,.',56,'white',.24*s);const v2=numOf(r.t),tk=A.rows[k];
+    (R.dbgV=R.dbgV||[]).push([key,tk&&tk.t,tk&&Math.round(tk.c),r.t,Math.round(r.c)]);
+    // 2 lectures : on garde la plus longue ; à longueur égale, la lecture ciblée (corrigée 1/7) ; si elles diffèrent, champ à vérifier
+    if(v2!=null&&(v==null||String(v2).length>=String(v).length)) v=v2;
+    if(v==null||!tk&&r.c<60||(v2!=null&&tk&&v2!==numOf(tk.t))) R.unsure.add(key);R[key]=v};
   await rowVal(3,'hp',[xR-2.9*s,yPV-.42*s,xE+.12*s,yPV+.42*s]);
   await rowVal(2,'atk',[xR-2.9*s,yPV+.58*s,xE+.12*s,yPV+1.42*s]);
   await rowVal(1,'def',[xR-2.9*s,yPV+1.58*s,xE+.12*s,yPV+2.42*s]);
   R.eva=numOf(A.P.t)||0;
   await rowVal(-1,'el',[xR-2.9*s,yPV+3.58*s,xE+.12*s,yPV+4.42*s]);
+  if(R.el==null&&ws.some(w=>/L[EÉ]M[EÉ]NT/i.test(w.t))){R.el=0}
   {const r=await ocrLine(W,I,[xR-3.8*s,yPV-1.95*s,xR+1.4*s,yPV-.78*s],'0123456789,.',70);R.power=numOf(r.t);if(R.power==null||r.c<60) R.unsure.add('power')}
   {const bx=[xR-4.35*s,yPV-6.15*s,xR-3.45*s,yPV-5.45*s];let r=await ocrLine(W,I,bx,'0123456789',60);if(!numOf(r.t)||r.c<60) r=await ocrLine(W,I,bx,'0123456789',60,'bright');const v=numOf(r.t);R.lvl=v&&v<=100?v:null;if(!R.lvl||r.c<60) R.unsure.add('lvl')}
   {const r=await ocrLine(W,I,[xR-1.85*s,yPV-5.75*s,xR+3.6*s,yPV-4.85*s],'',56);const t=r.t.replace(/[^\p{L}\p{N} _-]/gu,'').trim();if(r.c>55&&/^[\w -]{2,24}$/.test(t)) R.name=t}
@@ -121,6 +137,9 @@ async function analyse(file,W,say){
   // équipement : 6 cases (2 lignes × 3 colonnes), même ordre que les emplacements de la classe
   for(let i=0;i<cls.slots.length&&i<6;i++){const col=i%3,row=i/3|0,x0=xR+(1.418+col*2.934)*s,y0=yPV+(-1.870+row*3.276)*s;say&&say(`${i+1}/6`);
     const icx=x0+1.222*s,icy=y0+1.418*s,S=1.956*s;
+    // case vide : fond presque uni (texte « Équiper »)
+    {const F=samp(I,icx,icy-.12*s,1.4*s,20,1),L=[];for(let n=0;n<F.R.length;n++) L.push(.299*F.R[n]+.587*F.G[n]+.114*F.B[n]);L.sort((x,y)=>x-y);
+      const ct=L[Math.floor(L.length*.95)]-L[Math.floor(L.length*.05)];(R.dbgSd=R.dbgSd||[]).push(Math.round(ct));if(ct<58){R.gear[i]=null;R.empty=(R.empty||0)+1;continue}}
     const mask=(u,v)=>v<.86&&!(u>.84&&v<.42);
     const cands=D.items.filter(x=>cls.slots[i].includes(x.type)&&x.img!=null).map(it=>({it,P:tpl('it:'+it.name,SH.items,it.img,AT.itemCols,64,20,mask)}));
     const b0=bestOf(I,icx,icy,S,cands,{N:20});
@@ -167,14 +186,15 @@ function quality(I,cx,cy,S,P,x0,y0,s){const N=P.F.N,F=samp(I,cx,cy,S,N,2),inM=ne
   return {...res,q,unsure:mag<55||(h>85&&h<105)}}
 // couleur du cadre d'une compétence : rose = innée, bleu-vert = rare, or = épique, cuivre = commune
 function frameRarity(I,cx,cy,S){let r=0,g=0,b=0,n=0;const o=[0,0,0,0];
-  for(let t=-.42;t<=.42;t+=.04)for(const [u,v] of [[t,-.44],[t,.44],[-.44,t],[.44,t]]){pxl(I,cx+u*S,cy+v*S,o);r+=o[0];g+=o[1];b+=o[2];n++}
-  r/=n;g/=n;b/=n;return b>r-5?'Rare':b-g>15?'Innate':g-b>27?'Epic':'Common'}
+  for(const d of [.41,.44,.47])for(let t=-.4;t<=.4;t+=.04)for(const [u,v] of [[t,-d],[t,d],[-d,t],[d,t]]){pxl(I,cx+u*S,cy+v*S,o);r+=o[0];g+=o[1];b+=o[2];n++}
+  r/=n;g/=n;b/=n;return b>r-5?'Rare':b-g>15?'Innate':g-b>24?'Epic':'Common'}
 const SKIN=(u,v)=>u>.14&&u<.86&&v>.14&&v<.86&&!(u>.58&&v>.66);
 function skCands(fams){return fams.filter(f=>UA.ui['icon_global_skill_'+f.tiers[0].fam]!=null).map(f=>({f,P:tpl('sk:'+f.tiers[0].fam,SH.ui,UA.ui['icon_global_skill_'+f.tiers[0].fam],UA.uiCols,48,16,SKIN)}))}
 // lit les icônes 2 à 6 d'une rangée : chaque icône est recalée sur la précédente
 function readSkills(I,x,y,S,step,fams,R,minV){const cands=skCands(fams),out=[];R.dbgSk=R.dbgSk||[];
-  for(let k=1;k<=5;k++){x+=step;const rar=frameRarity(I,x,y,S);
+  for(let k=1;k<=5;k++){x+=step;
     const b=bestOf(I,x,y,S,cands,{N:16,gray:true,offs:[-.1,-.05,0,.05,.1],scs:[.94,1,1.06]});
+    const rar=b[0]?frameRarity(I,x+b[0].dx*S,y+b[0].dy*S,S*b[0].sc):'Common';
     const top=b.length?b[0].v:0,pick=b.find(c=>c.f.tiers[0].rarity===rar&&c.v>top-.08)||b[0];
     R.dbgSk.push(rar+' '+b.slice(0,3).map(c=>c.f.tiers[0].name+'('+c.f.tiers[0].rarity+'):'+c.v.toFixed(2)).join(' '));
     if(!pick||pick.v<minV||rar==='Innate') break;

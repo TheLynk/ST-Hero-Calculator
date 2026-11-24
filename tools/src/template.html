@@ -255,8 +255,8 @@ details.man>summary{cursor:pointer;font-weight:700;color:var(--txt);min-height:3
       <li>Graines : +4 ATK, +4 DEF ou +1 PV par graine, 80 max par stat avec les Blossoms. Carte de collection : chaque exemplaire de la carte de la classe donne de l'XP (commune 1, rare 5, mythique 10). Niveau 1 dès 1 exemplaire (×1,05), niveau 2 à 50 XP (×1,10), niveau 3 à 250 XP (×1,25).</li>
       <li>Menace = menace de la classe + compétence innée + esprits (les esprits identiques se cumulent).</li>
       <li>Stat d'un objet = ((base + bonus de transcendance) × qualité + enchantements) × (1 + % de base de transcendance et starforge) × (1 + bonus d'objet des compétences). Formule vérifiée sur 6 objets réels.</li>
-      <li>Affinité d'élément : +10 de valeur d'élément au tier 14 (+5 avant), +5 seulement pour l'affinité « Tous ». L'affinité double les stats de l'enchantement, sans dépasser la stat de base de l'objet.</li>
-      <li>Geomancer et Astramancer : +1 % ATK par point d'élément, tous éléments comptés. Velite et Praetorian : la DEF du bouclier s'ajoute à l'ATK. Spellknight : bonus sur les objets à élément intégré.</li>
+      <li>Affinité d'élément : +10 de valeur d'élément au tier 14 (+5 avant), +5 seulement pour l'affinité « Tous ». L'affinité et l'élément intégré doublent les stats de l'élément. Élément + esprit : au plus 2 × la stat de base de l'objet. Le Google Sheet compte l'élément intégré dans les stats de base : l'outil reprend les stats du jeu.</li>
+      <li>Geomancer et Astramancer : +1 % ATK par point d'élément, tous éléments comptés. Velite et Praetorian : la DEF du bouclier s'ajoute à l'ATK. Spellknight : tout le bonus des objets à élément intégré est multiplié par 1,5 (vérifié en jeu).</li>
       <li>Stats de base : valeurs du jeu aux niveaux 1, 40, 50 et Paragon 50 (niveau 100 ici). Entre les niveaux 1 et 40, courbe ((niveau − 1) / 39)^1,55, vérifiée sur 3 héros. Artefacts : compétence propre de l'objet (ex. Capuchon de réflexion : 50 % du bonus d'XP devient de l'ATQ).</li>
       <li>Vous pouvez entrer les vraies stats de base dans les champs « Stats de base du héros ».</li>
     </ul>
@@ -364,6 +364,9 @@ function itemBase(it,ctx){
   return o;
 }
 const ELEM_BY_NAME = Object.fromEntries(D.enchants.filter(e=>e.kind==='element').map(e=>[e.name,e]));
+// le Google Sheet ajoute l'élément ou l'esprit intégré (×1,5, plafonné) aux stats de base de l'objet : on revient aux stats du jeu (vérifié sur les 106 stats concernées)
+{const EN=Object.fromEntries(D.enchants.map(e=>[e.name,e]));for(const it of D.items){const e=EN[it.builtElem||it.builtSpirit];if(!e||it.sheetBase) continue;it.sheetBase={atk:it.atk,def_:it.def_,hp:it.hp};
+  for(const k of ['atk','def_','hp']){const v=it[k],E=e[k]||0;it[k]=v>=3*E?v-1.5*E:v/2}}}
 
 /* ---------- lecture des effets ---------- */
 const STATK={Attack:'atkP',Defense:'defP',Health:'hpP','Critical Hit Chance':'crit','Critical Hit Damage':'critD',Evasion:'eva'};
@@ -425,15 +428,15 @@ function evaluate(ctx,picks,skillFams){
   let ia=0,id=0,ih=0,ie=0,ic=0;const disp=[];
   for(const p of picks){
     if(T.noWeapon&&p===picks[0]) continue;
-    let b=1+T.itemP/100+(p.it.builtElem?T.innateElP/100:0)+(p.selfP||0)/100, ba=0,bd=0,bh=0;
+    let b=1+T.itemP/100+(p.selfP||0)/100, ba=0,bd=0,bh=0; const bm=p.it.builtElem?1+T.innateElP/100:1; // Sorceguerre : ×1,5 sur tout le bonus (vérifié en jeu)
     for(const c of conds) if(c.types.includes(p.it.type)){
       if(c.itemP) b+=c.itemP/100;
       else if(c.stat==='Attack') ba+=c.v/100; else if(c.stat==='Defense') bd+=c.v/100; else if(c.stat==='Health') bh+=c.v/100;
     }
     if(CONDMODE==='mult'){ba=(b)*(ba);bd=b*bd;bh=b*bh}
     if(CONDMODE==='global'){ba=0;bd=0;bh=0}
-    disp.push({atk:p.st.atk*(b+ba),def:p.st.def_*(b+bd),hp:p.st.hp*(b+bh)});
-    ia+=p.st.atk*(b+ba)+(T.shieldToAtk&&p.it.type==='Shield'?p.st.def_*(b+bd):0); id+=p.st.def_*(b+bd); ih+=p.st.hp*(b+bh); ie+=p.eva; ic+=p.crit;
+    disp.push({atk:p.st.atk*(b+ba)*bm,def:p.st.def_*(b+bd)*bm,hp:p.st.hp*(b+bh)*bm});
+    ia+=p.st.atk*(b+ba)*bm+(T.shieldToAtk&&p.it.type==='Shield'?p.st.def_*(b+bd)*bm:0); id+=p.st.def_*(b+bd)*bm; ih+=p.st.hp*(b+bh)*bm; ie+=p.eva; ic+=p.crit;
   }
   if(CONDMODE==='global') for(const c of conds) if(!c.itemP&&c.types.some(x=>types.has(x))) T[STATK[c.stat]]+=c.v;
   const threat=cls.threat+T.threat, B=ctx.base, K=ctx.card;
@@ -579,15 +582,17 @@ function makeCtx(){
 function makePick(ctx,itemName,elemName,spiritName){
   const {cls,q}=ctx, it=D.items.find(i=>i.name===itemName); if(!it) throw new Error('objet inconnu: '+itemName);
   const counts=el=>cls.element==='Any'||el===cls.element||(el==='Gold'&&ctx.goldWild);
-  const add=(e,mult)=>{const o={atk:0,def_:0,hp:0};for(const k of['atk','def_','hp']) if(it[k]>0&&e[k]>0) o[k]=Math.min(e[k]*mult,it[k]*q);return o};
+  const add=(e,mult)=>{const o={atk:0,def_:0,hp:0};for(const k of['atk','def_','hp']) if(it[k]>0&&e[k]>0) o[k]=e[k]*mult;return o};
   let e={name:null,val:0,anyVal:0,st:{atk:0,def_:0,hp:0}};
   const en=it.builtElem||elemName;
   if(en){const x=ELEM_BY_NAME[en];const bi=!!it.builtElem;const m=(!bi&&(affList(it.elemAff).includes(x.element)||affList(it.elemAff).includes('All')))||(bi&&BIMODE>=1);
     const sp=bi||affList(it.elemAff).includes(x.element);const av=x.value+(m?elemBonus(x.tier,!sp):0);e={name:en,aff:m&&!bi,val:counts(x.element)?av:0,anyVal:av,st:bi?(BIMODE>=2?add(x,BIMODE===3?2:1):{atk:0,def_:0,hp:0}):add(x,m?2:1)}}
   let s={name:null,threat:0,sfx:null,st:{atk:0,def_:0,hp:0}};
   const sn=it.builtSpirit||spiritName;
-  if(sn){const x=D.enchants.find(z=>z.name===sn);const plus=it.spiritAff===x.skill;s={name:sn,plus,threat:plus?x.threatPlus:x.threat,sfx:parseEffect(plus?x.effectPlus:x.effect),st:it.builtSpirit?{atk:0,def_:0,hp:0}:add(x,plus?2:1)}}
+  if(sn){const x=D.enchants.find(z=>z.name===sn);const plus=it.spiritAff===x.skill;s={name:sn,plus,threat:plus?x.threatPlus:x.threat,sfx:parseEffect(plus?x.effectPlus:x.effect),st:it.builtSpirit?add(x,2):add(x,plus?2:1)}}
   const b=itemBase(it,ctx);
+  // élément + esprit : au plus 2 × la stat de base de l'objet (vérifié sur les Sabots du père Fouettard et la Couronne pyroclastique)
+  for(const k of ['atk','def_','hp']){const cap=2*b[k],t=e.st[k]+s.st[k];if(t>cap){const x=t-cap,de=Math.min(x,e.st[k]);e.st={...e.st,[k]:e.st[k]-de};s.st={...s.st,[k]:s.st[k]-(x-de)}}}
   return {it,afx:it.artEffect?parseEffect(it.artEffect):null,e,s,val:e.val,anyVal:e.anyVal,sfx:s.sfx,selfP:(s.sfx&&s.sfx.selfP)||0,crit:b.crit,eva:b.eva,st:{atk:(b.atk+e.st.atk+s.st.atk)*b.P,def_:(b.def_+e.st.def_+s.st.def_)*b.P,hp:(b.hp+e.st.hp+s.st.hp)*b.P}};
 }
 function evalBuild(gear,skillNames){
@@ -599,7 +604,7 @@ function evalBuild(gear,skillNames){
 // ---------- résultats stockés ----------
 // PRE : meilleurs builds pré-calculés pour les réglages courants (recalculés quand les données changent)
 const PRE=/*PRECOMP*/{version:'',builds:{}};
-const FORMULA='f2'; // à changer quand une formule de calcul change (invalide les builds stockés)
+const FORMULA='f3'; // à changer quand une formule de calcul change (invalide les builds stockés)
 const DATA_VERSION=DV+'-'+FORMULA;
 function settingsKey(ctx){
   return JSON.stringify([ctx.cls.name,ctx.obj,ctx.lvl,ctx.q,ctx.trans,ctx.star,ctx.eT,ctx.goldWild,$('srcCraft').checked,$('srcChest').checked,$('srcPrem').checked,ctx.base,ctx.card,+$('cardLv').value]);
