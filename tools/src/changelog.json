@@ -1,6 +1,20 @@
 {
- "version": "1.5.3",
+ "version": "1.5.4",
  "entries": [
+  {
+   "v": "1.5.4",
+   "date": "2026-11-24",
+   "fr": [
+    "Affinité, élément intégré et esprit intégré : stats ×2 pour un enchantement T14 et plus, ×1,5 en dessous (vérifié sur la Racine de Mornefleche et le Décret de Mundra).",
+    "Puissance : l'Esprit de requin (+20 % d'attaque si l'ennemi a moins de 50 % de PV) et l'Esprit de Mundra (+20 % d'attaque et de défense contre les boss) comptent pour moitié. Vérifié en jeu sur un Géomancien, avec et sans Requin : 47 688 contre 47 684, et 46 312 contre 46 307.",
+    "L'optimiseur prend maintenant en compte ces esprits. Les meilleurs builds stockés sont recalculés."
+   ],
+   "en": [
+    "Affinity, built-in element and built-in spirit: stats ×2 for a T14+ enchantment, ×1.5 below (checked on Bleakspire Roots and Mundra's Decree).",
+    "Power: Shark Spirit (+20% Attack when the enemy is below 50% HP) and Mundra's Spirit (+20% Attack and Defense against bosses) count at half. Checked in game on a Geomancer, with and without Shark: 47,688 vs 47,684, and 46,312 vs 46,307.",
+    "The optimizer now takes these spirits into account. The stored best builds are recalculated."
+   ]
+  },
   {
    "v": "1.5.3",
    "date": "2026-11-24",

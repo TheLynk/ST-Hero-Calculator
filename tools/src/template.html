@@ -249,13 +249,13 @@ details.man>summary{cursor:pointer;font-weight:700;color:var(--txt);min-height:3
     <h2>Règles de calcul</h2>
     <ul>
       <li>Puissance = puissance d'attaque + puissance de défense (formule publiée par ST Central).</li>
-      <li>Puissance d'attaque = ATK × (1 + crit % × (multiplicateur crit − 1)) × 0,8. Des ajustements existent pour Ninja, Sensei, Samurai, Daimyo, Dancer, Acrobat, Conquistador, Berserker et Jarl. Tisse-Sort : +15 % de puissance (compétence innée).</li>
+      <li>Puissance d'attaque = ATK × (1 + crit % × (multiplicateur crit − 1)) × 0,8. Des ajustements existent pour Ninja, Sensei, Samurai, Daimyo, Dancer, Acrobat, Conquistador, Berserker et Jarl. Tisse-Sort : +15 % de puissance (compétence innée). Bonus conditionnels (Esprit de requin, Esprit de Mundra contre les boss) : comptés pour moitié dans la puissance.</li>
       <li>Puissance de défense = Menace × PV / (1 − Esq) × 0,025 + Menace × DEF × 0,008 + PV / (1 − Esq) × 5 + DEF × 1,2 (esquive max 75 %).</li>
       <li>Stat = (base + graines + objets × (1 + bonus d'objet) + bonus fixes) × (1 + bonus %) × carte de collection. Les enchantements sont inclus dans la valeur des objets.</li>
       <li>Graines : +4 ATK, +4 DEF ou +1 PV par graine, 80 max par stat avec les Blossoms. Carte de collection : chaque exemplaire de la carte de la classe donne de l'XP (commune 1, rare 5, mythique 10). Niveau 1 dès 1 exemplaire (×1,05), niveau 2 à 50 XP (×1,10), niveau 3 à 250 XP (×1,25).</li>
       <li>Menace = menace de la classe + compétence innée + esprits (les esprits identiques se cumulent).</li>
       <li>Stat d'un objet = ((base + bonus de transcendance) × qualité + enchantements) × (1 + % de base de transcendance et starforge) × (1 + bonus d'objet des compétences). Formule vérifiée sur 6 objets réels.</li>
-      <li>Affinité d'élément : +10 de valeur d'élément au tier 14 (+5 avant), +5 seulement pour l'affinité « Tous ». L'affinité et l'élément intégré doublent les stats de l'élément. Élément + esprit : au plus 2 × la stat de base de l'objet, sans la qualité. Le Google Sheet compte l'élément intégré dans les stats de base : l'outil reprend les stats du jeu.</li>
+      <li>Affinité d'élément : +10 de valeur d'élément au tier 14 (+5 avant), +5 seulement pour l'affinité « Tous ». L'affinité et l'élément ou l'esprit intégré multiplient ses stats : ×2 pour un enchantement T14 et plus, ×1,5 en dessous. Élément + esprit : au plus 2 × la stat de base de l'objet, sans la qualité. Le Google Sheet compte l'élément intégré dans les stats de base : l'outil reprend les stats du jeu.</li>
       <li>Geomancer et Astramancer : +1 % ATK par point d'élément, tous éléments comptés. Velite et Praetorian : la DEF du bouclier s'ajoute à l'ATK. Spellknight : tout le bonus des objets à élément intégré est multiplié par 1,5 (vérifié en jeu).</li>
       <li>Stats de base : valeurs du jeu aux niveaux 1, 40, 50 et Paragon 50 (niveau 100 ici). Entre les niveaux 1 et 40, courbe ((niveau − 1) / 39)^1,55, vérifiée sur 3 héros. Artefacts : compétence propre de l'objet (ex. Capuchon de réflexion : 50 % du bonus d'XP devient de l'ATQ).</li>
       <li>Vous pouvez entrer les vraies stats de base dans les champs « Stats de base du héros ».</li>
@@ -371,7 +371,7 @@ const ELEM_BY_NAME = Object.fromEntries(D.enchants.filter(e=>e.kind==='element')
 /* ---------- lecture des effets ---------- */
 const STATK={Attack:'atkP',Defense:'defP',Health:'hpP','Critical Hit Chance':'crit','Critical Hit Damage':'critD',Evasion:'eva'};
 function parseEffect(txt){
-  const fx={xp:0,xpToAtk:0,critSet:-1,evaSet:-1,noWeapon:0,atkP:0,defP:0,hpP:0,atk:0,def:0,hp:0,crit:0,critD:0,eva:0,itemP:0,threat:0,thrToAtk:0,shark:0,dino:0,atkPerEl:0,shieldToAtk:0,innateElP:0,selfP:0,cond:[]};
+  const fx={xp:0,xpToAtk:0,critSet:-1,evaSet:-1,noWeapon:0,atkP:0,defP:0,hpP:0,atk:0,def:0,hp:0,crit:0,critD:0,eva:0,itemP:0,threat:0,thrToAtk:0,shark:0,dino:0,bossA:0,bossD:0,atkPerEl:0,shieldToAtk:0,innateElP:0,selfP:0,cond:[]};
   let last=null;
   for(let c of String(txt||'').split(/[,.]/)){c=c.trim(); let m;
     if(!c) continue;
@@ -393,6 +393,8 @@ function parseEffect(txt){
     if(m=c.match(/^\+(\d+)% (?:bonus )?(Attack|Defense|Health|Critical Hit Chance|Critical Hit Damage|Evasion)$/)){fx[STATK[m[2]]]+=+m[1];continue}
     if(m=c.match(/^\+(\d+)% Attack when enemy's HP is below 50%/)){fx.shark+=+m[1];continue}
     if(m=c.match(/^\+(\d+)% Attack on the first round/)){fx.dino+=+m[1];continue}
+    if(m=c.match(/^\+(\d+)% Attack against bosses/)){fx.bossA+=+m[1];continue}
+    if(m=c.match(/^\+(\d+)% Defense against bosses/)){fx.bossD+=+m[1];continue}
     if(m=c.match(/^\+(\d+) (Attack|Defense|Health|Threat)$/)){fx[{Attack:'atk',Defense:'def',Health:'hp',Threat:'threat'}[m[2]]]+=+m[1];continue}
     (fx.unk=fx.unk||[]).push(c);
   }
@@ -420,7 +422,7 @@ function evaluate(ctx,picks,skillFams){
   const skills=skillFams.map(f=>bestTier(f,cls,el)).filter(Boolean); for(const s of skills) fxs.push(s.fx);
   for(const p of picks){ if(p.sfx) fxs.push(p.sfx); if(p.afx) fxs.push(p.afx); }
   let critSet=-1,evaSet=-1;for(const f of fxs){if(f.critSet>=0)critSet=f.critSet;if(f.evaSet>=0)evaSet=f.evaSet}
-  const T={xp:0,xpToAtk:0,noWeapon:0,atkP:0,defP:0,hpP:0,atk:0,def:0,hp:0,crit:0,critD:0,eva:0,itemP:0,threat:0,thrToAtk:0,shark:0,dino:0,atkPerEl:0,shieldToAtk:0,innateElP:0};
+  const T={xp:0,xpToAtk:0,noWeapon:0,atkP:0,defP:0,hpP:0,atk:0,def:0,hp:0,crit:0,critD:0,eva:0,itemP:0,threat:0,thrToAtk:0,shark:0,dino:0,bossA:0,bossD:0,atkPerEl:0,shieldToAtk:0,innateElP:0};
   let anyEl=0;for(const p of picks) anyEl+=p.anyVal;
   const conds=[];
   for(const f of fxs){for(const k in T) T[k]+=f[k]; if(f.cond.length) conds.push(...f.cond)}
@@ -442,6 +444,8 @@ function evaluate(ctx,picks,skillFams){
   const threat=cls.threat+T.threat, B=ctx.base, K=ctx.card;
   const atk=(B.atk+ia+T.atk)*(1+(T.atkP+T.atkPerEl*anyEl+T.xpToAtk/100*T.xp)/100)*K*(1+T.thrToAtk/100*threat/100);
   const def=(B.def+id+T.def)*(1+T.defP/100)*K;
+  // puissance : les bonus conditionnels (Requin : PV ennemis < 50 %, Mundra : contre les boss) comptent pour moitié (vérifié en jeu sur un Géomancien, avec et sans Requin)
+  const aBr=1+(T.atkP+T.atkPerEl*anyEl+T.xpToAtk/100*T.xp)/100, atkPw=atk*(aBr+(T.shark+T.bossA)/200)/aBr, defPw=def*(1+(T.defP+T.bossD/2)/100)/(1+T.defP/100);
   const hp=(B.hp+ih+T.hp)*(1+T.hpP/100)*K;
   const crit=critSet>=0?critSet:Math.min(100,pct(cls.crit)*100+ic*100+T.crit);
   const cm=cls.critDmg+T.critD/100;
@@ -452,16 +456,16 @@ function evaluate(ctx,picks,skillFams){
   if(n==='Ninja') ev=eva+20*(0.5+eva/100);
   if(n==='Sensei') ev=eva+20*(0.75+eva/100);
   const e=Math.min(ev,n==='Pathfinder'?78:75)/100;
-  let ap=atk*(1+crit/100*(cm-1))*0.8;
+  let ap=atkPw*(1+crit/100*(cm-1))*0.8;
   const aMod=1+T.atkP/100;
-  // Requin et Dinosaure : effet seulement en combat, non vérifié sur la puissance affichée → ignoré
+  // Dinosaure (1er tour) : non vérifié sur la puissance affichée → ignoré
   if(n==='Berserker'||n==='Jarl') ap*=(aMod+0.6)/aMod;
-  if(n==='Ninja') ap+=atk*0.4*(0.5+eva/100)*(cm-1)*0.8;
-  if(n==='Sensei') ap+=atk*0.4*(0.75+eva/100)*(cm-1)*0.8;
-  if(n==='Samurai'||n==='Daimyo') ap+=atk*0.15*(cm-1)*0.8;
-  if(n==='Dancer'||n==='Acrobat') ap+=atk*0.2*Math.min(eva,80)/100*(cm-1);
-  if(n==='Conquistador') ap+=atk*crit/100*(cm-1)*0.12;
-  const dp=threat*hp/(1-e)*0.025+threat*def*0.008+hp/(1-e)*5+def*1.2;
+  if(n==='Ninja') ap+=atkPw*0.4*(0.5+eva/100)*(cm-1)*0.8;
+  if(n==='Sensei') ap+=atkPw*0.4*(0.75+eva/100)*(cm-1)*0.8;
+  if(n==='Samurai'||n==='Daimyo') ap+=atkPw*0.15*(cm-1)*0.8;
+  if(n==='Dancer'||n==='Acrobat') ap+=atkPw*0.2*Math.min(eva,80)/100*(cm-1);
+  if(n==='Conquistador') ap+=atkPw*crit/100*(cm-1)*0.12;
+  const dp=threat*hp/(1-e)*0.025+threat*defPw*0.008+hp/(1-e)*5+defPw*1.2;
   // Tisse-Sort (Fateweaver) : « +15 % power bonus » de la compétence innée, compté dans la puissance affichée (vérifié en jeu)
   const pbm=inn&&/\+(\d+)% power bonus/i.exec(inn.effect||''); const power=(ap+dp)*(pbm?1+pbm[1]/100:1);
   const score=ctx.obj==='threat'? threat*1e9+power : power;
@@ -475,7 +479,7 @@ function buildOptions(ctx){
   const spirits=D.enchants.filter(e=>e.kind==='spirit'&&e.tier<=eT&&e.name!=="Mundra's Spirit"&&srcOk(e.source));
   spirits.forEach(s=>{s.fxB=s.fxB||parseEffect(s.effect);s.fxP=s.fxP||parseEffect(s.effectPlus)});
   // garder les esprits utiles au combat, plus le meilleur esprit « neutre » (seulement pour ses stats)
-  const useful=f=>['atkP','defP','hpP','atk','def','hp','crit','critD','eva','threat','shark','dino','selfP'].some(k=>f[k]);
+  const useful=f=>['atkP','defP','hpP','atk','def','hp','crit','critD','eva','threat','shark','dino','bossA','bossD','selfP'].some(k=>f[k]);
   const neutral=spirits.filter(s=>!useful(s.fxB)&&!useful(s.fxP)).sort((a,b)=>b.tier-a.tier)[0];
   for(let i=spirits.length-1;i>=0;i--){const s=spirits[i];if(!useful(s.fxB)&&!useful(s.fxP)&&s!==neutral) spirits.splice(i,1)}
   const elems=D.enchants.filter(e=>e.kind==='element'&&e.tier<=eT&&srcOk(e.source));
@@ -580,6 +584,8 @@ function makeCtx(){
   return ctx;
 }
 // construit un objet équipé précis (utilisé pour tester un build réel)
+// affinité ou intégré : stats ×2 pour un enchantement T14 et plus, ×1,5 en dessous (vérifié sur Racine de Mornefleche et Décret de Mundra)
+const AM=x=>x.tier>=14?2:1.5;
 function makePick(ctx,itemName,elemName,spiritName){
   const {cls,q}=ctx, it=D.items.find(i=>i.name===itemName); if(!it) throw new Error('objet inconnu: '+itemName);
   const counts=el=>cls.element==='Any'||el===cls.element||(el==='Gold'&&ctx.goldWild);
@@ -587,10 +593,10 @@ function makePick(ctx,itemName,elemName,spiritName){
   let e={name:null,val:0,anyVal:0,st:{atk:0,def_:0,hp:0}};
   const en=it.builtElem||elemName;
   if(en){const x=ELEM_BY_NAME[en];const bi=!!it.builtElem;const m=(!bi&&(affList(it.elemAff).includes(x.element)||affList(it.elemAff).includes('All')))||(bi&&BIMODE>=1);
-    const sp=bi||affList(it.elemAff).includes(x.element);const av=x.value+(m?elemBonus(x.tier,!sp):0);e={name:en,aff:m&&!bi,val:counts(x.element)?av:0,anyVal:av,st:bi?(BIMODE>=2?add(x,BIMODE===3?2:1):{atk:0,def_:0,hp:0}):add(x,m?2:1)}}
+    const sp=bi||affList(it.elemAff).includes(x.element);const av=x.value+(m?elemBonus(x.tier,!sp):0);e={name:en,aff:m&&!bi,val:counts(x.element)?av:0,anyVal:av,st:bi?(BIMODE>=2?add(x,BIMODE===3?AM(x):1):{atk:0,def_:0,hp:0}):add(x,m?AM(x):1)}}
   let s={name:null,threat:0,sfx:null,st:{atk:0,def_:0,hp:0}};
   const sn=it.builtSpirit||spiritName;
-  if(sn){const x=D.enchants.find(z=>z.name===sn);const plus=it.spiritAff===x.skill;s={name:sn,plus,threat:plus?x.threatPlus:x.threat,sfx:parseEffect(plus?x.effectPlus:x.effect),st:it.builtSpirit?add(x,2):add(x,plus?2:1)}}
+  if(sn){const x=D.enchants.find(z=>z.name===sn);const plus=it.spiritAff===x.skill;s={name:sn,plus,threat:plus?x.threatPlus:x.threat,sfx:parseEffect(plus?x.effectPlus:x.effect),st:it.builtSpirit?add(x,AM(x)):add(x,plus?AM(x):1)}}
   const b=itemBase(it,ctx);
   // élément + esprit : au plus 2 × la stat de base de l'objet (vérifié sur les Sabots du père Fouettard et la Couronne pyroclastique)
   for(const k of ['atk','def_','hp']){const cap=2*b[k]/q,t=e.st[k]+s.st[k];if(t>cap){const x=t-cap,de=Math.min(x,e.st[k]);e.st={...e.st,[k]:e.st[k]-de};s.st={...s.st,[k]:s.st[k]-(x-de)}}}
@@ -605,7 +611,7 @@ function evalBuild(gear,skillNames){
 // ---------- résultats stockés ----------
 // PRE : meilleurs builds pré-calculés pour les réglages courants (recalculés quand les données changent)
 const PRE=/*PRECOMP*/{version:'',builds:{}};
-const FORMULA='f4'; // à changer quand une formule de calcul change (invalide les builds stockés)
+const FORMULA='f5'; // à changer quand une formule de calcul change (invalide les builds stockés)
 const DATA_VERSION=DV+'-'+FORMULA;
 function settingsKey(ctx){
   return JSON.stringify([ctx.cls.name,ctx.obj,ctx.lvl,ctx.q,ctx.trans,ctx.star,ctx.eT,ctx.goldWild,$('srcCraft').checked,$('srcChest').checked,$('srcPrem').checked,ctx.base,ctx.card,+$('cardLv').value]);

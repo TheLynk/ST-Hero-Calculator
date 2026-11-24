@@ -1,5 +1,11 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.5.4 — 2026-11-24
+
+- Affinité, élément intégré et esprit intégré : stats ×2 pour un enchantement T14 et plus, ×1,5 en dessous (vérifié sur la Racine de Mornefleche et le Décret de Mundra).
+- Puissance : l'Esprit de requin (+20 % d'attaque si l'ennemi a moins de 50 % de PV) et l'Esprit de Mundra (+20 % d'attaque et de défense contre les boss) comptent pour moitié. Vérifié en jeu sur un Géomancien, avec et sans Requin : 47 688 contre 47 684, et 46 312 contre 46 307.
+- L'optimiseur prend maintenant en compte ces esprits. Les meilleurs builds stockés sont recalculés.
+
 ## v1.5.3 — 2026-11-24
 
 - Tisse-Sort : la puissance compte le bonus de +15 % de la compétence innée (« Contrôle du chaos »). Vérifié en jeu : 150 227 contre 150 211 (avant : −13 %).

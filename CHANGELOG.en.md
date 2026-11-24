@@ -1,5 +1,11 @@
 # Changelog — ST Hero Calculator
 
+## v1.5.4 — 2026-11-24
+
+- Affinity, built-in element and built-in spirit: stats ×2 for a T14+ enchantment, ×1.5 below (checked on Bleakspire Roots and Mundra's Decree).
+- Power: Shark Spirit (+20% Attack when the enemy is below 50% HP) and Mundra's Spirit (+20% Attack and Defense against bosses) count at half. Checked in game on a Geomancer, with and without Shark: 47,688 vs 47,684, and 46,312 vs 46,307.
+- The optimizer now takes these spirits into account. The stored best builds are recalculated.
+
 ## v1.5.3 — 2026-11-24
 
 - Fateweaver: power now includes the +15% bonus of the innate skill (“Chaos Control”). Checked in game: 150,227 vs 150,211 (before: −13%).
