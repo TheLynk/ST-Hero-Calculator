@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ST Hero Calculator</title>
+<style>
+/* VOICE: outil de joueur, sobre et dense
+   IDEA: fiche de héros du jeu
+   PICTURE: le score en grand à côté des réglages
+   COLOUR and TYPE: fond sombre, or pour le score
+   LAYOUT: réglages à gauche, résultats à droite, empilé sur mobile */
+:root{--bg:#14161c;--panel:#1d2029;--panel2:#252935;--line:#323747;--txt:#e7e9ee;--mut:#9aa1b2;--acc:#f0b43c;--acc2:#e2553f;--blue:#6aa8ff}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--txt);font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow-x:clip}
+header{padding:18px 24px;border-bottom:1px solid var(--line);display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+header h1{margin:0;font-size:20px}
+header span{color:var(--mut);font-size:13px}
+main{display:grid;grid-template-columns:320px minmax(0,1fr);gap:18px;padding:18px 24px;max-width:1500px;margin:auto}
+@media(max-width:900px){main{grid-template-columns:minmax(0,1fr);padding:12px}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.card h2{font-size:13px;color:var(--mut);margin:0 0 10px}
+label{display:block;margin:10px 0 4px;color:var(--mut);font-size:13px}
+select,input[type=number]{width:100%;background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:6px;padding:8px;font:16px system-ui,sans-serif;min-height:40px}
+.chk{display:flex;align-items:center;gap:8px;margin:6px 0;color:var(--txt);font-size:14px}
+.chk input{accent-color:var(--acc);width:18px;height:18px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.hero{display:grid;grid-template-columns:auto minmax(0,1fr);gap:20px;align-items:center}
+@media(max-width:600px){.hero{grid-template-columns:minmax(0,1fr)}}
+.score{font-size:clamp(40px,6vw,60px);font-weight:800;color:var(--acc);line-height:1;white-space:nowrap}
+.score small{display:block;font-size:13px;color:var(--mut);font-weight:500;margin-top:6px}
+.break{display:flex;flex-wrap:wrap;gap:8px}
+.pill{background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:13px}
+.pill b{color:var(--acc)}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--mut);font-weight:600;font-size:12px}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tag{display:inline-block;font-size:11px;padding:1px 6px;border-radius:4px;background:var(--panel2);color:var(--mut);margin-left:4px}
+.tag.plus{background:#3b2f12;color:var(--acc)}
+.tag.prem{background:#2b2340;color:#b9a0ff}
+.tag.chest{background:#16313a;color:#7fd3e8}
+.thr{color:var(--acc);font-weight:700}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+.stat{background:var(--panel2);border-radius:8px;padding:10px}
+.stat div{color:var(--mut);font-size:12px}
+.stat b{font-size:20px;white-space:nowrap}
+.right{display:flex;flex-direction:column;gap:18px}
+.note{color:var(--mut);font-size:13px}
+.note li{margin:3px 0}
+.alt{color:var(--mut);font-size:12px}
+.warn{color:var(--acc2)}
+.sheet{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;border-top:1px solid var(--line);padding-top:14px}
+@media(max-width:600px){.sheet{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.sheet div{background:var(--panel2);border-radius:8px;padding:10px 12px}
+.sheet span{display:block;color:var(--mut);font-size:12px}
+.sheet b{font-size:22px;white-space:nowrap}
+.sheet .hp b{color:#ff7a7a}.sheet .atk b{color:#ff9a5c}.sheet .def b{color:#6aa8ff}.sheet .eva b{color:#5cc28a}.sheet .el b{color:#7fd3e8}
+.ico{display:inline-block;width:40px;height:40px;flex:none;background-repeat:no-repeat;vertical-align:middle;border-radius:6px;background-color:var(--panel2)}
+.ico.s{width:26px;height:26px;background-color:transparent}
+.cell{display:flex;gap:10px;align-items:center}
+.cico{display:inline-block;width:36px;height:36px;background-repeat:no-repeat;vertical-align:middle;flex:none}
+.fam{margin:10px 0 4px;color:var(--mut);font-size:12px}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:6px}
+.cbtn{background:var(--panel2);border:2px solid transparent;border-radius:8px;padding:3px;cursor:pointer;min-height:44px;display:flex;align-items:center;justify-content:center}
+.cbtn:hover{border-color:var(--line)}.cbtn.on{border-color:var(--acc);background:#3b2f12}
+.cbtn:focus-visible{outline:2px solid var(--blue)}
+.evo{display:flex;width:100%;margin-top:10px;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.evo button{flex:1;min-height:40px;background:var(--panel2);color:var(--mut);border:0;font:600 14px system-ui,sans-serif;cursor:pointer}
+.evo button.on{background:var(--acc);color:#1d1606}
+.evo button:disabled{opacity:.4;cursor:not-allowed}
+#clsName{display:flex;align-items:center;gap:10px;margin-top:10px;font-weight:700;font-size:16px}
+header .lang{color:var(--acc);font-weight:600;text-decoration:none;border:1px solid var(--line);border-radius:6px;padding:4px 10px}
+.ui{display:inline-block;flex:none;background-repeat:no-repeat;vertical-align:middle}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{flex:1;min-height:44px;min-width:44px;display:flex;align-items:center;justify-content:center;gap:6px;background:var(--panel2);color:var(--txt);border:2px solid transparent;border-radius:8px;font:600 14px system-ui,sans-serif;cursor:pointer;padding:4px 8px}
+.seg button.on{border-color:var(--acc);background:#3b2f12}
+.seg button:focus-visible{outline:2px solid var(--blue)}
+.lab{display:flex;align-items:center;gap:6px}
+.score{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.score small{width:100%}
+.sheet span{display:flex;align-items:center;gap:6px}
+.skn{display:flex;align-items:center;gap:8px}
+.databar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:14px 24px 0;padding:12px 16px;border-radius:10px;background:var(--panel);border:1px solid var(--line);font-size:14px}
+.databar.missing,.databar.update{border-color:var(--acc);background:#3b2f12}
+.databar.error{border-color:var(--acc2)}
+.databar span{color:var(--mut)}
+.databar button{margin-left:auto;min-height:40px;padding:0 14px;border-radius:8px;border:1px solid var(--line);background:var(--panel2);color:var(--txt);font:600 14px system-ui,sans-serif;cursor:pointer}
+.databar button+button{margin-left:0}
+.databar button.big{background:var(--acc);color:#1d1606;border-color:var(--acc)}
+.ver{background:var(--panel2);color:var(--acc);border:1px solid var(--line);border-radius:999px;padding:3px 10px;font:700 13px system-ui,sans-serif;cursor:pointer;min-height:32px}
+.clog{margin:14px 24px 0;max-height:60vh;overflow:auto}.clog h3{margin:12px 0 4px;color:var(--txt);font-size:15px}.clog ul{margin:0;padding-left:20px}
+details.man>summary{cursor:pointer;font-weight:700;color:var(--txt);min-height:32px;display:flex;align-items:center;gap:8px}
+.man select{min-height:36px;font-size:14px;padding:4px 6px}
+.mrow{display:grid;grid-template-columns:44px minmax(0,2fr) 150px minmax(0,1.2fr) minmax(0,1.2fr);gap:8px;align-items:center;margin:6px 0}
+@media(max-width:700px){.mrow{grid-template-columns:44px minmax(0,1fr)}.mrow select:nth-of-type(n+2),.mrow .mq{grid-column:2}}
+.mq{display:flex;align-items:center;gap:6px}.mq select{flex:1;min-width:0}
+.mskill{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:8px;align-items:center;margin:6px 0}
+.delta.neg{color:var(--acc2)}.delta.pos{color:#5cc28a}
+.mtools{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.mtools button{min-height:40px;padding:0 14px;border-radius:8px;border:1px solid var(--line);background:var(--panel2);color:var(--txt);font:600 14px system-ui,sans-serif;cursor:pointer}
+#busy{color:var(--mut);font-size:13px;min-height:18px}
+</style>
+</head>
+<body>
+<header><h1>ST Hero Calculator</h1><button type="button" id="verBtn" class="ver" aria-expanded="false" title="Journal des modifications">v/*VERSTR*/</button><a class="lang" href="en.html">English</a><span>Meilleur équipement et compétences par classe · données : <b>Shop Titans Data Spreadsheet</b> <span id="sheetVer"></span></span></header>
+<div id="changelog" class="card note clog" hidden></div>
+<div id="dataBar" class="databar" role="status" aria-live="polite"></div>
+<main>
+<aside class="card">
+  <h2>Héros</h2>
+  <label for="obj">Objectif</label>
+  <select id="obj" hidden><option value="power" selected>Puissance</option><option value="threat">Menace</option></select>
+  <div class="seg" id="objSeg"><button type="button" data-v="power" title="Puissance" aria-label="Puissance">%%power%% Puissance</button><button type="button" data-v="threat" title="Menace" aria-label="Menace">%%defense%% Menace</button></div>
+  <label>Classe</label><select id="cls" hidden></select>
+  <div id="picker"></div>
+  <div class="evo" role="group" aria-label="Version de la classe"><button type="button" id="evo0">Classe normale</button><button type="button" id="evo1">Classe évoluée</button></div>
+  <div id="clsName"></div>
+  <div class="row2">
+    <div><label for="lvl" class="lab">%%xp%% Niveau</label><input id="lvl" type="number" min="1" max="100" value="50"><p class="note lab" style="margin:4px 0 0">%%paragon%% 51–100 = Paragon</p></div>
+    <div><label for="maxTier">Tier max objets</label><input id="maxTier" type="number" min="1" max="16" readonly></div>
+  </div>
+  <label>Qualité des objets</label>
+  <select id="qual" hidden><option value="1">Normale</option><option value="1.25">Supérieure</option><option value="1.5">Impeccable</option><option value="2">Épique</option><option value="3" selected>Légendaire</option></select>
+  <div class="seg" id="qualSeg"><button type="button" data-v="1" title="Normale" aria-label="Normale">%%q_common%%</button><button type="button" data-v="1.25" title="Supérieure" aria-label="Supérieure">%%q_uncommon%%</button><button type="button" data-v="1.5" title="Impeccable" aria-label="Impeccable">%%q_flawless%%</button><button type="button" data-v="2" title="Épique" aria-label="Épique">%%q_epic%%</button><button type="button" data-v="3" title="Légendaire" aria-label="Légendaire">%%q_legendary%%</button></div>
+  <label for="trans">Transcendance des objets</label>
+  <select id="trans"><option value="0">Aucune</option><option value="1">Palier 1</option><option value="2">Palier 2</option><option value="3" selected>Palier 3 (max)</option></select>
+  <label class="chk"><input type="checkbox" id="star" checked> Objets starforgés (+25 % de base si l'objet le permet)</label>
+  <label for="enchTier">Tier max enchantements</label><input id="enchTier" type="number" min="4" max="16" value="16">
+
+  <h2 style="margin-top:18px">Graines (0–80) et carte</h2>
+  <div class="row2" style="grid-template-columns:1fr 1fr 1fr">
+    <div><label for="sAtk" class="lab">%%seedatk%% ATK</label><input id="sAtk" type="number" min="0" max="80" value="80"></div>
+    <div><label for="sDef" class="lab">%%seeddef%% DEF</label><input id="sDef" type="number" min="0" max="80" value="80"></div>
+    <div><label for="sHp" class="lab">%%seedhp%% PV</label><input id="sHp" type="number" min="0" max="80" value="80"></div>
+  </div>
+  <label for="cardLv" class="lab">%%book%% Carte de collection de la classe</label>
+  <select id="cardLv"><option value="0">Pas de carte (aucun bonus)</option><option value="1">Niveau 1 (+5 %)</option><option value="2">Niveau 2 (+10 %)</option><option value="3" selected>Niveau 3 (+25 %)</option></select>
+  <p class="note" id="cardInfo" style="margin:4px 0 0"></p>
+
+  <h2 style="margin-top:18px">Stats de base du héros</h2>
+  <p class="note" style="margin:0">Valeurs sans objets ni compétences. Vide = estimation.</p>
+  <div class="row2" style="grid-template-columns:1fr 1fr 1fr">
+    <div><label for="bAtk">ATK</label><input id="bAtk" type="number" min="0"></div>
+    <div><label for="bDef">DEF</label><input id="bDef" type="number" min="0"></div>
+    <div><label for="bHp">PV</label><input id="bHp" type="number" min="0"></div>
+  </div>
+
+  <h2 style="margin-top:18px">Sources autorisées</h2>
+  <label class="chk"><input type="checkbox" id="srcCraft" checked> %%craft%% Objets fabricables</label>
+  <label class="chk"><input type="checkbox" id="srcChest" checked> %%chest%% Objets de coffres</label>
+  <label class="chk"><input type="checkbox" id="srcPrem" checked> %%crown%% Packs, pass, événements</label>
+
+  <h2 style="margin-top:18px">Règles</h2>
+  <label class="chk"><input type="checkbox" id="goldWild" checked> %%gold%% L'élément Or compte pour tous les héros</label>
+  <p class="note lab" style="margin:8px 0 0">%%paragon%% 5e emplacement de compétence : automatique pour une classe évoluée au niveau 100 (Paragon 50).</p>
+  <div id="busy"></div>
+  <div id="src" class="note"></div>
+</aside>
+
+<section class="right">
+  <div class="card hero">
+    <div class="score" id="score">…<small id="scoreLbl"></small></div>
+    <div>
+      <div id="clsInfo" style="margin-bottom:8px"></div>
+      <div class="break" id="breakdown"></div>
+    </div>
+    <div class="sheet" id="sheet" style="grid-column:1/-1"></div>
+  </div>
+
+  <div class="card">
+    <h2>Équipement optimal</h2>
+    <div class="scroll"><table><thead><tr><th>#</th><th>Objet</th><th>Élément</th><th>Esprit</th><th class="n">Élém.</th><th class="n">ATK objet</th><th class="n">DEF objet</th><th class="n">PV objet</th></tr></thead><tbody id="gear"></tbody></table></div>
+  </div>
+
+  <div class="card">
+    <h2>Compétences</h2>
+    <div class="scroll"><table><thead><tr><th>Emplacement</th><th>Compétence</th><th>Rang</th><th>Effet</th></tr></thead><tbody id="skills"></tbody></table></div>
+    <p class="note" id="skillNote"></p>
+  </div>
+
+  <div class="card">
+    <h2>Toutes les stats</h2>
+    <div class="grid3" id="stats"></div>
+  </div>
+
+  <div class="card">
+    <details class="man" id="manual">
+      <summary>Mode manuel : choisir mes objets et mes compétences</summary>
+      <p class="note">Choisissez chaque objet, élément, esprit et compétence. Le calcul utilise les réglages de gauche (niveau, qualité, graines, carte…). Utile pour comparer l'outil avec le jeu.</p>
+      <div class="mtools"><button type="button" id="mCopy">Copier le meilleur build</button></div>
+      <div id="mGear"></div>
+      <h2 style="margin-top:14px">Compétences</h2>
+      <div id="mSkills"></div>
+      <h2 style="margin-top:14px">Résultat de mon build</h2>
+      <div class="sheet" id="mSheet" style="border-top:0;padding-top:0"></div>
+      <p id="mDelta" style="margin:10px 0 0;font-weight:600"></p>
+    </details>
+  </div>
+
+  <div class="card note">
+    <h2>Règles de calcul</h2>
+    <ul>
+      <li>Puissance = puissance d'attaque + puissance de défense (formule publiée par ST Central).</li>
+      <li>Puissance d'attaque = ATK × (1 + crit % × (multiplicateur crit − 1)) × 0,8. Des ajustements existent pour Ninja, Sensei, Samurai, Daimyo, Dancer, Acrobat, Conquistador, Berserker et Jarl.</li>
+      <li>Puissance de défense = Menace × PV / (1 − Esq) × 0,025 + Menace × DEF × 0,008 + PV / (1 − Esq) × 5 + DEF × 1,2 (esquive max 75 %).</li>
+      <li>Stat = (base + graines + objets × (1 + bonus d'objet) + bonus fixes) × (1 + bonus %) × carte de collection. Les enchantements sont inclus dans la valeur des objets.</li>
+      <li>Graines : +4 ATK, +4 DEF ou +1 PV par graine, 80 max par stat avec les Blossoms. Carte de collection : chaque exemplaire de la carte de la classe donne de l'XP (commune 1, rare 5, mythique 10). Niveau 1 dès 1 exemplaire (×1,05), niveau 2 à 50 XP (×1,10), niveau 3 à 250 XP (×1,25).</li>
+      <li>Menace = menace de la classe + compétence innée + esprits (les esprits identiques se cumulent).</li>
+      <li>Stat d'un objet = ((base + bonus de transcendance) × qualité + enchantements) × (1 + % de base de transcendance et starforge) × (1 + bonus d'objet des compétences). Formule vérifiée sur 6 objets réels.</li>
+      <li>Affinité d'élément : +10 de valeur d'élément au tier 14 (+5 avant), +5 seulement pour l'affinité « Tous ». L'affinité double les stats de l'enchantement, sans dépasser la stat de base de l'objet.</li>
+      <li>Geomancer et Astramancer : +1 % ATK par point d'élément, tous éléments comptés. Velite et Praetorian : la DEF du bouclier s'ajoute à l'ATK. Spellknight : bonus sur les objets à élément intégré.</li>
+      <li>Stats de base : valeurs du jeu aux niveaux 1, 40, 50 et Paragon 50 (niveau 100 ici). Entre les niveaux 1 et 40, courbe ((niveau − 1) / 39)^1,55, vérifiée sur 3 héros. Artefacts : compétence propre de l'objet (ex. Capuchon de réflexion : 50 % du bonus d'XP devient de l'ATQ).</li>
+      <li>Vous pouvez entrer les vraies stats de base dans les champs « Stats de base du héros ».</li>
+    </ul>
+  </div>
+</section>
+</main>
+<script>
+const GM=/*GAME*/null;
+const LANG_UI='fr';
+const TXT={fr:{missing:'Les données du Google Sheet manquent.',missingWhy:'Le calculateur a besoin du « Shop Titans Data Spreadsheet » officiel.',download:'Télécharger les données',
+  newVer:'Nouvelle version du Google Sheet :',current:'version actuelle :',update:'Mettre à jour',retry:'Réessayer',ok:'Données du Google Sheet :',checked:'vérifié le',
+  checkNow:'Vérifier maintenant',redownload:'Retélécharger',downloading:'Téléchargement',reading:'Lecture des données…',badData:'Les données reçues ne sont pas valides.',
+  noStorage:'Le navigateur refuse de stocker les données.',fail:'Échec du téléchargement :',checking:'Vérification de la version…',embedded:'Page en ligne : données intégrées, version',checkFail:'Vérification impossible (pas de connexion ?).'},
+ en:{missing:'The Google Sheet data is missing.',missingWhy:'The calculator needs the official "Shop Titans Data Spreadsheet".',download:'Download the data',
+  newVer:'New Google Sheet version:',current:'current version:',update:'Update',retry:'Retry',ok:'Google Sheet data:',checked:'checked on',
+  checkNow:'Check now',redownload:'Download again',downloading:'Downloading',reading:'Reading the data…',badData:'The received data is not valid.',
+  noStorage:'The browser refuses to store the data.',fail:'Download failed:',checking:'Checking the version…',embedded:'Online page: built-in data, version',checkFail:'Check failed (no connection?).'}};
+/*SHEETJS*/
+function startApp(D){
+const DV=dataVersion(D); // avant toute modification de D
+const $ = id => document.getElementById(id);
+$('sheetVer').textContent=D.sheetVersion?'('+D.sheetVersion+')':'';
+const FR = {Fighter:'Combattant',Rogue:'Roublard',Spellcaster:'Lanceur de sorts'};
+const ELFR = {Fire:'Feu',Water:'Eau',Air:'Air',Earth:'Terre',Light:'Lumière',Dark:'Ténèbres',Gold:'Or',Any:'Tous'};
+const ITEM_TYPES = new Set(D.items.map(i=>i.type));
+const fr = n => Math.round(n).toLocaleString('fr-FR');
+const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pct = v => v>1?v/100:v; // "30" -> 0.30, 0.3 -> 0.3
+
+/* ---------- réglages ---------- */
+D.classes.forEach((c,i)=>{const o=document.createElement('option');o.value=i;o.textContent=`${c.name} (${FR[c.family]}${c.promoted?', promu':''})`;$('cls').appendChild(o)});
+const AT=/*ATLAS*/null;
+const icoItem=(it,sz)=>{if(!it||it.img==null) return '';const c=AT.itemCols,i=it.img;return `<span class="ico${sz<40?' s':''}" style="background-image:url(${AT.itemsImg});background-size:${c*sz}px auto;background-position:-${(i%c)*sz}px -${Math.floor(i/c)*sz}px"></span>`};
+const icoClass=(c,sz=36)=>c.icon==null?'':`<span class="cico" style="width:${sz}px;height:${sz}px;background-image:url(${AT.classesImg});background-size:${Object.keys(AT.classes).length*sz}px ${sz}px;background-position:-${c.icon*sz}px 0"></span>`;
+const UIK={power:'icon_global_power',hp:'icon_global_health',atk:'icon_global_attack',defense:'icon_global_defense',eva:'icon_global_evasion',
+  q_common:'icon_global_quality_common',q_uncommon:'icon_global_quality_uncommon',q_flawless:'icon_global_quality_flawless',q_epic:'icon_global_quality_epic',q_legendary:'icon_global_quality_legendary',
+  seedatk:'seedattack1',seeddef:'seeddef1',seedhp:'seedhp1',xp:'icon_worker_xp_bonus',craft:'icon_global_craft',chest:'icon_global_chest',crown:'icon_achievements_sp_vip01',
+  gold:'icon_global_element_gold',paragon:'paragonsoul',book:'icon_global_collection_book_small'};
+const UA=/*UIATLAS*/null;
+const ui=(name,sz=22)=>{const i=UA.ui[UIK[name]||name];if(i==null) return '';const c=UA.uiCols;return `<span class="ui" style="width:${sz}px;height:${sz}px;background-image:url(${UA.uiImg});background-size:${c*sz}px auto;background-position:-${(i%c)*sz}px -${Math.floor(i/c)*sz}px" aria-hidden="true"></span>`};
+const elIco=(el,sz=22)=>ui('icon_global_element_'+(el==='Any'?'all':String(el).toLowerCase()),sz);
+// remplace les marques %%nom%% du HTML par les icônes du jeu
+{const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT),L=[];let n;while(n=w.nextNode()) if(n.nodeValue.includes('%%')) L.push(n);
+ for(const n of L){const s=document.createElement('span');s.style.display='contents';s.innerHTML=esc(n.nodeValue).replace(/%%(\w+)%%/g,(m,k)=>ui(k));n.replaceWith(s)}}
+const ENCH=Object.fromEntries(D.enchants.map(e=>[e.name,e]));
+const ITEM=Object.fromEntries(D.items.map(e=>[e.name,e]));
+const LANG='fr';
+const typ=x=>LANG==='fr'&&D.typeFr[x]?D.typeFr[x]:x;
+const RAR=LANG==='fr'?{Common:'Ordinaire',Rare:'Rare',Epic:'Épique'}:{};
+const EFR=[[/Critical Hit Chance/g,'chances de critique'],[/Critical Hit Damage/g,'dégâts critiques'],[/% of total Threat is added as an attack multiplier/g,' % de la menace totale s’ajoute en multiplicateur d’attaque'],
+ [/Attack per point in any Element/g,'d’attaque par point dans tout élément'],[/bonus from all items with/g,'de bonus pour l’équipement de type'],[/bonus from all items/g,'de bonus pour l’équipement'],
+ [/extra bonus from equipment with innate elements/g,'de bonus en plus pour l’équipement à élément intégré'],[/stats with/g,'de stats avec'],[/Equipped Shield's DEF is added to ATK/g,'La DEF du bouclier équipé s’ajoute à l’ATQ'],
+ [/Has a chance to learn powerful/g,'Peut apprendre des compétences'],[/exclusive skills/g,'exclusives puissantes'],[/May learn a very powerful exclusive skill/g,'Peut apprendre une compétence exclusive très puissante'],
+ [/Learns skills faster than other classes/g,'Apprend les compétences plus vite que les autres classes'],[/Can use any element/g,'Peut utiliser tous les éléments'],
+ [/chance to survive one fatal blow/g,'de chances de survivre à un coup fatal'],[/Heal (\d+) HP each turn/g,'Soigne $1 PV par tour'],[/Break Chance/g,'chances de casse'],[/Resting Time/g,'temps de repos'],
+ [/Mana Shield/g,'bouclier de mana'],[/to max Evasion/g,'d’esquive max'],[/until damaged/g,'jusqu’à la première blessure'],[/Regain bonuses after (\d+) rounds/g,'Bonus récupérés après $1 tours'],
+ [/when HP falls below/g,'quand les PV passent sous'],[/increased effect received from Champion skills/g,'d’effet reçu des compétences de champion'],
+ [/Protect an ally from a Lethal attack once per battle/g,'Protège un allié d’une attaque mortelle une fois par combat'],
+ [/Guarantees a Critical Hit after dodging an attack/g,'Coup critique garanti après une esquive'],[/Attack with/g,'d’attaque avec'],[/Defense with/g,'de défense avec'],
+ [/(\d+)% Attack/g,'$1 % attaque'],[/(\d+)% Defense/g,'$1 % défense'],[/(\d+)% Health/g,'$1 % PV'],[/(\d+)% Evasion/g,'$1 % esquive'],[/(\d+)% XP/g,'$1 % EXP'],
+ [/(\d+) Attack/g,'$1 attaque'],[/(\d+) Defense/g,'$1 défense'],[/(\d+) Health/g,'$1 PV'],[/(\d+) Threat/g,'$1 menace'],[/(\d+)%/g,'$1 %']];
+const eff=s=>{if(LANG!=='fr') return s;let r=String(s);for(const [a,b] of EFR) r=r.replace(a,b);
+  return r.replace(/\b(Axe|Bow|Catalyst|Crossbow|Dagger|Gun|Instrument|Mace|Scythe|Spear|Staff|Sword|Wand|Heavy Armor|Shield|Herbal Medicine|Ring|Spell|Amulet|Gauntlets|Heavy Footwear|Helmet|Idol|Meal)\b/g,m=>(D.typeFr[m]||m).toLowerCase())};
+const nm=x=>LANG==='fr'&&x&&x.fr?x.fr:(x?x.name:'');
+// sélecteur : classes normales par famille, bouton pour la version évoluée
+const BASES={Fighter:[],Rogue:[],Spellcaster:[]};
+D.classes.forEach((c,i)=>{c.idx=i;if(!c.promoted) BASES[c.family].push(c)});
+D.classes.forEach(c=>{if(c.promoted){const b=D.classes.find(x=>!x.promoted&&x.name.toLowerCase()===String(c.baseClass).toLowerCase());if(b) b.evo=c}});
+let curBase=D.classes.find(c=>c.name==='Sorcerer'), evolved=true;
+const FAMFR={Fighter:'Guerriers',Rogue:'Roublards',Spellcaster:'Mages'};
+$('picker').innerHTML=Object.entries(BASES).map(([f,list])=>`<div class="fam">${FAMFR[f]}</div><div class="cgrid">${list.map(c=>`<button type="button" class="cbtn" data-b="${c.idx}" title="${esc(nm(c))}" aria-label="${esc(nm(c))}">${icoClass(c)}</button>`).join('')}</div>`).join('');
+function setClass(){
+  const c=evolved&&curBase.evo?curBase.evo:curBase;
+  $('cls').value=c.idx;
+  document.querySelectorAll('.cbtn').forEach(b=>{const on=+b.dataset.b===curBase.idx;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)});
+  $('evo1').disabled=!curBase.evo;
+  $('evo0').classList.toggle('on',c===curBase);$('evo1').classList.toggle('on',c!==curBase);
+  $('clsName').innerHTML=`${icoClass(c,40)}<span>${esc(nm(c))}<div class="alt">${FR[c.family]}${c.promoted?' · évoluée de '+esc(nm(curBase)):curBase.evo?' · évolue en '+esc(nm(curBase.evo)):''}</div></span>`;
+  schedule();
+}
+$('picker').addEventListener('click',e=>{const b=e.target.closest('.cbtn');if(!b)return;curBase=D.classes[+b.dataset.b];setClass()});
+$('evo0').addEventListener('click',()=>{evolved=false;setClass()});
+$('evo1').addEventListener('click',()=>{evolved=true;setClass()});
+function bindSeg(seg,sel){const S=$(seg),E=$(sel);const sync=()=>S.querySelectorAll('button').forEach(b=>{const on=b.dataset.v===E.value;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)});
+  S.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;E.value=b.dataset.v;E.dispatchEvent(new Event('input'));sync()});E.addEventListener('input',sync);sync()}
+bindSeg('objSeg','obj');bindSeg('qualSeg','qual');
+window.STC_pick=(name)=>{const c=D.classes.find(x=>x.name===name);curBase=c.promoted?D.classes.find(x=>x.evo===c):c;evolved=!!c.promoted;setClass()};
+
+function srcOk(s){return (s==='craft'&&$('srcCraft').checked)||(s==='chest'&&$('srcChest').checked)||(s==='premium'&&$('srcPrem').checked)}
+function maxTierFor(l){const r=D.levels.find(x=>x.level===l);return r?r.maxTier:16}
+const affList = a => (a||'').split(',').map(s=>s.trim()).filter(Boolean);
+function elemBonus(t,all){const b=t>=14?10:5;return all?b/2:b}
+// stats de base d'un objet : qualité, transcendance (paliers 1 à 3) et starforge
+let UPMODE='A', CONDMODE='item', BIMODE=3; // élément intégré = affinité (valeur +10 au T14, stats ×2), vérifié sur un héros réel
+function itemBase(it,ctx){
+  const q=ctx.q,f={atk:0,def_:0,hp:0,crit:it.crit,eva:it.eva};let pc=0;
+  for(let k=0;k<ctx.trans;k++){const u=(it.tr||[])[k];if(!u) continue;
+    if(u.stat==='BASE') pc+=u.v; else if(u.stat==='ATK') f.atk+=u.v; else if(u.stat==='DEF') f.def_+=u.v; else if(u.stat==='HP') f.hp+=u.v;
+    else if(u.stat==='CRIT') f.crit+=u.v/100; else if(u.stat==='EVA') f.eva+=u.v/100;}
+  if(ctx.star&&it.star) pc+=it.star;
+  // vérifié sur des objets réels : ((base + bonus fixes) × qualité + enchantements) × (1 + % de base)
+  const o={crit:f.crit,eva:f.eva,P:1+pc/100};
+  for(const k of ['atk','def_','hp']) o[k]=(it[k]+f[k])*q;
+  return o;
+}
+const ELEM_BY_NAME = Object.fromEntries(D.enchants.filter(e=>e.kind==='element').map(e=>[e.name,e]));
+
+/* ---------- lecture des effets ---------- */
+const STATK={Attack:'atkP',Defense:'defP',Health:'hpP','Critical Hit Chance':'crit','Critical Hit Damage':'critD',Evasion:'eva'};
+function parseEffect(txt){
+  const fx={xp:0,xpToAtk:0,critSet:-1,evaSet:-1,noWeapon:0,atkP:0,defP:0,hpP:0,atk:0,def:0,hp:0,crit:0,critD:0,eva:0,itemP:0,threat:0,thrToAtk:0,shark:0,dino:0,atkPerEl:0,shieldToAtk:0,innateElP:0,selfP:0,cond:[]};
+  let last=null;
+  for(let c of String(txt||'').split(/[,.]/)){c=c.trim(); let m;
+    if(!c) continue;
+    if(last && ITEM_TYPES.has(c)){last.types.push(c);continue}
+    last=null;
+    if(m=c.match(/^\+(\d+)% XP → Attack/)){fx.xpToAtk+=+m[1];continue}
+    if(m=c.match(/^\+(\d+)% XP$/)){fx.xp+=+m[1];continue}
+    if(m=c.match(/^Critical Hit Chance is set to (\d+)%/)){fx.critSet=+m[1];continue}
+    if(m=c.match(/^Evasion is set to (\d+)%/)){fx.evaSet=+m[1];continue}
+    if(/^Equipped weapons grant no bonuses/.test(c)){fx.noWeapon=1;continue}
+    if(m=c.match(/^\+(\d+)% Attack per point in any Element/)){fx.atkPerEl+=+m[1];continue}
+    if(/^Equipped Shield's DEF is added to ATK/.test(c)){fx.shieldToAtk=1;continue}
+    if(m=c.match(/^\+(\d+)% extra bonus from equipment with innate elements/)){fx.innateElP+=+m[1];continue}
+    if(m=c.match(/^(\d+)% bonus to enchanted item's stats/)){fx.selfP+=+m[1];continue}
+    if(m=c.match(/^\+?(\d+)% of total Threat is added as an attack multiplier/i)){fx.thrToAtk+=+m[1];continue}
+    if(m=c.match(/^\+(\d+)% (?:bonus from all items|stats) with (.+)$/)){last={types:[m[2].trim()],itemP:+m[1]};fx.cond.push(last);continue}
+    if(m=c.match(/^\+(\d+)% bonus from all items$/)){fx.itemP+=+m[1];continue}
+    if(m=c.match(/^\+(\d+)% (?:bonus )?(Attack|Defense|Health|Critical Hit Chance|Critical Hit Damage|Evasion) with (.+)$/)){last={types:[m[3].trim()],stat:m[2],v:+m[1]};fx.cond.push(last);continue}
+    if(m=c.match(/^\+(\d+)% (?:bonus )?(Attack|Defense|Health|Critical Hit Chance|Critical Hit Damage|Evasion)$/)){fx[STATK[m[2]]]+=+m[1];continue}
+    if(m=c.match(/^\+(\d+)% Attack when enemy's HP is below 50%/)){fx.shark+=+m[1];continue}
+    if(m=c.match(/^\+(\d+)% Attack on the first round/)){fx.dino+=+m[1];continue}
+    if(m=c.match(/^\+(\d+) (Attack|Defense|Health|Threat)$/)){fx[{Attack:'atk',Defense:'def',Health:'hp',Threat:'threat'}[m[2]]]+=+m[1];continue}
+    (fx.unk=fx.unk||[]).push(c);
+  }
+  return fx;
+}
+function eligible(s,cls){
+  return s.classes.split(',').map(t=>t.trim()).some(t=>{
+    if(t==='All Classes') return true;
+    if(t==='All Promoted Classes') return cls.promoted;
+    const m=t.match(/^All (Promoted )?(Fighters|Rogues|Spellcasters)$/);
+    if(m) return cls.family+'s'===m[2] && (!m[1]||cls.promoted);
+    return t===cls.name;
+  }) && (!s.promo||cls.promoted);
+}
+D.skills.forEach(s=>s.fx=parseEffect(s.effect));
+const FAMS=[];{let cur=null;for(const s of D.skills){if(s.tier===1||!cur||cur.type!==s.type){cur={type:s.type,tiers:[]};FAMS.push(cur)}cur.tiers.push(s)}}
+function bestTier(fam,cls,el){let r=null;for(const s of fam.tiers) if(eligible(s,cls)&&(s.req||0)<=el) r=s;return r}
+
+/* ---------- modèle de stats et puissance ---------- */
+function evaluate(ctx,picks,skillFams){
+  const {cls}=ctx;
+  let el=0;for(const p of picks) el+=p.val;
+  const fxs=[];
+  const inn=ctx.innate?bestTier(ctx.innate,cls,el):null; if(inn) fxs.push(inn.fx);
+  const skills=skillFams.map(f=>bestTier(f,cls,el)).filter(Boolean); for(const s of skills) fxs.push(s.fx);
+  for(const p of picks){ if(p.sfx) fxs.push(p.sfx); if(p.afx) fxs.push(p.afx); }
+  let critSet=-1,evaSet=-1;for(const f of fxs){if(f.critSet>=0)critSet=f.critSet;if(f.evaSet>=0)evaSet=f.evaSet}
+  const T={xp:0,xpToAtk:0,noWeapon:0,atkP:0,defP:0,hpP:0,atk:0,def:0,hp:0,crit:0,critD:0,eva:0,itemP:0,threat:0,thrToAtk:0,shark:0,dino:0,atkPerEl:0,shieldToAtk:0,innateElP:0};
+  let anyEl=0;for(const p of picks) anyEl+=p.anyVal;
+  const conds=[];
+  for(const f of fxs){for(const k in T) T[k]+=f[k]; if(f.cond.length) conds.push(...f.cond)}
+  const types=new Set(picks.map(p=>p.it.type));
+  let ia=0,id=0,ih=0,ie=0,ic=0;const disp=[];
+  for(const p of picks){
+    if(T.noWeapon&&p===picks[0]) continue;
+    let b=1+T.itemP/100+(p.it.builtElem?T.innateElP/100:0)+(p.selfP||0)/100, ba=0,bd=0,bh=0;
+    for(const c of conds) if(c.types.includes(p.it.type)){
+      if(c.itemP) b+=c.itemP/100;
+      else if(c.stat==='Attack') ba+=c.v/100; else if(c.stat==='Defense') bd+=c.v/100; else if(c.stat==='Health') bh+=c.v/100;
+    }
+    if(CONDMODE==='mult'){ba=(b)*(ba);bd=b*bd;bh=b*bh}
+    if(CONDMODE==='global'){ba=0;bd=0;bh=0}
+    disp.push({atk:p.st.atk*(b+ba),def:p.st.def_*(b+bd),hp:p.st.hp*(b+bh)});
+    ia+=p.st.atk*(b+ba)+(T.shieldToAtk&&p.it.type==='Shield'?p.st.def_*(b+bd):0); id+=p.st.def_*(b+bd); ih+=p.st.hp*(b+bh); ie+=p.eva; ic+=p.crit;
+  }
+  if(CONDMODE==='global') for(const c of conds) if(!c.itemP&&c.types.some(x=>types.has(x))) T[STATK[c.stat]]+=c.v;
+  const threat=cls.threat+T.threat, B=ctx.base, K=ctx.card;
+  const atk=(B.atk+ia+T.atk)*(1+(T.atkP+T.atkPerEl*anyEl+T.xpToAtk/100*T.xp)/100)*K*(1+T.thrToAtk/100*threat/100);
+  const def=(B.def+id+T.def)*(1+T.defP/100)*K;
+  const hp=(B.hp+ih+T.hp)*(1+T.hpP/100)*K;
+  const crit=critSet>=0?critSet:Math.min(100,pct(cls.crit)*100+ic*100+T.crit);
+  const cm=cls.critDmg+T.critD/100;
+  const eva=evaSet>=0?evaSet:pct(cls.eva)*100+ie*100+T.eva;
+  // puissance (ST Central)
+  const n=cls.name; let ev=eva;
+  if(n==='Berserker'||n==='Jarl'||n==='Daimyo') ev=eva+15;
+  if(n==='Ninja') ev=eva+20*(0.5+eva/100);
+  if(n==='Sensei') ev=eva+20*(0.75+eva/100);
+  const e=Math.min(ev,n==='Pathfinder'?78:75)/100;
+  let ap=atk*(1+crit/100*(cm-1))*0.8;
+  const aMod=1+T.atkP/100;
+  // Requin et Dinosaure : effet seulement en combat, non vérifié sur la puissance affichée → ignoré
+  if(n==='Berserker'||n==='Jarl') ap*=(aMod+0.6)/aMod;
+  if(n==='Ninja') ap+=atk*0.4*(0.5+eva/100)*(cm-1)*0.8;
+  if(n==='Sensei') ap+=atk*0.4*(0.75+eva/100)*(cm-1)*0.8;
+  if(n==='Samurai'||n==='Daimyo') ap+=atk*0.15*(cm-1)*0.8;
+  if(n==='Dancer'||n==='Acrobat') ap+=atk*0.2*Math.min(eva,80)/100*(cm-1);
+  if(n==='Conquistador') ap+=atk*crit/100*(cm-1)*0.12;
+  const dp=threat*hp/(1-e)*0.025+threat*def*0.008+hp/(1-e)*5+def*1.2;
+  const power=ap+dp;
+  const score=ctx.obj==='threat'? threat*1e9+power : power;
+  return {score,power,ap,dp,atk,def,hp,crit,cm,eva,threat,el,anyEl,inn,skills,T,disp,ia,id,ih};
+}
+
+/* ---------- options par emplacement ---------- */
+function buildOptions(ctx){
+  const {cls,q,maxT,eT}=ctx;
+  const counts=el=>cls.element==='Any'||el===cls.element||(el==='Gold'&&ctx.goldWild);
+  const spirits=D.enchants.filter(e=>e.kind==='spirit'&&e.tier<=eT&&e.name!=="Mundra's Spirit"&&srcOk(e.source));
+  spirits.forEach(s=>{s.fxB=s.fxB||parseEffect(s.effect);s.fxP=s.fxP||parseEffect(s.effectPlus)});
+  // garder les esprits utiles au combat, plus le meilleur esprit « neutre » (seulement pour ses stats)
+  const useful=f=>['atkP','defP','hpP','atk','def','hp','crit','critD','eva','threat','shark','dino','selfP'].some(k=>f[k]);
+  const neutral=spirits.filter(s=>!useful(s.fxB)&&!useful(s.fxP)).sort((a,b)=>b.tier-a.tier)[0];
+  for(let i=spirits.length-1;i>=0;i--){const s=spirits[i];if(!useful(s.fxB)&&!useful(s.fxP)&&s!==neutral) spirits.splice(i,1)}
+  const elems=D.enchants.filter(e=>e.kind==='element'&&e.tier<=eT&&srcOk(e.source));
+  const add=(it,e,mult)=>{const o={atk:0,def_:0,hp:0};for(const k of['atk','def_','hp']) if(it[k]>0&&e[k]>0) o[k]=Math.min(e[k]*mult,it[k]*q);return o};
+  return cls.slots.map(types=>{
+    const opts=[];
+    for(const it of D.items){
+      if(!types.includes(it.type)||it.tier>maxT||!srcOk(it.source)) continue;
+      const aff=affList(it.elemAff);
+      // éléments : garder les meilleurs choix distincts
+      let ech=[];
+      if(it.builtElem){const e=ELEM_BY_NAME[it.builtElem];const v=e?e.value+(BIMODE>=1?elemBonus(e.tier,false):0):0;ech.push({name:it.builtElem+' (intégré)',val:e&&counts(e.element)?v:0,anyVal:v,st:e&&BIMODE>=2?add(it,e,BIMODE===3?2:1):{atk:0,def_:0,hp:0}})}
+      else{
+        const all=[{name:null,val:0,anyVal:0,st:{atk:0,def_:0,hp:0}}];
+        for(const e of elems){const sp=aff.includes(e.element),m=sp||aff.includes('All');const av=e.value+(m?elemBonus(e.tier,!sp):0);all.push({name:e.name,aff:m,val:counts(e.element)?av:0,anyVal:av,st:add(it,e,m?2:1)})}
+        const sum=x=>x.st.atk+x.st.def_+x.st.hp*10;
+        const byVal=all.slice().sort((a,b)=>b.val-a.val||sum(b)-sum(a));
+        const bySt=all.slice().sort((a,b)=>sum(b)-sum(a)||b.val-a.val);
+        const byAny=all.slice().sort((a,b)=>b.anyVal-a.anyVal||sum(b)-sum(a));
+        ech=[...new Set([byVal[0],bySt[0],byAny[0]])];
+      }
+      // esprits
+      let sch=[];
+      if(it.builtSpirit){const s=D.enchants.find(x=>x.name===it.builtSpirit);sch.push({name:it.builtSpirit,threat:0,sfx:s?parseEffect(s.effect):null,st:{atk:0,def_:0,hp:0}})}
+      else for(const s of spirits){const plus=it.spiritAff===s.skill;sch.push({name:s.name,plus,threat:plus?s.threatPlus:s.threat,sfx:plus?s.fxP:s.fxB,st:add(it,s,plus?2:1)})}
+      if(!sch.length) sch.push({name:null,threat:0,sfx:null,st:{atk:0,def_:0,hp:0}});
+      const base=itemBase(it,ctx);
+      for(const e of ech) for(const s of sch){
+        const P=base.P;
+        opts.push({it,afx:it.artEffect?parseEffect(it.artEffect):null,e,s,val:e.val,anyVal:e.anyVal||0,sfx:s.sfx,selfP:(s.sfx&&s.sfx.selfP)||0,crit:base.crit,eva:base.eva,st:{atk:(base.atk+e.st.atk+s.st.atk)*P,def_:(base.def_+e.st.def_+s.st.def_)*P,hp:(base.hp+e.st.hp+s.st.hp)*P}});
+      }
+    }
+    return opts;
+  });
+}
+
+/* ---------- recherche ---------- */
+function chooseSkills(ctx,picks){
+  const chosen=[];
+  for(let k=0;k<ctx.nSlots;k++){
+    let best=null;
+    for(const f of ctx.fams){ if(chosen.includes(f)) continue;
+      const r=evaluate(ctx,picks,[...chosen,f]);
+      if(!best||r.score>best.r.score) best={f,r};
+    }
+    if(best) chosen.push(best.f);
+  }
+  return chosen;
+}
+function optimise(ctx,opts,start,pairs,maxR=8){
+  let picks=start.slice(), skills=chooseSkills(ctx,picks), cur=evaluate(ctx,picks,skills).score;
+  const K=12;
+  for(let round=0;round<maxR;round++){
+    let improved=false;
+    // 1) changer un emplacement à la fois
+    const tops=[];
+    for(let i=0;i<opts.length;i++){
+      let bi=picks[i]; const sc=[];
+      for(const o of opts[i]){ picks[i]=o; const s=evaluate(ctx,picks,skills).score; sc.push([s,o]); if(s>cur+1e-9){cur=s;bi=o;improved=true} }
+      picks[i]=bi;
+      sc.sort((a,b)=>b[0]-a[0]); tops.push([...new Set(sc.slice(0,K).map(x=>x[1]))]);
+    }
+    // 2) changer deux emplacements ensemble (sort d'un optimum local)
+    if(!improved&&pairs){
+      for(let i=0;i<opts.length;i++) for(let j=i+1;j<opts.length;j++){
+        const pi=picks[i],pj=picks[j]; let bi=pi,bj=pj;
+        for(const a of tops[i]) for(const b of tops[j]){ picks[i]=a;picks[j]=b; const s=evaluate(ctx,picks,skills).score; if(s>cur+1e-9){cur=s;bi=a;bj=b;improved=true} }
+        picks[i]=bi;picks[j]=bj;
+      }
+    }
+    const ns=chooseSkills(ctx,picks), sc=evaluate(ctx,picks,ns).score;
+    if(sc>cur+1e-9){skills=ns;cur=sc;improved=true}
+    if(!improved) break;
+  }
+  return {picks,skills,score:cur};
+}
+
+let timer=null;
+function schedule(){clearTimeout(timer);$('busy').textContent='Calcul en cours…';timer=setTimeout(run,30)}
+window.STC_last=()=>({key:settingsKey(makeCtx()),build:lastBuild,busy:$('busy').textContent,version:DATA_VERSION});
+document.querySelectorAll('input,select').forEach(el=>el.addEventListener('input',schedule));
+
+function makeCtx(){
+  const cls=D.classes[+$('cls').value], lvl=Math.max(1,Math.min(100,+$('lvl').value||1));
+  const maxT=maxTierFor(lvl); $('maxTier').value=maxT;
+  let nSlots=cls.skillUnlock.filter(l=>l<=lvl).length; if(cls.promoted&&lvl>=100) nSlots++; // 5e emplacement au Paragon 50
+  // stats de base : estimation (croissance linéaire) ou valeurs saisies, + graines (+4 ATK, +4 DEF, +1 PV)
+  // stats de base (données du jeu) : niveau 1 → 40 en courbe ((L−1)/39)^1,55 (vérifiée sur 3 héros), 40 → 50 et Paragon 1 → 50 en linéaire
+  const curve=a=>{const [v1,v40,v50,v100]=a; if(lvl<=40) return v1+(v40-v1)*Math.pow((lvl-1)/39,1.55);
+    if(lvl<=50) return v40+(v50-v40)*(lvl-40)/10; return v100? v50+(v100-v50)*(lvl-50)/50 : v50;};
+  const est={atk:Math.round(curve(cls.grow.atk)),def:Math.round(curve(cls.grow.def)),hp:Math.round(curve(cls.grow.hp))};
+  $('bAtk').placeholder=est.atk;$('bDef').placeholder=est.def;$('bHp').placeholder=est.hp;
+  const num=(id,d)=>{const v=$(id).value;return v===''?d:Math.max(0,+v)};
+  const sd=id=>Math.max(0,Math.min(80,+$(id).value||0));
+  const base={atk:num('bAtk',est.atk)+4*sd('sAtk'),def:num('bDef',est.def)+4*sd('sDef'),hp:num('bHp',est.hp)+sd('sHp')};
+  const cardLvl=+$('cardLv').value, card=[1,1.05,1.10,1.25][cardLvl];
+  const ctx={cls,lvl,maxT,base,card,trans:+$('trans').value,star:$('star').checked,q:+$('qual').value,eT:+$('enchTier').value,goldWild:$('goldWild').checked,obj:$('obj').value,nSlots,
+    innate:FAMS.find(f=>f.type==='Innate'&&f.tiers.some(s=>eligible(s,cls))),
+    fams:FAMS.filter(f=>f.type==='Hero'&&f.tiers.some(s=>eligible(s,cls)))};
+  return ctx;
+}
+// construit un objet équipé précis (utilisé pour tester un build réel)
+function makePick(ctx,itemName,elemName,spiritName){
+  const {cls,q}=ctx, it=D.items.find(i=>i.name===itemName); if(!it) throw new Error('objet inconnu: '+itemName);
+  const counts=el=>cls.element==='Any'||el===cls.element||(el==='Gold'&&ctx.goldWild);
+  const add=(e,mult)=>{const o={atk:0,def_:0,hp:0};for(const k of['atk','def_','hp']) if(it[k]>0&&e[k]>0) o[k]=Math.min(e[k]*mult,it[k]*q);return o};
+  let e={name:null,val:0,anyVal:0,st:{atk:0,def_:0,hp:0}};
+  const en=it.builtElem||elemName;
+  if(en){const x=ELEM_BY_NAME[en];const bi=!!it.builtElem;const m=(!bi&&(affList(it.elemAff).includes(x.element)||affList(it.elemAff).includes('All')))||(bi&&BIMODE>=1);
+    const sp=bi||affList(it.elemAff).includes(x.element);const av=x.value+(m?elemBonus(x.tier,!sp):0);e={name:en,aff:m&&!bi,val:counts(x.element)?av:0,anyVal:av,st:bi?(BIMODE>=2?add(x,BIMODE===3?2:1):{atk:0,def_:0,hp:0}):add(x,m?2:1)}}
+  let s={name:null,threat:0,sfx:null,st:{atk:0,def_:0,hp:0}};
+  const sn=it.builtSpirit||spiritName;
+  if(sn){const x=D.enchants.find(z=>z.name===sn);const plus=it.spiritAff===x.skill;s={name:sn,plus,threat:plus?x.threatPlus:x.threat,sfx:parseEffect(plus?x.effectPlus:x.effect),st:it.builtSpirit?{atk:0,def_:0,hp:0}:add(x,plus?2:1)}}
+  const b=itemBase(it,ctx);
+  return {it,afx:it.artEffect?parseEffect(it.artEffect):null,e,s,val:e.val,anyVal:e.anyVal,sfx:s.sfx,selfP:(s.sfx&&s.sfx.selfP)||0,crit:b.crit,eva:b.eva,st:{atk:(b.atk+e.st.atk+s.st.atk)*b.P,def_:(b.def_+e.st.def_+s.st.def_)*b.P,hp:(b.hp+e.st.hp+s.st.hp)*b.P}};
+}
+function evalBuild(gear,skillNames){
+  const ctx=makeCtx();
+  const picks=gear.map(g=>makePick(ctx,...g));
+  const fams=skillNames.map(n=>{const f=FAMS.find(f=>f.tiers.some(s=>s.name===n));if(!f) throw new Error('compétence inconnue: '+n);return f});
+  return evaluate(ctx,picks,fams);
+}
+// ---------- résultats stockés ----------
+// PRE : meilleurs builds pré-calculés pour les réglages courants (recalculés quand les données changent)
+const PRE=/*PRECOMP*/{version:'',builds:{}};
+const FORMULA='f2'; // à changer quand une formule de calcul change (invalide les builds stockés)
+const DATA_VERSION=DV+'-'+FORMULA;
+function settingsKey(ctx){
+  return JSON.stringify([ctx.cls.name,ctx.obj,ctx.lvl,ctx.q,ctx.trans,ctx.star,ctx.eT,ctx.goldWild,$('srcCraft').checked,$('srcChest').checked,$('srcPrem').checked,ctx.base,ctx.card,+$('cardLv').value]);
+}
+function storeGet(k){try{const s=JSON.parse(localStorage.getItem('sthc:'+DATA_VERSION+':'+k));return s}catch(e){return null}}
+function storeSet(k,v){try{localStorage.setItem('sthc:'+DATA_VERSION+':'+k,JSON.stringify(v))}catch(e){}}
+function packBuild(B){return {g:B.picks.map(p=>[p.it.name,p.e.name?p.e.name.replace(' (intégré)',''):null,p.s.name]),s:B.skills.map(f=>f.tiers[0].name)}}
+function unpackBuild(ctx,P){
+  const picks=P.g.map(g=>makePick(ctx,...g));
+  const skills=P.s.map(n=>FAMS.find(f=>f.tiers[0].name===n)).filter(Boolean);
+  return {picks,skills,score:evaluate(ctx,picks,skills).score};
+}
+let lastBuild=null;
+function run(){
+  const ctx=makeCtx(), {cls,lvl}=ctx;
+  const key=settingsKey(ctx);
+  const saved=(PRE.version===DATA_VERSION&&PRE.builds[key])||storeGet(key);
+  if(saved){try{const B=unpackBuild(ctx,saved);lastBuild=saved;render(ctx,B);$('busy').textContent='';$('src').textContent=PRE.builds[key]?'⚡ Résultat stocké (pré-calculé)':'⚡ Résultat stocké (déjà calculé sur cet appareil)';return}catch(e){}}
+  const opts=buildOptions(ctx);
+  if(opts.some(o=>!o.length)){$('gear').innerHTML='<tr><td colspan=8 class="warn">Aucun objet disponible pour un emplacement. Élargissez les sources ou le niveau.</td></tr>';$('busy').textContent='';return}
+  // départs multiples : stats brutes, valeur d'élément max, menace max
+  const starts=[
+    opts.map(o=>o.reduce((a,b)=>(b.st.atk+b.st.def_+b.st.hp*10>a.st.atk+a.st.def_+a.st.hp*10?b:a))),
+    opts.map(o=>o.reduce((a,b)=>(b.val*1e6+b.st.atk+b.st.def_>a.val*1e6+a.st.atk+a.st.def_?b:a))),
+    opts.map(o=>o.reduce((a,b)=>(b.s.threat*1e6+b.val*1e3+b.st.def_>a.s.threat*1e6+a.val*1e3+a.st.def_?b:a)))
+  ];
+  const spNames=[...new Set(opts.flat().map(o=>o.s.name))];
+  const rank=n=>{const o=opts.flat().filter(x=>x.s.name===n);return o.length};
+  for(const n of spNames.filter(n=>n&&/Leviathan|Tomb|Kraken|Chimera|Behemoth|Eagle|Carbuncle|Krampus|Mammoth|Titan|Bahamut|Griffin|Ouroboros/.test(n)))
+    starts.push(opts.map(o=>{const c=o.filter(x=>x.s.name===n);const pool=c.length?c:o;return pool.reduce((a,b)=>(b.st.atk+b.st.def_+b.st.hp*10+b.val*50>a.st.atk+a.st.def_+a.st.hp*10+a.val*50?b:a))}));
+  let best=null;
+  const quick=starts.map(s=>optimise(ctx,opts,s,false,1)).sort((a,b)=>b.score-a.score);
+  for(const q of quick.slice(0,2)){const r=optimise(ctx,opts,q.picks,true);if(!best||r.score>best.score)best=r}
+  render(ctx,best);
+  lastBuild=packBuild(best); storeSet(key,lastBuild);
+  $('busy').textContent='';$('src').textContent='Résultat calculé maintenant, puis stocké sur cet appareil';
+}
+
+function render(ctx,B){
+  const {cls,lvl}=ctx, R=evaluate(ctx,B.picks,B.skills);
+  const isP=ctx.obj==='power';
+  $('score').innerHTML=`${ui(isP?'power':'defense',52)}<span>${isP?fr(R.power):fr(R.threat)}</span><small>${isP?'Puissance estimée':'Score de menace'}</small>`;
+  $('clsInfo').innerHTML=`<span class="cell">${icoClass(cls,32)}<b>${esc(nm(cls))}</b></span> ${FR[cls.family]} · élément <b>${ELFR[cls.element]||esc(cls.element)}</b> · niveau ${lvl} · objets tier ≤ ${ctx.maxT} · valeur d'élément <b>${R.el}</b>${R.T.atkPerEl?` · tous éléments <b>${R.anyEl}</b> (+${R.T.atkPerEl*R.anyEl} % ATK)`:''}`;
+  $('breakdown').innerHTML=(isP
+    ?`<span class="pill">Puissance d'attaque <b>${fr(R.ap)}</b></span><span class="pill">Puissance de défense <b>${fr(R.dp)}</b></span><span class="pill">Menace <b>${fr(R.threat)}</b></span>`
+    :`<span class="pill">Classe <b>${cls.threat}</b></span><span class="pill">Innée et compétences <b>+${R.threat-cls.threat-B.picks.reduce((a,p)=>a+p.s.threat,0)}</b></span><span class="pill">Esprits <b>+${B.picks.reduce((a,p)=>a+p.s.threat,0)}</b></span><span class="pill">Puissance <b>${fr(R.power)}</b></span>`);
+  const sic={hp:ui('hp'),atk:ui('atk'),def:ui('defense'),eva:ui('eva'),el:elIco(cls.element)};
+  $('sheet').innerHTML=[['hp','PV',fr(R.hp)],['atk','ATQ',fr(R.atk)],['def','DEF',fr(R.def)],['eva','ESQ',Math.round(R.eva)+' %'],['el','ÉLÉMENT',R.el]]
+    .map(([c,k,v])=>`<div class="${c}"><span>${sic[c]}${k}</span><b>${v}</b></div>`).join('');
+  const tag=s=>s==='premium'?'<span class="tag prem">pack</span>':s==='chest'?'<span class="tag chest">coffre</span>':'';
+  const enc=n=>{if(!n) return '—';const b=n.replace(' (intégré)',''),e=ENCH[b];return `<span class="cell">${icoItem(e,26)}<span title="${esc(b)}">${esc(e?nm(e):b)}${n!==b?' (intégré)':''}</span></span>`};
+  $('gear').innerHTML=B.picks.map((p,i)=>`<tr><td>${i+1}</td><td><div class="cell">${icoItem(p.it,40)}<div><b title="${esc(p.it.name)}">${esc(nm(p.it))}</b><span class="tag">${esc(typ(p.it.type))} · T${p.it.tier}</span>${tag(p.it.source)}${(p.it.elemAff||p.it.spiritAff)?`<div class="alt">Affinité : ${esc([p.it.elemAff,p.it.spiritAff].filter(Boolean).join(' · '))}</div>`:''}</div></div></td>
+    <td>${enc(p.e.name)}${p.e.aff?'<span class="tag plus">affinité</span>':''}</td>
+    <td>${enc(p.s.name)}${p.s.plus?'<span class="tag plus">+</span>':''}${p.s.threat?` <span class="thr">+${p.s.threat} menace</span>`:''}</td>
+    <td class="n">${p.val}</td><td class="n">${fr(p.st.atk)}</td><td class="n">${fr(p.st.def_)}</td><td class="n">${fr(p.st.hp)}</td></tr>`).join('');
+  const rows=[];
+  if(R.inn) rows.push(`<tr><td>Innée</td><td><span class="skn">${ui('icon_global_skill_'+R.inn.fam,32)}<b title="${esc(R.inn.name)}">${esc(nm(R.inn))}</b></span></td><td>${R.inn.tier}</td><td>${esc(eff(R.inn.effect))}</td></tr>`);
+  R.skills.forEach((s,i)=>rows.push(`<tr><td>Compétence ${i+1}</td><td><span class="skn">${ui('icon_global_skill_'+s.fam,32)}<b title="${esc(s.name)}">${esc(nm(s))}</b><span class="tag">${esc(RAR[s.rarity]||s.rarity||'')}</span></span></td><td>${s.tier}</td><td>${esc(eff(s.effect))}</td></tr>`));
+  $('skills').innerHTML=rows.join('');
+  $('skillNote').textContent=`${ctx.nSlots} emplacement(s) de compétence au niveau ${lvl}. Le rang de chaque compétence dépend de la valeur d'élément (${R.el}).`;
+  bestShown={ctx,B,R}; renderManual();
+  $('stats').innerHTML=[['Puissance',fr(R.power)],['Menace',fr(R.threat)],['ATK',fr(R.atk)],['DEF',fr(R.def)],['PV',fr(R.hp)],['Crit %',R.crit.toFixed(0)],['Mult. crit',R.cm.toFixed(2)+'x'],['Esquive %',R.eva.toFixed(0)]]
+    .map(([k,v])=>`<div class="stat"><div>${k}</div><b>${v}</b></div>`).join('');
+}
+window.STC={D,parseEffect,FAMS,evaluate,evalBuild,makeCtx,makePick,setMode:m=>UPMODE=m,setCond:m=>CONDMODE=m,setBI:m=>BIMODE=m};
+// ===== Mode manuel =====
+let bestShown=null, man=null, manClass=null;
+function manualReset(){ if(!bestShown) return; man={g:bestShown.B.picks.map(p=>[p.it.name,p.e.name?p.e.name.replace(' (intégré)',''):'',p.s.name||'',String(bestShown.ctx.q)]),s:bestShown.B.skills.map(f=>f.tiers[0].name)}; }
+function renderManual(){
+  if(!bestShown) return; const ctx=makeCtx(), cls=ctx.cls;
+  if(!man||manClass!==cls.name||!man.edited){manClass=cls.name;manualReset()}
+  while(man.s.length<ctx.nSlots) man.s.push(''); man.s.length=ctx.nSlots;
+  if(!$('manual').open) return;
+  const elems=D.enchants.filter(e=>e.kind==='element').sort((a,b)=>b.tier-a.tier||a.name.localeCompare(b.name));
+  const spirits=D.enchants.filter(e=>e.kind==='spirit').sort((a,b)=>b.tier-a.tier||a.name.localeCompare(b.name));
+  const opt=(v,label,sel)=>`<option value="${esc(v)}"${sel?' selected':''}>${esc(label)}</option>`;
+  $('mGear').innerHTML=cls.slots.map((types,i)=>{
+    const [iN,eN,sN,qN]=man.g[i], it=ITEM[iN];
+    const QL=[['1','q_common','Normale'],['1.25','q_uncommon','Supérieure'],['1.5','q_flawless','Impeccable'],['2','q_epic','Épique'],['3','q_legendary','Légendaire']];
+    const qa=QL.find(x=>+x[0]===+qN)||QL[4];
+    const qSel=`<span class="mq">${ui(qa[1],26)}<select data-k="q" data-i="${i}" aria-label="Qualité">${QL.map(([v,,l])=>opt(v,l,+v===+qN)).join('')}</select></span>`;
+    const list=D.items.filter(x=>types.includes(x.type)).sort((a,b)=>b.tier-a.tier||nm(a).localeCompare(nm(b)));
+    const eSel=it&&it.builtElem?`<select disabled><option>${esc(nm(ENCH[it.builtElem])||it.builtElem)} (intégré)</option></select>`
+      :`<select data-k="e" data-i="${i}" aria-label="Élément">${opt('','— Aucun élément —',!eN)}${elems.map(e=>opt(e.name,`${nm(e)} · T${e.tier} · ${ELFR[e.element]||e.element}`,e.name===eN)).join('')}</select>`;
+    const sSel=it&&it.builtSpirit?`<select disabled><option>${esc(nm(ENCH[it.builtSpirit])||it.builtSpirit)} (intégré)</option></select>`
+      :`<select data-k="s" data-i="${i}" aria-label="Esprit">${opt('','— Aucun esprit —',!sN)}${spirits.map(e=>opt(e.name,`${nm(e)} · T${e.tier}`,e.name===sN)).join('')}</select>`;
+    return `<div class="mrow">${icoItem(it,40)}<select data-k="it" data-i="${i}" aria-label="Objet ${i+1}">${list.map(x=>opt(x.name,`${nm(x)} · ${typ(x.type)} · T${x.tier}`,x.name===iN)).join('')}</select>${qSel}${eSel}${sSel}</div>`;
+  }).join('');
+  const fams=ctx.fams;
+  const inn=bestShown.R.inn;
+  $('mSkills').innerHTML=(inn?`<div class="mskill">${ui('icon_global_skill_'+inn.fam,32)}<span>${esc(nm(inn))} <span class="alt">(innée)</span></span><span></span></div>`:'')+
+    man.s.map((sn,k)=>{const f=FAMS.find(f=>f.tiers[0].name===sn);return `<div class="mskill">${f?ui('icon_global_skill_'+f.tiers[0].fam,32):'<span></span>'}<select data-k="sk" data-i="${k}" aria-label="Compétence ${k+1}">${opt('','— Aucune compétence —',!sn)}${fams.map(f=>{const el=f.tiers.filter(s=>eligible(s,cls)),top=el[el.length-1]||f.tiers[0];return opt(f.tiers[0].name,`${el.map(s=>nm(s)).reverse().join(' / ')} · ${RAR[top.rarity]||top.rarity||''}`,f.tiers[0].name===sn)}).join('')}</select><span class="alt" data-rank="${k}"></span></div>`}).join('');
+  manualCompute();
+}
+function manualCompute(){
+  const ctx=makeCtx();
+  let picks;
+  try{picks=man.g.map(([i,e,s,q])=>{const it=ITEM[i];return makePick({...ctx,q:+q||ctx.q},i,it&&it.builtElem?null:(e||null),it&&it.builtSpirit?null:(s||null))})}catch(err){$('mDelta').textContent=String(err.message);return}
+  const fams=man.s.map(n=>FAMS.find(f=>f.tiers[0].name===n)).filter(Boolean);
+  const uniq=[...new Set(fams)];
+  const R=evaluate(ctx,picks,uniq);
+  man.s.forEach((n,k)=>{const el=document.querySelector(`[data-rank="${k}"]`);if(!el) return;const f=FAMS.find(f=>f.tiers[0].name===n);const t=f?bestTier(f,ctx.cls,R.el):null;el.textContent=f?(t?'Rang '+t.tier:'Rang —'):''});
+  const sic={hp:ui('hp'),atk:ui('atk'),def:ui('defense'),eva:ui('eva'),el:elIco(ctx.cls.element),pw:ui('power')};
+  $('mSheet').innerHTML=[['pw','Puissance',fr(R.power)],['hp','PV',fr(R.hp)],['atk','ATQ',fr(R.atk)],['def','DEF',fr(R.def)],['eva','ESQ',Math.round(R.eva)+' %'],['el','ÉLÉMENT',R.el]]
+    .map(([c,k,v])=>`<div class="${c}"><span>${sic[c]}${k}</span><b>${v}</b></div>`).join('')+`<div><span>Crit</span><b>${R.crit.toFixed(0)} % · ×${R.cm.toFixed(2)}</b></div><div><span>Menace</span><b>${fr(R.threat)}</b></div>`;
+  const best=bestShown.R, isP=ctx.obj==='power', a=isP?R.power:R.threat, b=isP?best.power:best.threat, d=b?((a-b)/b*100):0;
+  $('mDelta').className='delta '+(d<-0.05?'neg':d>0.05?'pos':'');
+  $('mDelta').textContent=`${uniq.length<fams.length?'Compétence en double ignorée. ':''}Écart avec le meilleur build : ${d>=0?'+':''}${d.toFixed(1).replace('.',',')} % (${isP?'puissance':'menace'} ${fr(a)} contre ${fr(b)})`;
+}
+$('manual').addEventListener('toggle',renderManual);
+$('manual').addEventListener('change',e=>{const s=e.target.closest('select[data-k]');if(!s) return;const i=+s.dataset.i,k=s.dataset.k;
+  man.edited=true;
+  if(k==='it'){man.g[i][0]=s.value;renderManual();return}
+  if(k==='q'){man.g[i][3]=s.value;renderManual();return}
+  if(k==='e') man.g[i][1]=s.value; else if(k==='s') man.g[i][2]=s.value; else if(k==='sk'){man.s[i]=s.value;renderManual();return}
+  manualCompute()});
+$('mCopy').addEventListener('click',()=>{man=null;renderManual()});
+setClass();
+}
+// ===== Données : chargement, détection des mises à jour =====
+const EMB=/*DATA*/null;           // données intégrées (page publiée) ; null dans la version téléchargeable
+const STORE='sthc:sheet', META='sthc:meta', DAY=864e5;
+const sget=k=>{try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}};
+const sset=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}};
+const bar=document.getElementById('dataBar');
+const fmtDate=t=>t?new Date(t).toLocaleString(LANG_UI==='fr'?'fr-FR':'en-US',{dateStyle:'short',timeStyle:'short'}):'—';
+let current=EMB||sget(STORE);
+function showBar(state,info){
+  const T=TXT[LANG_UI], m=sget(META)||{};
+  let h='';
+  if(state==='missing') h=`<b>${T.missing}</b><span>${T.missingWhy}</span><button type="button" id="dlBtn" class="big">${T.download}</button>`;
+  else if(state==='update') h=`<b>${T.newVer}</b><span>${esc0(info)} · ${T.current} ${esc0(current&&current.sheetVersion||'?')}</span><button type="button" id="dlBtn" class="big">${T.update}</button>`;
+  else if(state==='busy') h=`<b>${esc0(info)}</b>`;
+  else if(state==='error') h=`<b class="warn">${esc0(info)}</b><button type="button" id="dlBtn">${T.retry}</button>`;
+  else if(EMB) h=`<span>${T.embedded} <b>${esc0(current.sheetVersion||'')}</b></span>`;
+  else h=`<span>${T.ok} <b>${esc0(current&&current.sheetVersion||'')}</b> · ${T.checked} ${fmtDate(m.lastCheck)}</span><button type="button" id="chkBtn">${T.checkNow}</button><button type="button" id="dlBtn">${T.redownload}</button>`;
+  bar.innerHTML=h; bar.className='databar '+state;
+  const d=document.getElementById('dlBtn'); if(d) d.onclick=doDownload;
+  const c=document.getElementById('chkBtn'); if(c) c.onclick=()=>checkUpdate(true);
+}
+function esc0(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+async function doDownload(){
+  const T=TXT[LANG_UI];
+  try{
+    const S=await downloadSheet((i,n,name)=>showBar('busy',`${T.downloading} ${i}/${n} (${name})…`));
+    showBar('busy',T.reading);
+    const D=enrich(extractSheet(S,GM),GM);
+    if(!D.classes.length||!D.items.length) throw new Error(T.badData);
+    if(!sset(STORE,D)) throw new Error(T.noStorage);
+    sset(META,{...(sget(META)||{}),lastCheck:Date.now(),downloaded:Date.now(),sheetVersion:D.sheetVersion});
+    location.reload();
+  }catch(e){showBar('error',T.fail+' '+e.message)}
+}
+async function checkUpdate(manual){
+  const T=TXT[LANG_UI];
+  if(manual) showBar('busy',T.checking);
+  try{
+    const H=await gviz('Home',0), v=sheetVersionOf(H.rows);
+    sset(META,{...(sget(META)||{}),lastCheck:Date.now(),remote:v});
+    if(!current) showBar('missing');
+    else if(v&&v!==current.sheetVersion) showBar('update',v);
+    else showBar('ok');
+  }catch(e){ document.querySelector('main').hidden=!current;
+if(current) showBar('ok'); else showBar('missing'); if(manual) showBar('error',T.checkFail) }
+}
+{const C=/*CHANGELOG*/null, cl=document.getElementById('changelog'), vb=document.getElementById('verBtn');
+ const H={fr:'Journal des modifications',en:'Changelog'}[LANG_UI];
+ cl.innerHTML=`<h2>${H}</h2>`+C.entries.map(e=>`<h3>v${esc0(e.v)} · ${esc0(e.date)}</h3><ul>${(e[LANG_UI]||e.fr).map(x=>`<li>${esc0(x)}</li>`).join('')}</ul>`).join('');
+ vb.title=H; vb.onclick=()=>{cl.hidden=!cl.hidden;vb.setAttribute('aria-expanded',!cl.hidden)};}
+if(current){ try{startApp(current)}catch(e){console.error(e);current=null;showBar('error',TXT[LANG_UI].badData)} }
+document.querySelector('main').hidden=!current;
+if(current) showBar('ok'); else showBar('missing');
+if(!EMB){ checkUpdate(false);                         // vérification à l'ouverture
+setInterval(()=>{const m=sget(META)||{};if(!m.lastCheck||Date.now()-m.lastCheck>DAY) checkUpdate(false)},36e5); } // puis 1 fois par jour
+</script>
+</body>
+</html>

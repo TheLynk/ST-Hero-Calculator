@@ -1,0 +1,21 @@
+ST Hero Calculator — meilleur équipement et compétences pour Shop Titans
+========================================================================
+
+Utilisation
+1. Décompressez le dossier.
+2. Ouvrez index.html (français) ou en.html (anglais) dans votre navigateur (Chrome, Edge ou Firefox).
+3. Au premier lancement, la page indique que les données manquent.
+   Cliquez sur « Télécharger les données ». La page télécharge le
+   « Shop Titans Data Spreadsheet » officiel depuis Google Sheets (environ 10 secondes).
+4. Les données restent dans votre navigateur. Une connexion Internet est
+   nécessaire seulement pour le téléchargement et la vérification des mises à jour.
+
+Mises à jour
+- À chaque ouverture, la page vérifie la version du Google Sheet.
+- Si la page reste ouverte, elle vérifie aussi 1 fois par jour.
+- Si une nouvelle version existe, un bouton « Mettre à jour » apparaît : 1 clic suffit.
+- Le bouton « Vérifier maintenant » lance une vérification tout de suite.
+
+Source des données : https://docs.google.com/spreadsheets/d/1WLa7X8h3O0-aGKxeAlCL7bnN8-FhGd3t7pz2RCzSg8c
+Les images, les noms français et les stats de base des classes viennent des fichiers du jeu.
+Outil non officiel, sans lien avec Kabam.

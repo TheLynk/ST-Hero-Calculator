@@ -1,0 +1,13 @@
+# Copie du jeu : ne jamais publier (fichiers de Kabam, 2 Go)
+JeuSteam/
+
+# Donnees extraites du jeu (brutes) et anciens fichiers
+tools/gamedata/
+tools/_ancien/
+
+# Fichiers generes ou lourds
+release/
+*.zip
+*.xlsx
+__pycache__/
+*.pyc

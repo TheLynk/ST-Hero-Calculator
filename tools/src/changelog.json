@@ -1,0 +1,155 @@
+{
+ "version": "1.1.2",
+ "entries": [
+  {
+   "v": "1.1.2",
+   "date": "2026-11-24",
+   "fr": [
+    "Correction : un élément intégré à un objet compte comme une affinité (+10 de valeur d'élément au tier 14, stats de l'enchantement ×2). Vérifié sur un Sorceguerre réel : écart avec le jeu de 12 % à moins de 1 %.",
+    "Les 168 meilleurs builds stockés sont recalculés avec cette correction."
+   ],
+   "en": [
+    "Fix: an element built into an item counts as an affinity (+10 element value at tier 14, enchantment stats ×2). Checked on a real Spellknight: gap with the game from 12% to less than 1%.",
+    "The 168 stored best builds are recomputed with this fix."
+   ]
+  },
+  {
+   "v": "1.1.1",
+   "date": "2026-11-24",
+   "fr": [
+    "Mode manuel : choix de la qualité de chaque objet (normale à légendaire), avec son icône."
+   ],
+   "en": [
+    "Manual mode: quality choice for each item (normal to legendary), with its icon."
+   ]
+  },
+  {
+   "v": "1.1.0",
+   "date": "2026-11-24",
+   "fr": [
+    "Numéro de version affiché dans l'en-tête de la page.",
+    "Journal des modifications (français et anglais) dans la page et dans les fichiers CHANGELOG.",
+    "Mode manuel : choix libre des objets, éléments, esprits et compétences, avec comparaison au meilleur build."
+   ],
+   "en": [
+    "Version number shown in the page header.",
+    "Changelog (French and English) in the page and in the CHANGELOG files.",
+    "Manual mode: free choice of items, elements, spirits and skills, compared with the best build."
+   ]
+  },
+  {
+   "v": "1.0.0",
+   "date": "2026-11-24",
+   "fr": [
+    "Outil autonome dans un zip : la page télécharge elle-même le Google Sheet officiel en 1 clic.",
+    "Vérification de la version du sheet à l'ouverture, puis 1 fois par jour. Bouton « Mettre à jour » si une nouvelle version existe.",
+    "Script make_release.bat pour créer le zip d'une release GitHub."
+   ],
+   "en": [
+    "Standalone tool in a zip: the page downloads the official Google Sheet itself in 1 click.",
+    "Sheet version check at start-up, then once a day. \"Update\" button when a new version exists.",
+    "make_release.bat script to create the zip of a GitHub release."
+   ]
+  },
+  {
+   "v": "0.9.0",
+   "date": "2026-11-24",
+   "fr": [
+    "168 meilleurs builds pré-calculés : résultat en moins d'une seconde.",
+    "Builds calculés stockés dans le navigateur.",
+    "5e emplacement de compétence automatique au Paragon 50."
+   ],
+   "en": [
+    "168 precomputed best builds: result in less than one second.",
+    "Computed builds stored in the browser.",
+    "5th skill slot added automatically at Paragon 50."
+   ]
+  },
+  {
+   "v": "0.8.0",
+   "date": "2026-11-24",
+   "fr": [
+    "Icônes du jeu : puissance, PV, ATQ, DEF, ESQ, éléments, compétences, qualité, graines, XP, sources, Paragon.",
+    "Noms et effets des compétences en français.",
+    "Carte de collection : choix du niveau 0 à 3."
+   ],
+   "en": [
+    "Game icons: power, HP, ATK, DEF, EVA, elements, skills, quality, seeds, XP, sources, Paragon.",
+    "French skill names and effects.",
+    "Collection card: choice of level 0 to 3."
+   ]
+  },
+  {
+   "v": "0.7.0",
+   "date": "2026-11-24",
+   "fr": [
+    "Version anglaise (en.html) et version française (index.html).",
+    "Images des objets et icônes des classes.",
+    "Sélecteur de classe par famille, avec bouton classe normale / évoluée."
+   ],
+   "en": [
+    "English version (en.html) and French version (index.html).",
+    "Item images and class icons.",
+    "Class picker by family, with base / promoted class button."
+   ]
+  },
+  {
+   "v": "0.6.0",
+   "date": "2026-11-24",
+   "fr": [
+    "Stats de base exactes de chaque classe (données du jeu, niveaux 1, 40, 50 et Paragon).",
+    "Compétences des artefacts (ex. Capuchon de réflexion : XP → ATQ).",
+    "Build du top 1 reproduit à 0,05 % près."
+   ],
+   "en": [
+    "Exact base stats of each class (game data, levels 1, 40, 50 and Paragon).",
+    "Artifact skills (e.g. Thinkin' Cap: XP → ATK).",
+    "Top 1 build reproduced within 0.05%."
+   ]
+  },
+  {
+   "v": "0.5.0",
+   "date": "2026-11-24",
+   "fr": [
+    "Formule exacte des stats d'objet : transcendance, starforge, affinités.",
+    "Optimiseur amélioré (changements de 2 objets à la fois)."
+   ],
+   "en": [
+    "Exact item stat formula: transcendence, starforge, affinities.",
+    "Better optimizer (changes of 2 items at a time)."
+   ]
+  },
+  {
+   "v": "0.4.0",
+   "date": "2026-11-23",
+   "fr": [
+    "Graines, carte de collection, stats de base du héros.",
+    "Ligne PV / ATQ / DEF / ESQ / ÉLÉMENT comme dans le jeu."
+   ],
+   "en": [
+    "Seeds, collection card, hero base stats.",
+    "HP / ATK / DEF / EVA / ELEMENT row like in the game."
+   ]
+  },
+  {
+   "v": "0.3.0",
+   "date": "2026-11-23",
+   "fr": [
+    "Objectif puissance (formule de ST Central), en plus de la menace."
+   ],
+   "en": [
+    "Power objective (ST Central formula), in addition to threat."
+   ]
+  },
+  {
+   "v": "0.1.0",
+   "date": "2026-11-23",
+   "fr": [
+    "Première version : meilleur équipement pour la menace maximale."
+   ],
+   "en": [
+    "First version: best gear for maximum threat."
+   ]
+  }
+ ]
+}
