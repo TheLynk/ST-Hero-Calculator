@@ -1,5 +1,11 @@
 # Changelog — ST Hero Calculator
 
+## v1.2.0 — 2026-11-24
+
+- Starforge icon next to the "Starforged items" option.
+- Animation during the calculation: spinning star, blinking numbers and progress bar, then an effect when the result appears. The animation is off if the system asks for reduced motion.
+- Artifact icon on artifact items (Thinkin' Cap, Kiku-Ichimonji…).
+
 ## v1.1.2 — 2026-11-24
 
 - Fix: an element built into an item counts as an affinity (+10 element value at tier 14, enchantment stats ×2). Checked on a real Spellknight: gap with the game from 12% to less than 1%.

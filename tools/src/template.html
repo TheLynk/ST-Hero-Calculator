@@ -100,6 +100,21 @@ details.man>summary{cursor:pointer;font-weight:700;color:var(--txt);min-height:3
 .delta.neg{color:var(--acc2)}.delta.pos{color:#5cc28a}
 .mtools{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
 .mtools button{min-height:40px;padding:0 14px;border-radius:8px;border:1px solid var(--line);background:var(--panel2);color:var(--txt);font:600 14px system-ui,sans-serif;cursor:pointer}
+.ico.relic{position:relative}
+.ico.relic::after{content:"";position:absolute;right:-5px;top:-5px;width:18px;height:18px;background:var(--relic) no-repeat;background-size:var(--relic-size);background-position:var(--relic-pos);filter:drop-shadow(0 0 2px #000)}
+.hero{position:relative;overflow:hidden}
+.hero .calcbar{position:absolute;left:0;bottom:0;height:3px;width:100%;opacity:0;overflow:hidden}
+.hero .calcbar::before{content:"";position:absolute;top:0;left:0;width:40%;height:100%;background:linear-gradient(90deg,transparent,var(--acc),transparent);will-change:transform}
+.hero.calc .calcbar{opacity:1}.hero.calc .calcbar::before{animation:slide 1.1s linear infinite}
+.hero.calc .score .ui{animation:spin 1.2s linear infinite}
+.hero.calc .score>span:not(.ui),.hero.calc .sheet b{animation:pulse 1s ease-in-out infinite}
+.hero.done .score>span:not(.ui){animation:pop .45s ease-out}
+@keyframes slide{from{transform:translateX(-100%)}to{transform:translateX(250%)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{50%{opacity:.35}}
+@keyframes pop{0%{transform:scale(.92);opacity:.4}60%{transform:scale(1.04);opacity:1}100%{transform:scale(1)}}
+.hero.calc .score .ui,.hero.calc .score>span:not(.ui),.hero.calc .sheet b{will-change:transform,opacity}
+@media (prefers-reduced-motion:reduce){.hero.calc .calcbar::before,.hero.calc .score .ui,.hero.calc .score>span,.hero.calc .sheet b,.hero.done .score>span{animation:none}}
 #busy{color:var(--mut);font-size:13px;min-height:18px}
 </style>
 </head>
@@ -126,7 +141,7 @@ details.man>summary{cursor:pointer;font-weight:700;color:var(--txt);min-height:3
   <div class="seg" id="qualSeg"><button type="button" data-v="1" title="Normale" aria-label="Normale">%%q_common%%</button><button type="button" data-v="1.25" title="Supérieure" aria-label="Supérieure">%%q_uncommon%%</button><button type="button" data-v="1.5" title="Impeccable" aria-label="Impeccable">%%q_flawless%%</button><button type="button" data-v="2" title="Épique" aria-label="Épique">%%q_epic%%</button><button type="button" data-v="3" title="Légendaire" aria-label="Légendaire">%%q_legendary%%</button></div>
   <label for="trans">Transcendance des objets</label>
   <select id="trans"><option value="0">Aucune</option><option value="1">Palier 1</option><option value="2">Palier 2</option><option value="3" selected>Palier 3 (max)</option></select>
-  <label class="chk"><input type="checkbox" id="star" checked> Objets starforgés (+25 % de base si l'objet le permet)</label>
+  <label class="chk"><input type="checkbox" id="star" checked> %%starforge%% Objets starforgés (+25 % de base si l'objet le permet)</label>
   <label for="enchTier">Tier max enchantements</label><input id="enchTier" type="number" min="4" max="16" value="16">
 
   <h2 style="margin-top:18px">Graines (0–80) et carte</h2>
@@ -160,7 +175,7 @@ details.man>summary{cursor:pointer;font-weight:700;color:var(--txt);min-height:3
 </aside>
 
 <section class="right">
-  <div class="card hero">
+  <div class="card hero" id="heroCard"><div class="calcbar" aria-hidden="true"></div>
     <div class="score" id="score">…<small id="scoreLbl"></small></div>
     <div>
       <div id="clsInfo" style="margin-bottom:8px"></div>
@@ -243,14 +258,15 @@ const pct = v => v>1?v/100:v; // "30" -> 0.30, 0.3 -> 0.3
 /* ---------- réglages ---------- */
 D.classes.forEach((c,i)=>{const o=document.createElement('option');o.value=i;o.textContent=`${c.name} (${FR[c.family]}${c.promoted?', promu':''})`;$('cls').appendChild(o)});
 const AT=/*ATLAS*/null;
-const icoItem=(it,sz)=>{if(!it||it.img==null) return '';const c=AT.itemCols,i=it.img;return `<span class="ico${sz<40?' s':''}" style="background-image:url(${AT.itemsImg});background-size:${c*sz}px auto;background-position:-${(i%c)*sz}px -${Math.floor(i/c)*sz}px"></span>`};
+const icoItem=(it,sz)=>{if(!it||it.img==null) return '';const c=AT.itemCols,i=it.img;return `<span class="ico${sz<40?' s':''}${it.relic&&sz>=40?' relic':''}" ${it.relic&&sz>=40?'title="Relique"':''} style="background-image:url(${AT.itemsImg});background-size:${c*sz}px auto;background-position:-${(i%c)*sz}px -${Math.floor(i/c)*sz}px"></span>`};
 const icoClass=(c,sz=36)=>c.icon==null?'':`<span class="cico" style="width:${sz}px;height:${sz}px;background-image:url(${AT.classesImg});background-size:${Object.keys(AT.classes).length*sz}px ${sz}px;background-position:-${c.icon*sz}px 0"></span>`;
 const UIK={power:'icon_global_power',hp:'icon_global_health',atk:'icon_global_attack',defense:'icon_global_defense',eva:'icon_global_evasion',
   q_common:'icon_global_quality_common',q_uncommon:'icon_global_quality_uncommon',q_flawless:'icon_global_quality_flawless',q_epic:'icon_global_quality_epic',q_legendary:'icon_global_quality_legendary',
   seedatk:'seedattack1',seeddef:'seeddef1',seedhp:'seedhp1',xp:'icon_worker_xp_bonus',craft:'icon_global_craft',chest:'icon_global_chest',crown:'icon_achievements_sp_vip01',
-  gold:'icon_global_element_gold',paragon:'paragonsoul',book:'icon_global_collection_book_small'};
+  gold:'icon_global_element_gold',starforge:'icon_global_battlepass_starforge_currency',relic:'icon_global_artifact',paragon:'paragonsoul',book:'icon_global_collection_book_small'};
 const UA=/*UIATLAS*/null;
 const ui=(name,sz=22)=>{const i=UA.ui[UIK[name]||name];if(i==null) return '';const c=UA.uiCols;return `<span class="ui" style="width:${sz}px;height:${sz}px;background-image:url(${UA.uiImg});background-size:${c*sz}px auto;background-position:-${(i%c)*sz}px -${Math.floor(i/c)*sz}px" aria-hidden="true"></span>`};
+{const i=UA.ui[UIK.relic],c=UA.uiCols,s=document.documentElement.style;if(i!=null){s.setProperty('--relic',`url(${UA.uiImg})`);s.setProperty('--relic-size',`${c*18}px auto`);s.setProperty('--relic-pos',`-${(i%c)*18}px -${Math.floor(i/c)*18}px`)}}
 const elIco=(el,sz=22)=>ui('icon_global_element_'+(el==='Any'?'all':String(el).toLowerCase()),sz);
 // remplace les marques %%nom%% du HTML par les icônes du jeu
 {const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT),L=[];let n;while(n=w.nextNode()) if(n.nodeValue.includes('%%')) L.push(n);
@@ -503,7 +519,9 @@ function optimise(ctx,opts,start,pairs,maxR=8){
 }
 
 let timer=null;
-function schedule(){clearTimeout(timer);$('busy').textContent='Calcul en cours…';timer=setTimeout(run,30)}
+let tok=0;
+function schedule(){clearTimeout(timer);const my=++tok;$('busy').textContent='Calcul en cours…';const h=$('heroCard');h.classList.remove('done');h.classList.add('calc');
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{if(my!==tok) return;timer=setTimeout(()=>{try{run()}finally{h.classList.remove('calc');void h.offsetWidth;h.classList.add('done')}},20)}))}
 window.STC_last=()=>({key:settingsKey(makeCtx()),build:lastBuild,busy:$('busy').textContent,version:DATA_VERSION});
 document.querySelectorAll('input,select').forEach(el=>el.addEventListener('input',schedule));
 
@@ -671,7 +689,7 @@ $('mCopy').addEventListener('click',()=>{man=null;renderManual()});
 setClass();
 }
 // ===== Données : chargement, détection des mises à jour =====
-const EMB=/*DATA*/null;           // données intégrées (page publiée) ; null dans la version téléchargeable
+const EMB0=/*DATA*/null, EMB=EMB0?enrich(EMB0,GM):null;           // données intégrées (page publiée) ; null dans la version téléchargeable
 const STORE='sthc:sheet', META='sthc:meta', DAY=864e5;
 const sget=k=>{try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}};
 const sset=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}};

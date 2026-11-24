@@ -1,5 +1,11 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.2.0 — 2026-11-24
+
+- Icône starforge à côté de l'option « Objets starforgés ».
+- Animation pendant le calcul : étoile qui tourne, chiffres qui clignotent et barre de progression, puis effet à l'affichage du résultat. L'animation est coupée si le système demande moins de mouvements.
+- Icône relique sur les objets reliques (Capuchon de réflexion, Kiku-Ichimonji…).
+
 ## v1.1.2 — 2026-11-24
 
 - Correction : un élément intégré à un objet compte comme une affinité (+10 de valeur d'élément au tier 14, stats de l'enchantement ×2). Vérifié sur un Sorceguerre réel : écart avec le jeu de 12 % à moins de 1 %.

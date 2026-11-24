@@ -12,6 +12,7 @@ if os.path.exists(pre): P=json.load(open(pre,encoding='utf-8'))
 print('builds stockés',len(P['builds']),'version',P.get('version'))
 t=open(tpl,encoding='utf-8').read()
 EN=[
+("'title=\"Relique\"'","'title=\"Artifact\"'"),
 ('aria-label="Qualité">','aria-label="Quality">'),
 ("[['1','q_common','Normale'],['1.25','q_uncommon','Supérieure'],['1.5','q_flawless','Impeccable'],['2','q_epic','Épique'],['3','q_legendary','Légendaire']]","[['1','q_common','Normal'],['1.25','q_uncommon','Superior'],['1.5','q_flawless','Flawless'],['2','q_epic','Epic'],['3','q_legendary','Legendary']]"),
 ('title="Journal des modifications">','title="Changelog">'),
@@ -64,7 +65,7 @@ EN=[
 ('Transcendance des objets','Item transcendence'),
 ('<option value="0">Aucune</option><option value="1">Palier 1</option><option value="2">Palier 2</option><option value="3" selected>Palier 3 (max)</option>',
  '<option value="0">None</option><option value="1">Level 1</option><option value="2">Level 2</option><option value="3" selected>Level 3 (max)</option>'),
-("Objets starforgés (+25 % de base si l'objet le permet)","Starforged items (+25% base if the item allows it)"),
+("%%starforge%% Objets starforgés (+25 % de base si l'objet le permet)","%%starforge%% Starforged items (+25% base if the item allows it)"),
 ('Tier max enchantements','Max enchant tier'),
 
 

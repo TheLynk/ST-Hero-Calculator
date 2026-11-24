@@ -9,6 +9,7 @@ for u in GI:
     n=EN.get(u+'_name')
     if n and n.strip() not in items:
         e={'uid':u,'fr':FR.get(u+'_name',n)}
+        if str(GI[u].get('skill') or '').startswith('a_'): e['relic']=1
         if u in AT['items']: e['img']=AT['items'][u]
         items[n.strip()]=e
 skills={}

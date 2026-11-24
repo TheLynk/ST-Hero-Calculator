@@ -1,6 +1,20 @@
 {
- "version": "1.1.2",
+ "version": "1.2.0",
  "entries": [
+  {
+   "v": "1.2.0",
+   "date": "2026-11-24",
+   "fr": [
+    "Icône starforge à côté de l'option « Objets starforgés ».",
+    "Animation pendant le calcul : étoile qui tourne, chiffres qui clignotent et barre de progression, puis effet à l'affichage du résultat. L'animation est coupée si le système demande moins de mouvements.",
+    "Icône relique sur les objets reliques (Capuchon de réflexion, Kiku-Ichimonji…)."
+   ],
+   "en": [
+    "Starforge icon next to the \"Starforged items\" option.",
+    "Animation during the calculation: spinning star, blinking numbers and progress bar, then an effect when the result appears. The animation is off if the system asks for reduced motion.",
+    "Artifact icon on artifact items (Thinkin' Cap, Kiku-Ichimonji…)."
+   ]
+  },
   {
    "v": "1.1.2",
    "date": "2026-11-24",

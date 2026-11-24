@@ -101,12 +101,12 @@ function extractSheet(T,GM){
 }
 // signature des données de calcul (sans noms, images ni traductions)
 function dataVersion(D){
-  const s=JSON.stringify(D,(k,v)=>['fr','img','icon','uid','fam','typeFr','sheetVersion'].includes(k)?undefined:v);
+  const s=JSON.stringify(D,(k,v)=>['fr','img','icon','uid','fam','typeFr','sheetVersion','relic'].includes(k)?undefined:v);
   let h1=0x811c9dc5,h2=0x1b873593;for(let i=0;i<s.length;i++){const c=s.charCodeAt(i);h1=Math.imul(h1^c,16777619);h2=Math.imul(h2^c,2246822519)}
   return ((h1>>>0).toString(16).padStart(8,'0')+(h2>>>0).toString(16).padStart(8,'0')).slice(0,12);
 }
 function enrich(D,GM){ // noms FR, images (données du jeu)
-  for(const i of D.items.concat(D.enchants)){const g=GM.items[i.name];if(g){i.uid=g.uid;i.fr=g.fr;if(g.img!=null) i.img=g.img}}
+  for(const i of D.items.concat(D.enchants)){const g=GM.items[i.name];if(g){i.uid=g.uid;i.fr=g.fr;if(g.img!=null) i.img=g.img;if(g.relic) i.relic=1}}
   for(const c of D.classes){const u=GM.alias[c.name]||c.name.toLowerCase().replace(/ /g,''),g=GM.classes[u];if(g){c.uid=u;c.fr=g.fr||c.name;if(g.icon!=null) c.icon=g.icon}}
   for(const s of D.skills){const g=GM.skills[s.name];if(g){s.fam=g.fam;s.fr=g.fr}}
   D.typeFr=GM.typeFr; return D;
