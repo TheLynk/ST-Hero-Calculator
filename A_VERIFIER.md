@@ -3,7 +3,7 @@
 Ce fichier donne les règles de calcul que l'outil n'a pas encore vérifiées dans le jeu.
 Chaque test dit quoi préparer, quoi faire, quoi noter et comment lire le résultat.
 
-Mise à jour : 27/11/2026 · version 1.5.6 · tests 1 à 6 vérifiés · version 1.5.8
+Mise à jour : 27/11/2026 · version 1.5.6 · tests 1 à 7 faits · version 1.5.8
 
 ---
 
@@ -94,7 +94,7 @@ Le bonus d'attaque conditionnel du Kirin (présent dans les fichiers du jeu) **n
 
 ---
 
-### Test 7 — Esprit intégré (Crâne de Mundra de R1)
+### Test 7 — Esprit intégré ✅ FAIT le 27/11/2026 (Crâne de Mundra corrigé en 1.5.10)
 
 Dans le jeu, **tous** les esprits intégrés sont l'Esprit de Mundra (T9), sur 10 objets. Il n'existe aucun esprit intégré T12 ou plus : la règle « ×2 dès T12 » ne s'applique jamais aux esprits intégrés.
 
@@ -118,7 +118,29 @@ Le Décret de Mundra (T15) est déjà vérifié : esprit ×1,5 (Albin).
 
 **Suite (27/11) :** la fiche de Ténèbres millénaires (3 289 ATQ, 138 PV) montre que l'Abysse T12 donne +10 de valeur mais seulement ×1,5 sur les stats. Corrigé en 1.5.9.
 
-Avec les vraies stats du Crâne (864 DEF, 97 PV), R1 devient exact en PV (1 556 contre 1 554) et en DEF (10 480 contre 10 485). **Le Crâne de Mundra est donc la seule cause.** Hypothèse : ses stats de base ont changé dans le jeu (environ 705 DEF et 49 PV de base, au lieu de 650 et 41 dans les données). À confirmer avec un autre Crâne de Mundra ou une mise à jour du Google Sheet.
+Avec les vraies stats du Crâne (864 DEF, 97 PV), R1 devient exact en PV (1 556 contre 1 554) et en DEF (10 480 contre 10 485). **Le Crâne de Mundra est donc la seule cause.**
+
+**Suite (27/11, site officiel) :** le site officiel donne 699 DEF et 56 PV pour le Crâne. Ce sont les mêmes valeurs que les données de l'outil. L'hypothèse « stats de base changées » est donc **fausse**. L'écart vient d'une règle du jeu.
+
+Calcul (base 650 DEF / 41 PV, Oubli T14 : 109 DEF / 33 PV, Esprit de Mundra ×1,5 : 49,5 DEF / 15 PV) :
+
+| Hypothèse | DEF | PV |
+|---|---|---|
+| Outil (Oubli ×1) | 809 | 89 |
+| Oubli ×1,5 | 863 ✓ | 105,5 ✗ |
+| Oubli ×1,5, et l'élément ne dépasse pas la base de l'objet (PV : 41) | 863 ✓ | 97 ✓ |
+| Jeu | 864 | 97 |
+
+Seule la 3e ligne donne les 2 chiffres. Mais elle utilise 2 règles inconnues, sur 1 seul objet. Je ne change pas l'outil avant un 2e exemple.
+
+**27/11 — fiches des plans de 8 objets de Mundra (sans élément) :** toutes égales aux données de l'outil, à 1 point près (arrondi : Égide 560/559, Tabard 136/135, Amulette 106/105). L'esprit intégré ×1,5 est donc juste sur tous les objets de Mundra. Ces fiches ne testent pas un élément ajouté.
+
+**Test 7b ✅ (27/11) :** fiche du Crâne **ordinaire sans élément** : 700 DEF, 56 PV (= données). Avec Oubli : 864 DEF, 97 PV. L'Oubli ajoute donc +164 DEF (109 × 1,5) et +41 PV (et non 49,5).
+
+- La règle « élément ≤ base » est fausse : elle casse les Sabots du père Fouettard de PartoutV2 (vérifiés).
+- Règle retenue en **1.5.10**, seulement pour les objets à esprit intégré (Mundra) : élément ajouté ×1,5, et élément + esprit ≤ stat de la fiche (base + esprit intégré). Résultat : 863 DEF / 97 PV.
+- Héros déjà vérifiés : inchangés (PartoutV2, idole, Albin, Tisse-Sort).
+- **Reste à confirmer :** un 2e objet de Mundra fabriqué avec un élément (Égide, Lance, Remède…), si vous en avez un un jour.
 
 **ATQ de R1 (−242) :** l'écart correspond exactement à 10 graines d'ATQ. Vérifier si R1 a 50 graines d'ATQ au lieu de 40.
 
@@ -214,6 +236,7 @@ Avec les vraies stats du Crâne (864 DEF, 97 PV), R1 devient exact en PV (1 556 
 | Affinité et intégré en dessous de T14 : ×1,5 | Racine de Mornefleche, Décret de Mundra (Albin) |
 | Sorceguerre : ×1,5 sur tout le bonus des objets à élément intégré | PartoutV2 |
 | Limite élément + esprit : 2 × la stat de base, sans la qualité | Sabots du père Fouettard, Couronne pyroclastique, Kiku-Ichimonji |
+| Objet à esprit intégré + élément : élément ×1,5, élément + esprit ≤ stat de la fiche | Crâne de Mundra + Oubli (1 seul objet) |
 | Esprit né de la tombe : +20 % ajouté aux autres bonus d'objet (ATQ) | Sabots de PassePartout |
 | « Dieu de la guerre ancien » : +250 % sur l'arme seulement | Kiku-Ichimonji de PassePartout |
 | Capuchon de réflexion : 50 % de l'XP en ATQ, sans le bonus de guilde | PartoutV2 |

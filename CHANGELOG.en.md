@@ -1,5 +1,10 @@
 # Changelog — ST Hero Calculator
 
+## v1.5.10 — 2026-11-27
+
+- Items with a built-in spirit (Mundra) with an added element: the element counts ×1.5, and element + spirit do not go above the item's sheet stat (base + built-in spirit). Checked on Mundra's Skull + Oblivion: 864 DEF and 97 HP in game, 863 and 97 in the tool (before: 809 and 89). Rule taken from one item only: to be confirmed.
+- The stored best builds are recalculated.
+
 ## v1.5.9 — 2026-11-27
 
 - Affinity, fix of 1.5.8: from tier 12 the element value does get +10, but stats stay ×1.5 up to tier 13. Stats ×2 start at tier 14. Checked on the Darkness Millennium sheet (Abyssal T12): 3,289 ATK and 138 HP, like the game.

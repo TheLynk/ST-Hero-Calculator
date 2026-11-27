@@ -1,6 +1,18 @@
 {
- "version": "1.5.9",
+ "version": "1.5.10",
  "entries": [
+  {
+   "v": "1.5.10",
+   "date": "2026-11-27",
+   "fr": [
+    "Objets à esprit intégré (Mundra) avec un élément ajouté : l'élément compte ×1,5, et élément + esprit ne dépassent pas la stat de la fiche de l'objet (base + esprit intégré). Vérifié sur le Crâne de Mundra + Oubli : 864 DEF et 97 PV dans le jeu, 863 et 97 dans l'outil (avant : 809 et 89). Règle tirée d'un seul objet : à confirmer.",
+    "Les meilleurs builds stockés sont recalculés."
+   ],
+   "en": [
+    "Items with a built-in spirit (Mundra) with an added element: the element counts ×1.5, and element + spirit do not go above the item's sheet stat (base + built-in spirit). Checked on Mundra's Skull + Oblivion: 864 DEF and 97 HP in game, 863 and 97 in the tool (before: 809 and 89). Rule taken from one item only: to be confirmed.",
+    "The stored best builds are recalculated."
+   ]
+  },
   {
    "v": "1.5.9",
    "date": "2026-11-27",

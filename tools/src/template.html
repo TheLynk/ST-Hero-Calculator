@@ -620,13 +620,14 @@ function makePick(ctx,itemName,elemName,spiritName){
   let e={name:null,val:0,anyVal:0,st:{atk:0,def_:0,hp:0}};
   const en=it.builtElem||elemName;
   if(en){const x=ELEM_BY_NAME[en];const bi=!!it.builtElem;const m=(!bi&&(affList(it.elemAff).includes(x.element)||affList(it.elemAff).includes('All')))||(bi&&BIMODE>=1);
-    const sp=bi||affList(it.elemAff).includes(x.element);const av=x.value+(m?elemBonus(x.tier,!sp):0);e={name:en,aff:m&&!bi,val:counts(x.element)?av:0,anyVal:av,st:bi?(BIMODE>=2?add(x,BIMODE===3?AM(x):1):{atk:0,def_:0,hp:0}):add(x,m?AM(x):1)}}
+    const sp=bi||affList(it.elemAff).includes(x.element);const av=x.value+(m?elemBonus(x.tier,!sp):0);e={name:en,aff:m&&!bi,val:counts(x.element)?av:0,anyVal:av,st:bi?(BIMODE>=2?add(x,BIMODE===3?AM(x):1):{atk:0,def_:0,hp:0}):add(x,m?AM(x):(it.builtSpirit?1.5:1))}}
   let s={name:null,threat:0,sfx:null,st:{atk:0,def_:0,hp:0}};
   const sn=it.builtSpirit||spiritName;
   if(sn){const x=D.enchants.find(z=>z.name===sn);const plus=it.spiritAff===x.skill;s={name:sn,plus,threat:plus?x.threatPlus:x.threat,sfx:parseEffect(plus?x.effectPlus:x.effect),st:it.builtSpirit?add(x,AM(x)):add(x,plus?AM(x):1)}}
   const b=itemBase(it,ctx);
   // élément + esprit : au plus 2 × la stat de base de l'objet (vérifié sur les Sabots du père Fouettard et la Couronne pyroclastique)
-  for(const k of ['atk','def_','hp']){const cap=2*b[k]/q,t=e.st[k]+s.st[k];if(t>cap){const x=t-cap,de=Math.min(x,e.st[k]);e.st={...e.st,[k]:e.st[k]-de};s.st={...s.st,[k]:s.st[k]-(x-de)}}}
+  // objet à esprit intégré (Mundra) : élément + esprit au plus égal à la stat de la fiche (base + esprit intégré) — Crâne de Mundra + Oubli : 864 DEF, 97 PV
+  for(const k of ['atk','def_','hp']){const cap=it.builtSpirit?b[k]/q+s.st[k]:2*b[k]/q,t=e.st[k]+s.st[k];if(t>cap){const x=t-cap,de=Math.min(x,e.st[k]);e.st={...e.st,[k]:e.st[k]-de};s.st={...s.st,[k]:s.st[k]-(x-de)}}}
   return {it,afx:it.artEffect?parseEffect(it.artEffect):null,e,s,val:e.val,anyVal:e.anyVal,sfx:s.sfx,selfP:(s.sfx&&s.sfx.selfP)||0,crit:b.crit,eva:b.eva,st:{atk:(b.atk+e.st.atk+s.st.atk)*b.P,def_:(b.def_+e.st.def_+s.st.def_)*b.P,hp:(b.hp+e.st.hp+s.st.hp)*b.P}};
 }
 function evalBuild(gear,skillNames){
@@ -638,7 +639,7 @@ function evalBuild(gear,skillNames){
 // ---------- résultats stockés ----------
 // PRE : meilleurs builds pré-calculés pour les réglages courants (recalculés quand les données changent)
 const PRE=/*PRECOMP*/{version:'',builds:{}};
-const FORMULA='f10'; // à changer quand une formule de calcul change (invalide les builds stockés)
+const FORMULA='f11'; // à changer quand une formule de calcul change (invalide les builds stockés)
 const DATA_VERSION=DV+'-'+FORMULA;
 function settingsKey(ctx){
   return JSON.stringify([ctx.cls.name,ctx.obj,ctx.lvl,ctx.q,ctx.trans,ctx.star,ctx.eT,ctx.goldWild,$('srcCraft').checked,$('srcChest').checked,$('srcPrem').checked,ctx.base,ctx.card,+$('cardLv').value]);

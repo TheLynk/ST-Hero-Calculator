@@ -1,5 +1,10 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.5.10 — 2026-11-27
+
+- Objets à esprit intégré (Mundra) avec un élément ajouté : l'élément compte ×1,5, et élément + esprit ne dépassent pas la stat de la fiche de l'objet (base + esprit intégré). Vérifié sur le Crâne de Mundra + Oubli : 864 DEF et 97 PV dans le jeu, 863 et 97 dans l'outil (avant : 809 et 89). Règle tirée d'un seul objet : à confirmer.
+- Les meilleurs builds stockés sont recalculés.
+
 ## v1.5.9 — 2026-11-27
 
 - Affinité, correction de la 1.5.8 : dès le tier 12, la valeur d'élément prend bien +10, mais les stats restent ×1,5 jusqu'au tier 13. Les stats ×2 commencent au tier 14. Vérifié sur la fiche de Ténèbres millénaires (Abysse T12) : 3 289 ATQ et 138 PV, comme le jeu.
