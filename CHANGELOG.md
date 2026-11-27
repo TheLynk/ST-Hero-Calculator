@@ -1,5 +1,15 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.5.6 — 2026-11-27
+
+- Puissance : l'Esprit de dinosaure (+25 % d'attaque au 1er tour) compte pour 1/5, et non pour moitié. Vérifié en jeu sur une Sorceguerre (Dinosaure sur une idole : 281 326 contre 281 317) et sur un Berserker.
+- Idole : effet de l'esprit doublé, vérifié en jeu (Esprit de lion : 281 365 contre 281 356).
+- Berserker et Jarl : les bonus d'attaque conditionnels entrent aussi dans l'ajustement de rage de la formule de puissance.
+- Optimiseur : il utilise maintenant exactement les mêmes règles de stats que le mode manuel (affinité ×2 ou ×1,5, limite élément + esprit, esprits intégrés). Avant, la recherche utilisait encore les anciennes règles.
+- Version française : 24 effets restaient en anglais (Berserker, Samouraï, Tisse-Sort, esprits de requin, dinosaure et Mundra, compétences « coups critiques consécutifs »…). Ils sont traduits.
+- Version française : les affinités des objets s'affichent en français (« Terre · Esprit de tigre » au lieu de « Earth · Tiger Power »).
+- Les meilleurs builds stockés sont recalculés.
+
 ## v1.5.5 — 2026-11-27
 
 - Carquois : sans arc, arbalète ou fusil, le carquois est désactivé et n'apporte rien (règle du jeu). L'outil ne propose plus un carquois avec une épée.

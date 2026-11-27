@@ -249,7 +249,7 @@ details.man>summary{cursor:pointer;font-weight:700;color:var(--txt);min-height:3
     <h2>Règles de calcul</h2>
     <ul>
       <li>Puissance = puissance d'attaque + puissance de défense (formule publiée par ST Central).</li>
-      <li>Puissance d'attaque = ATK × (1 + crit % × (multiplicateur crit − 1)) × 0,8. Des ajustements existent pour Ninja, Sensei, Samurai, Daimyo, Dancer, Acrobat, Conquistador, Berserker et Jarl. Tisse-Sort : +15 % de puissance (compétence innée). Bonus conditionnels (Esprit de requin, Esprit de dinosaure, Esprit de Mundra contre les boss) : comptés pour moitié dans la puissance. Carquois : désactivé sans arc, arbalète ou fusil ; avec un arc, +30 % de bonus sur l'arc. Idole : effet de l'esprit doublé.</li>
+      <li>Puissance d'attaque = ATK × (1 + crit % × (multiplicateur crit − 1)) × 0,8. Des ajustements existent pour Ninja, Sensei, Samurai, Daimyo, Dancer, Acrobat, Conquistador, Berserker et Jarl. Tisse-Sort : +15 % de puissance (compétence innée). Bonus conditionnels dans la puissance : Esprit de requin et Esprit de Mundra (contre les boss) comptés pour moitié, Esprit de dinosaure (1er tour) compté pour 1/5. Carquois : désactivé sans arc, arbalète ou fusil ; avec un arc, +30 % de bonus sur l'arc. Idole : effet de l'esprit doublé.</li>
       <li>Puissance de défense = Menace × PV / (1 − Esq) × 0,025 + Menace × DEF × 0,008 + PV / (1 − Esq) × 5 + DEF × 1,2 (esquive max 75 %).</li>
       <li>Stat = (base + graines + objets × (1 + bonus d'objet) + bonus fixes) × (1 + bonus %) × carte de collection. Les enchantements sont inclus dans la valeur des objets.</li>
       <li>Graines : +4 ATK, +4 DEF ou +1 PV par graine, 80 max par stat avec les Blossoms. Carte de collection : chaque exemplaire de la carte de la classe donne de l'XP (commune 1, rare 5, mythique 10). Niveau 1 dès 1 exemplaire (×1,05), niveau 2 à 50 XP (×1,10), niveau 3 à 250 XP (×1,25).</li>
@@ -300,14 +300,29 @@ const ui=(name,sz=22)=>{const i=UA.ui[UIK[name]||name];if(i==null) return '';con
 {const i=UA.ui[UIK.relic],c=UA.uiCols,s=document.documentElement.style;if(i!=null){s.setProperty('--relic',`url(${UA.uiImg})`);s.setProperty('--relic-size',`${c*18}px auto`);s.setProperty('--relic-pos',`-${(i%c)*18}px -${Math.floor(i/c)*18}px`)}}
 const elIco=(el,sz=22)=>ui('icon_global_element_'+(el==='Any'?'all':String(el).toLowerCase()),sz);
 // remplace les marques %%nom%% du HTML par les icônes du jeu
-{const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT),L=[];let n;while(n=w.nextNode()) if(n.nodeValue.includes('%%')) L.push(n);
+{const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT),L=[];let n;while(n=w.nextNode()) if(n.nodeValue.includes('%%')&&!/^(SCRIPT|STYLE)$/.test(n.parentElement.tagName)) L.push(n);
  for(const n of L){const s=document.createElement('span');s.style.display='contents';s.innerHTML=esc(n.nodeValue).replace(/%%(\w+)%%/g,(m,k)=>ui(k));n.replaceWith(s)}}
 const ENCH=Object.fromEntries(D.enchants.map(e=>[e.name,e]));
 const ITEM=Object.fromEntries(D.items.map(e=>[e.name,e]));
 const LANG='fr';
 const typ=x=>LANG==='fr'&&D.typeFr[x]?D.typeFr[x]:x;
 const RAR=LANG==='fr'?{Common:'Ordinaire',Rare:'Rare',Epic:'Épique'}:{};
-const EFR=[[/Critical Hit Chance/g,'chances de critique'],[/Critical Hit Damage/g,'dégâts critiques'],[/% of total Threat is added as an attack multiplier/g,' % de la menace totale s’ajoute en multiplicateur d’attaque'],
+const EFR=[[/Upon striking, defeat any enemy below (\d+)% HP/g,'En frappant, achève tout ennemi sous $1 % de PV'],[/Gain a random Seed bonus to stat when surviving a quest/g,'Gagne une graine de stat au hasard en survivant à une quête'],
+ [/(\d+)% more critical damage per consecutive critical hits/g,'$1 % de dégâts critiques en plus par coup critique consécutif'],[/Stacks (\d+) times/g,'Cumulable $1 fois'],
+ [/when enemy's HP is below (\d+)%/g,'quand l’ennemi a moins de $1 % de PV'],[/on the first round/g,'au premier tour'],[/against bosses/g,'contre les boss'],
+ [/Effect is doubled when below (\d+)% HP and tripled when below (\d+)% HP/g,'Effet doublé sous $1 % de PV et triplé sous $2 % de PV'],
+ [/% reduced Energy cost to surcharge/g,' % d’énergie en moins pour la surcharge'],[/% bonus to enchanted item's stats/g,' % de bonus aux stats de l’objet enchanté'],
+ [/Evasion is set to (\d+)% and cannot change/g,'Esquive fixée à $1 %, sans changement possible'],[/Critical Hit Chance is set to (\d+)% and cannot change/g,'Chances de critique fixées à $1 %, sans changement possible'],
+ [/Guaranteed evasion and critical hit (?:on the first round|au premier tour)/g,'Esquive et coup critique garantis au premier tour'],[/This attack ignores Elemental Barriers/g,'Cette attaque ignore les barrières élémentaires'],
+ [/The Samurai's first attack is always a critical hit that ignores Elemental Barriers/g,'La première attaque du Samouraï est toujours un coup critique qui ignore les barrières élémentaires'],
+ [/If the party is defeated, allows an immediate second attempt at the quest with a \+(\d+)% power bonus/g,'Si le groupe est vaincu, permet un 2e essai immédiat de la quête avec +$1 % de puissance'],
+ [/If the party is defeated, allows an immediate second attempt at the quest/g,'Si le groupe est vaincu, permet un 2e essai immédiat de la quête'],
+ [/Skill effect is doubled within the Tower and Tomb of Titans quests/g,'Effet doublé dans les quêtes de la Tour et du Tombeau des Titans'],[/User begins combat at (\d+)% HP/g,'Commence le combat à $1 % de PV'],
+ [/\+(\d+)% to Polonia's steal chance/g,'+$1 % de chances de vol pour Polonia'],[/\+(\d+) max items stolen/g,'+$1 objets volés au maximum'],
+ [/but only counts as (\d+)% against Elemental Barriers/g,'mais compte seulement pour $1 % contre les barrières élémentaires'],
+ [/Nullify effects this Hero receives from Champions/g,'Annule les effets des champions sur ce héros'],[/Equipped weapons grant no bonuses/g,'Les armes équipées ne donnent aucun bonus'],
+ [/Has a chance to learn powerful, exclusive skills/g,'Peut apprendre des compétences exclusives puissantes'],[/XP → Attack/g,'EXP → attaque'],
+ [/Critical Hit Chance/g,'chances de critique'],[/Critical Hit Damage/g,'dégâts critiques'],[/% of total Threat is added as an attack multiplier/g,' % de la menace totale s’ajoute en multiplicateur d’attaque'],
  [/Attack per point in any Element/g,'d’attaque par point dans tout élément'],[/bonus from all items with/g,'de bonus pour l’équipement de type'],[/bonus from all items/g,'de bonus pour l’équipement'],
  [/extra bonus from equipment with innate elements/g,'de bonus en plus pour l’équipement à élément intégré'],[/stats with/g,'de stats avec'],[/Equipped Shield's DEF is added to ATK/g,'La DEF du bouclier équipé s’ajoute à l’ATQ'],
  [/Has a chance to learn powerful/g,'Peut apprendre des compétences'],[/exclusive skills/g,'exclusives puissantes'],[/May learn a very powerful exclusive skill/g,'Peut apprendre une compétence exclusive très puissante'],
@@ -318,10 +333,13 @@ const EFR=[[/Critical Hit Chance/g,'chances de critique'],[/Critical Hit Damage/
  [/Protect an ally from a Lethal attack once per battle/g,'Protège un allié d’une attaque mortelle une fois par combat'],
  [/Guarantees a Critical Hit after dodging an attack/g,'Coup critique garanti après une esquive'],[/Attack with/g,'d’attaque avec'],[/Defense with/g,'de défense avec'],
  [/(\d+)% Attack/g,'$1 % attaque'],[/(\d+)% Defense/g,'$1 % défense'],[/(\d+)% Health/g,'$1 % PV'],[/(\d+)% Evasion/g,'$1 % esquive'],[/(\d+)% XP/g,'$1 % EXP'],
- [/(\d+) Attack/g,'$1 attaque'],[/(\d+) Defense/g,'$1 défense'],[/(\d+) Health/g,'$1 PV'],[/(\d+) Threat/g,'$1 menace'],[/(\d+)%/g,'$1 %']];
+ [/(\d+) Attack/g,'$1 attaque'],[/(\d+) Defense/g,'$1 défense'],[/(\d+) Health/g,'$1 PV'],[/(\d+) Threat/g,'$1 menace'],[/(\d+)%/g,'$1 %'],[/ and \+/g,' et +']];
 const eff=s=>{if(LANG!=='fr') return s;let r=String(s);for(const [a,b] of EFR) r=r.replace(a,b);
   return r.replace(/\b(Axe|Bow|Catalyst|Crossbow|Dagger|Gun|Instrument|Mace|Scythe|Spear|Staff|Sword|Wand|Heavy Armor|Shield|Herbal Medicine|Ring|Spell|Amulet|Gauntlets|Heavy Footwear|Helmet|Idol|Meal)\b/g,m=>(D.typeFr[m]||m).toLowerCase())};
 const nm=x=>LANG==='fr'&&x&&x.fr?x.fr:(x?x.name:'');
+// affinités : éléments et esprits dans la langue de la page
+const affEl=v=>LANG==='fr'?String(v).split(/,\s*/).map(x=>x==='All'?'Tous':(ELFR[x]||x)).join(', '):v;
+const affSp=v=>{const n=ENCH[v]?v:(/^Tomb/.test(v)?'Tomb-Bound Spirit':String(v).split(' ')[0]+' Spirit');return ENCH[n]?nm(ENCH[n]):v};
 // sélecteur : classes normales par famille, bouton pour la version évoluée
 const BASES={Fighter:[],Rogue:[],Spellcaster:[]};
 D.classes.forEach((c,i)=>{c.idx=i;if(!c.promoted) BASES[c.family].push(c)});
@@ -451,8 +469,8 @@ function evaluate(ctx,picks,skillFams){
   const threat=cls.threat+T.threat, B=ctx.base, K=ctx.card;
   const atk=(B.atk+ia+T.atk)*(1+(T.atkP+T.atkPerEl*anyEl+T.xpToAtk/100*T.xp)/100)*K*(1+T.thrToAtk/100*threat/100);
   const def=(B.def+id+T.def)*(1+T.defP/100)*K;
-  // puissance : les bonus conditionnels (Requin et Dinosaure : même champ du jeu « monsAtkBuf » ; Mundra : contre les boss) comptent pour moitié (vérifié en jeu sur un Géomancien, avec et sans Requin)
-  const aBr=1+(T.atkP+T.atkPerEl*anyEl+T.xpToAtk/100*T.xp)/100, atkPw=atk*(aBr+(T.shark+T.dino+T.bossA)/200)/aBr, defPw=def*(1+(T.defP+T.bossD/2)/100)/(1+T.defP/100);
+  // puissance : bonus conditionnels. Requin ×1/2 et Mundra (boss) ×1/2 : vérifiés sur un Géomancien. Dinosaure (1er tour) ×1/5 : vérifié sur une Sorceguerre (idole) et un Berserker
+  const aBr=1+(T.atkP+T.atkPerEl*anyEl+T.xpToAtk/100*T.xp)/100, cAtk=(T.shark/2+T.dino/5+T.bossA/2)/100, atkPw=atk*(aBr+cAtk)/aBr, defPw=def*(1+(T.defP+T.bossD/2)/100)/(1+T.defP/100);
   const hp=(B.hp+ih+T.hp)*(1+T.hpP/100)*K;
   const crit=critSet>=0?critSet:Math.min(100,pct(cls.crit)*100+ic*100+T.crit);
   const cm=cls.critDmg+T.critD/100;
@@ -464,7 +482,7 @@ function evaluate(ctx,picks,skillFams){
   if(n==='Sensei') ev=eva+20*(0.75+eva/100);
   const e=Math.min(ev,n==='Pathfinder'?78:75)/100;
   let ap=atkPw*(1+crit/100*(cm-1))*0.8;
-  const aMod=1+T.atkP/100;
+  const aMod=1+T.atkP/100+cAtk;
   if(n==='Berserker'||n==='Jarl') ap*=(aMod+0.6)/aMod;
   if(n==='Ninja') ap+=atkPw*0.4*(0.5+eva/100)*(cm-1)*0.8;
   if(n==='Sensei') ap+=atkPw*0.4*(0.75+eva/100)*(cm-1)*0.8;
@@ -514,8 +532,8 @@ function buildOptions(ctx){
       if(!sch.length) sch.push({name:null,threat:0,sfx:null,st:{atk:0,def_:0,hp:0}});
       const base=itemBase(it,ctx);
       for(const e of ech) for(const s of sch){
-        const P=base.P;
-        opts.push({it,afx:it.artEffect?parseEffect(it.artEffect):null,e,s,val:e.val,anyVal:e.anyVal||0,sfx:s.sfx,selfP:(s.sfx&&s.sfx.selfP)||0,crit:base.crit,eva:base.eva,st:{atk:(base.atk+e.st.atk+s.st.atk)*P,def_:(base.def_+e.st.def_+s.st.def_)*P,hp:(base.hp+e.st.hp+s.st.hp)*P}});
+        // mêmes règles que le mode manuel (affinité ×2/×1,5, limite élément + esprit, esprit intégré)
+        opts.push(makePick(ctx,it.name,it.builtElem?null:e.name,it.builtSpirit?null:s.name));
       }
     }
     return opts;
@@ -617,7 +635,7 @@ function evalBuild(gear,skillNames){
 // ---------- résultats stockés ----------
 // PRE : meilleurs builds pré-calculés pour les réglages courants (recalculés quand les données changent)
 const PRE=/*PRECOMP*/{version:'',builds:{}};
-const FORMULA='f6'; // à changer quand une formule de calcul change (invalide les builds stockés)
+const FORMULA='f8'; // à changer quand une formule de calcul change (invalide les builds stockés)
 const DATA_VERSION=DV+'-'+FORMULA;
 function settingsKey(ctx){
   return JSON.stringify([ctx.cls.name,ctx.obj,ctx.lvl,ctx.q,ctx.trans,ctx.star,ctx.eT,ctx.goldWild,$('srcCraft').checked,$('srcChest').checked,$('srcPrem').checked,ctx.base,ctx.card,+$('cardLv').value]);
@@ -669,9 +687,9 @@ function render(ctx,B){
     .map(([c,k,v])=>`<div class="${c}"><span>${sic[c]}${k}</span><b>${v}</b></div>`).join('');
   const tag=s=>s==='premium'?'<span class="tag prem">pack</span>':s==='chest'?'<span class="tag chest">coffre</span>':'';
   const enc=n=>{if(!n) return '—';const b=n.replace(' (intégré)',''),e=ENCH[b];return `<span class="cell">${icoItem(e,26)}<span title="${esc(b)}">${esc(e?nm(e):b)}${n!==b?' (intégré)':''}</span></span>`};
-  $('gear').innerHTML=B.picks.map((p,i)=>`<tr><td>${i+1}</td><td><div class="cell">${icoItem(p.it,40)}<div><b title="${esc(p.it.name)}">${esc(nm(p.it))}</b><span class="tag">${esc(typ(p.it.type))} · T${p.it.tier}</span>${tag(p.it.source)}${R.off[i]?'<span class="tag off">désactivé : sans arc, arbalète ou fusil</span>':''}${(p.it.elemAff||p.it.spiritAff)?`<div class="alt">Affinité : ${esc([p.it.elemAff,p.it.spiritAff].filter(Boolean).join(' · '))}</div>`:''}</div></div></td>
-    <td>${enc(p.e.name)}${p.e.aff?'<span class="tag plus">affinité</span>':''}</td>
-    <td>${enc(p.s.name)}${p.s.plus?'<span class="tag plus">+</span>':''}${p.s.threat?` <span class="thr">+${p.s.threat} menace</span>`:''}</td>
+  $('gear').innerHTML=B.picks.map((p,i)=>`<tr><td>${i+1}</td><td><div class="cell">${icoItem(p.it,40)}<div><b title="${esc(p.it.name)}">${esc(nm(p.it))}</b><span class="tag">${esc(typ(p.it.type))} · T${p.it.tier}</span>${tag(p.it.source)}${R.off[i]?'<span class="tag off">désactivé : sans arc, arbalète ou fusil</span>':''}${(p.it.elemAff||p.it.spiritAff)?`<div class="alt">Affinité : ${esc([p.it.elemAff&&affEl(p.it.elemAff),p.it.spiritAff&&affSp(p.it.spiritAff)].filter(Boolean).join(' · '))}</div>`:''}</div></div></td>
+    <td>${enc(p.e.name&&p.it.builtElem===p.e.name?p.e.name+' (intégré)':p.e.name)}${p.e.aff?'<span class="tag plus">affinité</span>':''}</td>
+    <td>${enc(p.s.name&&p.it.builtSpirit===p.s.name?p.s.name+' (intégré)':p.s.name)}${p.s.plus?'<span class="tag plus">+</span>':''}${p.s.threat?` <span class="thr">+${p.s.threat} menace</span>`:''}</td>
     <td class="n">${p.val}</td><td class="n">${fr(p.st.atk)}</td><td class="n">${fr(p.st.def_)}</td><td class="n">${fr(p.st.hp)}</td></tr>`).join('');
   const rows=[];
   if(R.inn) rows.push(`<tr><td>Innée</td><td><span class="skn">${ui('icon_global_skill_'+R.inn.fam,32)}<b title="${esc(R.inn.name)}">${esc(nm(R.inn))}</b></span></td><td>${R.inn.tier}</td><td>${esc(eff(R.inn.effect))}</td></tr>`);

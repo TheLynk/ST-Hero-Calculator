@@ -1,5 +1,15 @@
 # Changelog — ST Hero Calculator
 
+## v1.5.6 — 2026-11-27
+
+- Power: Dinosaur Spirit (+25% Attack on the first round) counts at 1/5, not at half. Checked in game on a Spellknight (Dinosaur on an idol: 281,326 vs 281,317) and on a Berserker.
+- Idol: spirit effect doubled, checked in game (Lion Spirit: 281,365 vs 281,356).
+- Berserker and Jarl: conditional attack bonuses also enter the rage adjustment of the power formula.
+- Optimizer: it now uses exactly the same stat rules as the manual mode (affinity ×2 or ×1.5, element + spirit limit, built-in spirits). Before, the search still used the old rules.
+- French version: 24 effects were still in English. They are translated.
+- French version: item affinities show in French.
+- The stored best builds are recalculated.
+
 ## v1.5.5 — 2026-11-27
 
 - Quiver: without a bow, crossbow or gun, the quiver is disabled and gives nothing (game rule). The tool no longer suggests a quiver with a sword.

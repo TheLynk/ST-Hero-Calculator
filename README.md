@@ -34,6 +34,7 @@ Pour que les utilisateurs reçoivent la mise à jour : poussez sur `main`, puis 
 | Chemin | Rôle |
 |---|---|
 | `index.html`, `en.html` | Pages prêtes à l'emploi |
+| `A_VERIFIER.md` | Règles de calcul à tester et à vérifier dans le jeu |
 | `ocr.js` | Lecteur de texte (Tesseract.js + modèle anglais), chargé à la demande |
 | `tools/src/template.html` | Modèle de la page (version française) |
 | `tools/src/sheet.js` | Téléchargement et lecture du Google Sheet |
