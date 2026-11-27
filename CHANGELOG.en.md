@@ -1,5 +1,11 @@
 # Changelog — ST Hero Calculator
 
+## v1.5.8 — 2026-11-27
+
+- Affinity: the big bonus (+10 element value, stats ×2) starts at tier 12, not tier 14. Checked with the Abyssal Element (T12) on Darkness Millennium: element 220 like the game.
+- Dark Knight and Death Knight: power counts +10% for “defeat any enemy below 10% HP”. Checked on R1: 138,802 vs 138,964 (before: −9.2%).
+- The stored best builds are recalculated.
+
 ## v1.5.7 — 2026-11-27
 
 - Screenshot reading: the “Death Knight” class was read as “Knight”. On a tie, the page now keeps the longest class name. With the right class, the 6 items are recognized.

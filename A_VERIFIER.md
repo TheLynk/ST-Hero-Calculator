@@ -3,7 +3,7 @@
 Ce fichier donne les règles de calcul que l'outil n'a pas encore vérifiées dans le jeu.
 Chaque test dit quoi préparer, quoi faire, quoi noter et comment lire le résultat.
 
-Mise à jour : 27/11/2026 · version 1.5.6 · tests 1, 2 et 3 vérifiés
+Mise à jour : 27/11/2026 · version 1.5.6 · tests 1, 2 et 3 vérifiés · version 1.5.8
 
 ---
 
@@ -131,6 +131,18 @@ Reste à tester : la même chose avec une **arbalète** (l'outil ne donne pas le
 
 ---
 
+### Test 9b — Chevalier de la mort R1 : DEF trop basse (−1,3 %)
+
+**Constat :** avec le preset de R1 (niveau 39, 40 graines partout, carte niveau 1), l'outil donne DEF 10 353, le jeu 10 485. PV et ATQ sont justes (±0,3 %). Il manque environ 57 DEF « brute » (avant les % de défense).
+
+**Causes possibles :** la DEF de base d'une classe promue au niveau 39, ou l'Esprit de Mundra intégré au Crâne de Mundra.
+
+**Test :** déséquipez tous les objets de R1, capture de l'onglet Infos (comme le test sans objets de PartoutV2). Puis, si la base est juste, la fiche du Crâne de Mundra.
+
+**Aussi à tester :** le seuil exact du grand bonus d'affinité (T10 ou T11 ? Vérifié : T9 = petit bonus, T12 = grand bonus).
+
+---
+
 ### Test 10 — Classes avec ajustement de puissance
 
 **Ce que l'outil fait :** la formule de puissance de ST Central a un ajustement pour ces classes : Ninja, Sensei, Samouraï, Daimyo, Baladin, Acrobate, Conquistador, Berserker, Jarl. Aucune n'est vérifiée.
@@ -197,6 +209,8 @@ Reste à tester : la même chose avec une **arbalète** (l'outil ne donne pas le
 | Carte de collection : niveau 1, 2 et 3 (×1,05, ×1,10, ×1,25) | Albin (niveau 2), PartoutV2 (niveau 1) |
 | Graines : +4 ATQ par graine | PassePartout (12 graines) |
 | Stats de base au niveau 39 | Albin |
+| Affinité : +10 et stats ×2 dès le tier 12 | R1 (Abysse T12 sur Ténèbres millénaires) |
+| Chevalier de la mort : +10 % de puissance (achève sous 10 % de PV) | R1 |
 | Idole : effet de l'esprit doublé, stats de l'esprit non doublées | PartoutV2 + Idole primitive + Esprit de lion |
 | Dinosaure : 1/5 de son effet dans la puissance | PartoutV2 (idole), Berserker Samson |
 | Carquois + arc : +30 % de bonus d'objet sur l'arc, ajouté aux autres bonus | Agatha (Baladin), Grand Monarque |

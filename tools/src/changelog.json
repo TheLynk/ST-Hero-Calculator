@@ -1,6 +1,20 @@
 {
- "version": "1.5.7",
+ "version": "1.5.8",
  "entries": [
+  {
+   "v": "1.5.8",
+   "date": "2026-11-27",
+   "fr": [
+    "Affinité : le grand bonus (+10 de valeur d'élément, stats ×2) commence dès le tier 12, et non au tier 14. Vérifié avec l'Élément Abysse (T12) sur Ténèbres millénaires : élément 220 comme le jeu.",
+    "Chevalier noir et Chevalier de la mort : la puissance compte +10 % pour « achève tout ennemi sous 10 % de PV ». Vérifié sur R1 : 138 802 contre 138 964 (avant : −9,2 %).",
+    "Les meilleurs builds stockés sont recalculés."
+   ],
+   "en": [
+    "Affinity: the big bonus (+10 element value, stats ×2) starts at tier 12, not tier 14. Checked with the Abyssal Element (T12) on Darkness Millennium: element 220 like the game.",
+    "Dark Knight and Death Knight: power counts +10% for “defeat any enemy below 10% HP”. Checked on R1: 138,802 vs 138,964 (before: −9.2%).",
+    "The stored best builds are recalculated."
+   ]
+  },
   {
    "v": "1.5.7",
    "date": "2026-11-27",

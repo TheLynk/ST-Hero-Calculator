@@ -1,5 +1,11 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.5.8 — 2026-11-27
+
+- Affinité : le grand bonus (+10 de valeur d'élément, stats ×2) commence dès le tier 12, et non au tier 14. Vérifié avec l'Élément Abysse (T12) sur Ténèbres millénaires : élément 220 comme le jeu.
+- Chevalier noir et Chevalier de la mort : la puissance compte +10 % pour « achève tout ennemi sous 10 % de PV ». Vérifié sur R1 : 138 802 contre 138 964 (avant : −9,2 %).
+- Les meilleurs builds stockés sont recalculés.
+
 ## v1.5.7 — 2026-11-27
 
 - Lecture des captures : la classe « Chevalier de la mort » était lue « Chevalier ». À égalité, la page garde maintenant le nom de classe le plus long. Avec la bonne classe, les 6 objets de la capture sont reconnus.

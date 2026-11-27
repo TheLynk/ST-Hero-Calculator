@@ -249,13 +249,13 @@ details.man>summary{cursor:pointer;font-weight:700;color:var(--txt);min-height:3
     <h2>Règles de calcul</h2>
     <ul>
       <li>Puissance = puissance d'attaque + puissance de défense (formule publiée par ST Central).</li>
-      <li>Puissance d'attaque = ATK × (1 + crit % × (multiplicateur crit − 1)) × 0,8. Des ajustements existent pour Ninja, Sensei, Samurai, Daimyo, Dancer, Acrobat, Conquistador, Berserker et Jarl. Tisse-Sort : +15 % de puissance (compétence innée). Bonus conditionnels dans la puissance : Esprit de requin et Esprit de Mundra (contre les boss) comptés pour moitié, Esprit de dinosaure (1er tour) compté pour 1/5. Carquois : désactivé sans arc, arbalète ou fusil ; avec un arc, +30 % de bonus sur l'arc. Idole : effet de l'esprit doublé.</li>
+      <li>Puissance d'attaque = ATK × (1 + crit % × (multiplicateur crit − 1)) × 0,8. Des ajustements existent pour Ninja, Sensei, Samurai, Daimyo, Dancer, Acrobat, Conquistador, Berserker et Jarl. Tisse-Sort : +15 % de puissance (compétence innée). Chevalier noir et Chevalier de la mort : +10 % de puissance (achève les ennemis sous 10 % de PV). Bonus conditionnels dans la puissance : Esprit de requin et Esprit de Mundra (contre les boss) comptés pour moitié, Esprit de dinosaure (1er tour) compté pour 1/5. Carquois : désactivé sans arc, arbalète ou fusil ; avec un arc, +30 % de bonus sur l'arc. Idole : effet de l'esprit doublé.</li>
       <li>Puissance de défense = Menace × PV / (1 − Esq) × 0,025 + Menace × DEF × 0,008 + PV / (1 − Esq) × 5 + DEF × 1,2 (esquive max 75 %).</li>
       <li>Stat = (base + graines + objets × (1 + bonus d'objet) + bonus fixes) × (1 + bonus %) × carte de collection. Les enchantements sont inclus dans la valeur des objets.</li>
       <li>Graines : +4 ATK, +4 DEF ou +1 PV par graine, 80 max par stat avec les Blossoms. Carte de collection : chaque exemplaire de la carte de la classe donne de l'XP (commune 1, rare 5, mythique 10). Niveau 1 dès 1 exemplaire (×1,05), niveau 2 à 50 XP (×1,10), niveau 3 à 250 XP (×1,25).</li>
       <li>Menace = menace de la classe + compétence innée + esprits (les esprits identiques se cumulent).</li>
       <li>Stat d'un objet = ((base + bonus de transcendance) × qualité + enchantements) × (1 + % de base de transcendance et starforge) × (1 + bonus d'objet des compétences). Formule vérifiée sur 6 objets réels.</li>
-      <li>Affinité d'élément : +10 de valeur d'élément au tier 14 (+5 avant), +5 seulement pour l'affinité « Tous ». L'affinité et l'élément ou l'esprit intégré multiplient ses stats : ×2 pour un enchantement T14 et plus, ×1,5 en dessous. Élément + esprit : au plus 2 × la stat de base de l'objet, sans la qualité. Le Google Sheet compte l'élément intégré dans les stats de base : l'outil reprend les stats du jeu.</li>
+      <li>Affinité d'élément : +10 de valeur d'élément à partir du tier 12 (+5 avant), +5 seulement pour l'affinité « Tous ». L'affinité et l'élément ou l'esprit intégré multiplient ses stats : ×2 pour un enchantement T12 et plus, ×1,5 en dessous. Élément + esprit : au plus 2 × la stat de base de l'objet, sans la qualité. Le Google Sheet compte l'élément intégré dans les stats de base : l'outil reprend les stats du jeu.</li>
       <li>Geomancer et Astramancer : +1 % ATK par point d'élément, tous éléments comptés. Velite et Praetorian : la DEF du bouclier s'ajoute à l'ATK. Spellknight : tout le bonus des objets à élément intégré est multiplié par 1,5 (vérifié en jeu).</li>
       <li>Stats de base : valeurs du jeu aux niveaux 1, 40, 50 et Paragon 50 (niveau 100 ici). Entre les niveaux 1 et 40, courbe ((niveau − 1) / 39)^1,55, vérifiée sur 3 héros. Artefacts : compétence propre de l'objet (ex. Capuchon de réflexion : 50 % du bonus d'XP devient de l'ATQ).</li>
       <li>Vous pouvez entrer les vraies stats de base dans les champs « Stats de base du héros ».</li>
@@ -367,7 +367,7 @@ window.STC_pick=(name)=>{const c=D.classes.find(x=>x.name===name);curBase=c.prom
 function srcOk(s){return (s==='craft'&&$('srcCraft').checked)||(s==='chest'&&$('srcChest').checked)||(s==='premium'&&$('srcPrem').checked)}
 function maxTierFor(l){const r=D.levels.find(x=>x.level===l);return r?r.maxTier:16}
 const affList = a => (a||'').split(',').map(s=>s.trim()).filter(Boolean);
-function elemBonus(t,all){const b=t>=14?10:5;return all?b/2:b}
+function elemBonus(t,all){const b=t>=12?10:5;return all?b/2:b} // +10 dès T12 (Abysse T12 vérifié sur R1), +5 en dessous (Primaire T9 vérifié)
 // stats de base d'un objet : qualité, transcendance (paliers 1 à 3) et starforge
 let UPMODE='A', CONDMODE='item', BIMODE=3; // élément intégré = affinité (valeur +10 au T14, stats ×2), vérifié sur un héros réel
 function itemBase(it,ctx){
@@ -491,7 +491,10 @@ function evaluate(ctx,picks,skillFams){
   if(n==='Conquistador') ap+=atkPw*crit/100*(cm-1)*0.12;
   const dp=threat*hp/(1-e)*0.025+threat*defPw*0.008+hp/(1-e)*5+defPw*1.2;
   // Tisse-Sort (Fateweaver) : « +15 % power bonus » de la compétence innée, compté dans la puissance affichée (vérifié en jeu)
-  const pbm=inn&&/\+(\d+)% power bonus/i.exec(inn.effect||''); const power=(ap+dp)*(pbm?1+pbm[1]/100:1);
+  const pbm=inn&&/\+(\d+)% power bonus/i.exec(inn.effect||'');
+  // Chevalier noir / de la mort : « achève tout ennemi sous 10 % de PV » → puissance ×1,10 (vérifié sur R1 : 138 964 = 126 340 × 1,10)
+  const exm=inn&&/defeat any enemy below (\d+)% HP/i.exec(inn.effect||'');
+  const power=(ap+dp)*(pbm?1+pbm[1]/100:1)*(exm?1+exm[1]/100:1);
   const score=ctx.obj==='threat'? threat*1e9+power : power;
   return {score,power,ap,dp,atk,def,hp,crit,cm,eva,threat,el,anyEl,inn,skills,T,disp,ia,id,ih,off:picks.map(p=>off.has(p))};
 }
@@ -608,8 +611,8 @@ function makeCtx(){
   return ctx;
 }
 // construit un objet équipé précis (utilisé pour tester un build réel)
-// affinité ou intégré : stats ×2 pour un enchantement T14 et plus, ×1,5 en dessous (vérifié sur Racine de Mornefleche et Décret de Mundra)
-const AM=x=>x.tier>=14?2:1.5;
+// affinité ou intégré : stats ×2 pour un enchantement T12 et plus (Abysse T12 vérifié sur R1), ×1,5 en dessous (vérifié sur Racine de Mornefleche et Décret de Mundra)
+const AM=x=>x.tier>=12?2:1.5;
 function makePick(ctx,itemName,elemName,spiritName){
   const {cls,q}=ctx, it=D.items.find(i=>i.name===itemName); if(!it) throw new Error('objet inconnu: '+itemName);
   const counts=el=>cls.element==='Any'||el===cls.element||(el==='Gold'&&ctx.goldWild);
@@ -635,7 +638,7 @@ function evalBuild(gear,skillNames){
 // ---------- résultats stockés ----------
 // PRE : meilleurs builds pré-calculés pour les réglages courants (recalculés quand les données changent)
 const PRE=/*PRECOMP*/{version:'',builds:{}};
-const FORMULA='f8'; // à changer quand une formule de calcul change (invalide les builds stockés)
+const FORMULA='f9'; // à changer quand une formule de calcul change (invalide les builds stockés)
 const DATA_VERSION=DV+'-'+FORMULA;
 function settingsKey(ctx){
   return JSON.stringify([ctx.cls.name,ctx.obj,ctx.lvl,ctx.q,ctx.trans,ctx.star,ctx.eT,ctx.goldWild,$('srcCraft').checked,$('srcChest').checked,$('srcPrem').checked,ctx.base,ctx.card,+$('cardLv').value]);
