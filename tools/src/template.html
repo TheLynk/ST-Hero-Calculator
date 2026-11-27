@@ -255,7 +255,7 @@ details.man>summary{cursor:pointer;font-weight:700;color:var(--txt);min-height:3
       <li>Graines : +4 ATK, +4 DEF ou +1 PV par graine, 80 max par stat avec les Blossoms. Carte de collection : chaque exemplaire de la carte de la classe donne de l'XP (commune 1, rare 5, mythique 10). Niveau 1 dès 1 exemplaire (×1,05), niveau 2 à 50 XP (×1,10), niveau 3 à 250 XP (×1,25).</li>
       <li>Menace = menace de la classe + compétence innée + esprits (les esprits identiques se cumulent).</li>
       <li>Stat d'un objet = ((base + bonus de transcendance) × qualité + enchantements) × (1 + % de base de transcendance et starforge) × (1 + bonus d'objet des compétences). Formule vérifiée sur 6 objets réels.</li>
-      <li>Affinité d'élément : +10 de valeur d'élément à partir du tier 12 (+5 avant), +5 seulement pour l'affinité « Tous ». L'affinité et l'élément ou l'esprit intégré multiplient ses stats : ×2 pour un enchantement T12 et plus, ×1,5 en dessous. Élément + esprit : au plus 2 × la stat de base de l'objet, sans la qualité. Le Google Sheet compte l'élément intégré dans les stats de base : l'outil reprend les stats du jeu.</li>
+      <li>Affinité d'élément : +10 de valeur d'élément à partir du tier 12 (+5 avant), +5 seulement pour l'affinité « Tous ». L'affinité et l'élément ou l'esprit intégré multiplient ses stats : ×2 pour un enchantement T14 et plus, ×1,5 en dessous (la valeur d'élément, elle, prend +10 dès T12). Élément + esprit : au plus 2 × la stat de base de l'objet, sans la qualité. Le Google Sheet compte l'élément intégré dans les stats de base : l'outil reprend les stats du jeu.</li>
       <li>Geomancer et Astramancer : +1 % ATK par point d'élément, tous éléments comptés. Velite et Praetorian : la DEF du bouclier s'ajoute à l'ATK. Spellknight : tout le bonus des objets à élément intégré est multiplié par 1,5 (vérifié en jeu).</li>
       <li>Stats de base : valeurs du jeu aux niveaux 1, 40, 50 et Paragon 50 (niveau 100 ici). Entre les niveaux 1 et 40, courbe ((niveau − 1) / 39)^1,55, vérifiée sur 3 héros. Artefacts : compétence propre de l'objet (ex. Capuchon de réflexion : 50 % du bonus d'XP devient de l'ATQ).</li>
       <li>Vous pouvez entrer les vraies stats de base dans les champs « Stats de base du héros ».</li>
@@ -611,8 +611,8 @@ function makeCtx(){
   return ctx;
 }
 // construit un objet équipé précis (utilisé pour tester un build réel)
-// affinité ou intégré : stats ×2 pour un enchantement T12 et plus (Abysse T12 vérifié sur R1), ×1,5 en dessous (vérifié sur Racine de Mornefleche et Décret de Mundra)
-const AM=x=>x.tier>=12?2:1.5;
+// affinité ou intégré : stats ×2 pour un enchantement T14 et plus, ×1,5 en dessous (Abysse T12 : ×1,5, fiche de Ténèbres millénaires), ×1,5 en dessous (vérifié sur Racine de Mornefleche et Décret de Mundra)
+const AM=x=>x.tier>=14?2:1.5;
 function makePick(ctx,itemName,elemName,spiritName){
   const {cls,q}=ctx, it=D.items.find(i=>i.name===itemName); if(!it) throw new Error('objet inconnu: '+itemName);
   const counts=el=>cls.element==='Any'||el===cls.element||(el==='Gold'&&ctx.goldWild);
@@ -638,7 +638,7 @@ function evalBuild(gear,skillNames){
 // ---------- résultats stockés ----------
 // PRE : meilleurs builds pré-calculés pour les réglages courants (recalculés quand les données changent)
 const PRE=/*PRECOMP*/{version:'',builds:{}};
-const FORMULA='f9'; // à changer quand une formule de calcul change (invalide les builds stockés)
+const FORMULA='f10'; // à changer quand une formule de calcul change (invalide les builds stockés)
 const DATA_VERSION=DV+'-'+FORMULA;
 function settingsKey(ctx){
   return JSON.stringify([ctx.cls.name,ctx.obj,ctx.lvl,ctx.q,ctx.trans,ctx.star,ctx.eT,ctx.goldWild,$('srcCraft').checked,$('srcChest').checked,$('srcPrem').checked,ctx.base,ctx.card,+$('cardLv').value]);

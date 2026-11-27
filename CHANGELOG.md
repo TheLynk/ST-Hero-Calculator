@@ -1,5 +1,10 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.5.9 — 2026-11-27
+
+- Affinité, correction de la 1.5.8 : dès le tier 12, la valeur d'élément prend bien +10, mais les stats restent ×1,5 jusqu'au tier 13. Les stats ×2 commencent au tier 14. Vérifié sur la fiche de Ténèbres millénaires (Abysse T12) : 3 289 ATQ et 138 PV, comme le jeu.
+- Les meilleurs builds stockés sont recalculés.
+
 ## v1.5.8 — 2026-11-27
 
 - Affinité : le grand bonus (+10 de valeur d'élément, stats ×2) commence dès le tier 12, et non au tier 14. Vérifié avec l'Élément Abysse (T12) sur Ténèbres millénaires : élément 220 comme le jeu.

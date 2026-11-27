@@ -1,6 +1,18 @@
 {
- "version": "1.5.8",
+ "version": "1.5.9",
  "entries": [
+  {
+   "v": "1.5.9",
+   "date": "2026-11-27",
+   "fr": [
+    "Affinité, correction de la 1.5.8 : dès le tier 12, la valeur d'élément prend bien +10, mais les stats restent ×1,5 jusqu'au tier 13. Les stats ×2 commencent au tier 14. Vérifié sur la fiche de Ténèbres millénaires (Abysse T12) : 3 289 ATQ et 138 PV, comme le jeu.",
+    "Les meilleurs builds stockés sont recalculés."
+   ],
+   "en": [
+    "Affinity, fix of 1.5.8: from tier 12 the element value does get +10, but stats stay ×1.5 up to tier 13. Stats ×2 start at tier 14. Checked on the Darkness Millennium sheet (Abyssal T12): 3,289 ATK and 138 HP, like the game.",
+    "The stored best builds are recalculated."
+   ]
+  },
   {
    "v": "1.5.8",
    "date": "2026-11-27",

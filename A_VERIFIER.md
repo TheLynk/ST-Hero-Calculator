@@ -3,7 +3,7 @@
 Ce fichier donne les règles de calcul que l'outil n'a pas encore vérifiées dans le jeu.
 Chaque test dit quoi préparer, quoi faire, quoi noter et comment lire le résultat.
 
-Mise à jour : 27/11/2026 · version 1.5.6 · tests 1, 2 et 3 vérifiés · version 1.5.8
+Mise à jour : 27/11/2026 · version 1.5.6 · tests 1 à 6 vérifiés · version 1.5.8
 
 ---
 
@@ -56,58 +56,71 @@ Reste à tester : la même chose avec une **arbalète** (l'outil ne donne pas le
 
 ---
 
-### Test 4 — Carquois désactivé
+### Test 4 — Carquois désactivé ✅ VÉRIFIÉ le 27/11/2026
 
-**Ce que l'outil fait :** sans arc, arbalète ou fusil, le carquois ne donne rien : pas de stats, pas de valeur d'élément, pas d'effet d'esprit.
+Vérifié sur Agatha (Baladin niv. 39) avec un instrument (pas d'arc, d'arbalète ni de fusil), avec puis sans le Sac à cadeaux du Père Noël enchanté (élément Air) :
+- puissance 20 713, PV 303, ATQ 2 898, DEF 8 404, ESQ 35 % : identiques dans les 2 captures ;
+- **valeur d'élément 70 identique** : l'élément du carquois désactivé ne compte pas non plus.
 
-**Héros possibles :** **une de vos Sorceguerres** avec une **épée** ou un **bâton**, et un carquois dans le 6e emplacement. Autres classes : Samouraï, Daimyo, Ninja, Sensei, Druide, Archidruide, Mage, Archimage, Chevalier noir, Chevalier de la mort.
-
-**Étapes :**
-1. Équipez l'épée et le carquois (avec un élément et un esprit). Capture « avant ».
-2. Enlevez le carquois. Capture « après ».
-
-**Ce qu'il faut comparer :**
-- PV, ATQ, DEF : ils doivent être **identiques** dans les 2 captures.
-- **Valeur d'élément :** est-elle identique ? Sinon, le carquois désactivé compte encore pour l'élément.
-- **Rang des compétences** (onglet Capacités) : identique ?
-- Fiche du carquois : le jeu écrit-il « désactivé » ? Quelles stats montre-t-il ?
+L'outil fait exactement cela : un carquois désactivé ne donne ni stats, ni élément, ni effet d'esprit.
 
 ---
 
-### Test 5 — Esprit né de la tombe : DEF trop basse
+### Test 5 — Esprit né de la tombe ✅ VÉRIFIÉ le 27/11/2026
 
-**Ce que l'outil fait :** l'esprit donne 133 DEF (valeur des fichiers du jeu), puis +20 % de bonus sur l'objet. Sur les Sabots du père Fouettard de PassePartout, la fiche montre **1 611 DEF**. L'outil calcule **1 592** (−19). L'ATQ de la même fiche est juste (801).
+Vérifié sur R1 (Chevalier de la mort) avec le Manteau royal de Sia (T15, normal, Oubli), sans esprit puis avec l'Esprit né de la tombe :
 
-**Préparer :** l'Esprit né de la tombe sur un **autre objet avec de la DEF** : armure, casque, bottes, bouclier. Évitez un objet avec une petite stat de base (la limite élément + esprit peut cacher l'effet).
+| Fiche du manteau | Outil | Jeu |
+|---|---|---|
+| Sans esprit | 1 039 DEF · 91 PV | 1 039 · 91 ✓ |
+| Avec l'Esprit né de la tombe | 1 406 DEF · 157 PV | 1 406 · 157 ✓ |
 
-**Étapes :**
-1. Fiche de l'objet **avec** l'Esprit né de la tombe : notez ATQ, DEF, PV.
-2. Fiche du même objet avec un autre esprit T16 connu, ou sans esprit.
-3. Notez les compétences du héros qui donnent un bonus d'objet (ex. Sorceguerre : +30 %).
+- Les stats de l'esprit sont bien 200 / 133 / 40 (fichiers du jeu).
+- Son +20 % agit sur toute la stat de l'objet (base + élément + esprit) et s'ajoute aux autres bonus d'objet.
+- Puissance du héros : écart outil +2 610, jeu +2 604.
 
-**Ce que je vérifie :** la valeur réelle de DEF de l'esprit (133 ou environ 145), et si le +20 % agit pareil sur la DEF et sur l'ATQ.
-
----
-
-### Test 6 — Esprit de Kirin
-
-**Ce que l'outil fait :** le Google Sheet donne seulement « +10 % XP ». Les fichiers du jeu ajoutent un bonus d'attaque conditionnel de +25 %, comme le Dinosaure. L'outil ignore ce bonus.
-
-**Étapes :** même méthode que le test 2, avec un Esprit de Kirin.
-
-**Ce qu'il faut comparer :** si la puissance baisse d'environ 4 à 5 % sans le Kirin, alors que l'ATQ ne change pas, il faut ajouter le bonus.
+**Reste inexpliqué (priorité basse) :** sur les Sabots du père Fouettard de PassePartout, la fiche montre 1 611 DEF et l'outil 1 592. L'ATQ de la même fiche est juste. À revoir si un autre objet donne un écart.
 
 ---
 
-### Test 7 — Esprit intégré T14 ou plus
+### Test 6 — Esprit de Kirin ✅ VÉRIFIÉ le 27/11/2026
 
-**Ce que l'outil fait :** les stats d'un esprit intégré T14 ou plus sont ×2. Seul le cas T9 est vérifié (Décret de Mundra : ×1,5).
+Vérifié sur Albin (Géomancien) avec le Chapeau de tacticien (T7, normal), sans esprit puis avec l'Esprit de Kirin (T12) :
+- fiche du chapeau : 120 → 189 DEF (+69, la DEF de l'esprit) ;
+- héros : DEF 3 479 → 3 578, ATQ et PV identiques ;
+- puissance : 45 287 → 45 422 (+135). Les +99 DEF expliquent seuls ces +135.
 
-**Préparer :** un objet T14 à T16 avec un **esprit intégré** (le cadenas est sur la case de l'esprit dans la fiche).
+Le bonus d'attaque conditionnel du Kirin (présent dans les fichiers du jeu) **ne compte pas** dans la puissance. L'outil l'ignore déjà : rien à changer.
 
-**Étapes :** une seule capture de la **fiche de l'objet** suffit. Notez sa qualité.
+---
 
-**Ce que je vérifie :** la fiche montre ATQ, DEF, PV. Je calcule les 2 cas (×1,5 et ×2) et je garde celui du jeu.
+### Test 7 — Esprit intégré (Crâne de Mundra de R1)
+
+Dans le jeu, **tous** les esprits intégrés sont l'Esprit de Mundra (T9), sur 10 objets. Il n'existe aucun esprit intégré T12 ou plus : la règle « ×2 dès T12 » ne s'applique jamais aux esprits intégrés.
+
+Objets T14 à T16 avec l'Esprit de Mundra intégré :
+
+| Objet | Type · Tier | ATQ | DEF | PV |
+|---|---|---|---|---|
+| Crâne de Mundra | Casque · T14 | 0 | 699 | 56 |
+| Décret de Mundra | Parchemin · T15 | 2 205 | 475 | 0 |
+| Lance de Cristal de Mundra | Lance · T16 | 1 405 | 0 | 0 |
+
+(Stats du Google Sheet : elles contiennent déjà l'esprit ×1,5.)
+
+Le Décret de Mundra (T15) est déjà vérifié : esprit ×1,5 (Albin).
+
+**Résultat du 27/11/2026 — écart trouvé :** fiche du Crâne de Mundra de R1 (normal, Oubli) : **864 DEF et 97 PV**. L'outil donne 809 DEF et 89 PV (+55 DEF et +8 PV dans le jeu).
+
+- Ces +55 DEF expliquent presque toute la DEF qui manque à R1 (environ 57, test 9b).
+- Aucune règle simple ne donne en même temps 864 et 97 : ×1,5 sur l'élément et l'esprit donne bien 864 DEF, mais 106 PV.
+- Sur le Décret de Mundra (T15), l'esprit intégré est exact (×1,5). Le Crâne (T14) ne suit pas la même règle.
+
+**Suite (27/11) :** la fiche de Ténèbres millénaires (3 289 ATQ, 138 PV) montre que l'Abysse T12 donne +10 de valeur mais seulement ×1,5 sur les stats. Corrigé en 1.5.9.
+
+Avec les vraies stats du Crâne (864 DEF, 97 PV), R1 devient exact en PV (1 556 contre 1 554) et en DEF (10 480 contre 10 485). **Le Crâne de Mundra est donc la seule cause.** Hypothèse : ses stats de base ont changé dans le jeu (environ 705 DEF et 49 PV de base, au lieu de 650 et 41 dans les données). À confirmer avec un autre Crâne de Mundra ou une mise à jour du Google Sheet.
+
+**ATQ de R1 (−242) :** l'écart correspond exactement à 10 graines d'ATQ. Vérifier si R1 a 50 graines d'ATQ au lieu de 40.
 
 ---
 
@@ -209,8 +222,11 @@ Reste à tester : la même chose avec une **arbalète** (l'outil ne donne pas le
 | Carte de collection : niveau 1, 2 et 3 (×1,05, ×1,10, ×1,25) | Albin (niveau 2), PartoutV2 (niveau 1) |
 | Graines : +4 ATQ par graine | PassePartout (12 graines) |
 | Stats de base au niveau 39 | Albin |
-| Affinité : +10 et stats ×2 dès le tier 12 | R1 (Abysse T12 sur Ténèbres millénaires) |
+| Affinité T12 : valeur d'élément +10, stats ×1,5 (stats ×2 seulement dès T14) | R1, fiche de Ténèbres millénaires (Abysse T12) |
 | Chevalier de la mort : +10 % de puissance (achève sous 10 % de PV) | R1 |
 | Idole : effet de l'esprit doublé, stats de l'esprit non doublées | PartoutV2 + Idole primitive + Esprit de lion |
 | Dinosaure : 1/5 de son effet dans la puissance | PartoutV2 (idole), Berserker Samson |
 | Carquois + arc : +30 % de bonus d'objet sur l'arc, ajouté aux autres bonus | Agatha (Baladin), Grand Monarque |
+| Carquois sans arc, arbalète ou fusil : aucune stat, aucune valeur d'élément | Agatha (Baladin) avec un instrument |
+| Esprit né de la tombe : 133 DEF, 40 PV, +20 % sur toute la stat de l'objet | R1, Manteau royal de Sia |
+| Esprit de Kirin : seulement ses stats, aucun bonus d'attaque dans la puissance | Albin, Chapeau de tacticien |

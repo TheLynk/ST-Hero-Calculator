@@ -1,5 +1,10 @@
 # Changelog — ST Hero Calculator
 
+## v1.5.9 — 2026-11-27
+
+- Affinity, fix of 1.5.8: from tier 12 the element value does get +10, but stats stay ×1.5 up to tier 13. Stats ×2 start at tier 14. Checked on the Darkness Millennium sheet (Abyssal T12): 3,289 ATK and 138 HP, like the game.
+- The stored best builds are recalculated.
+
 ## v1.5.8 — 2026-11-27
 
 - Affinity: the big bonus (+10 element value, stats ×2) starts at tier 12, not tier 14. Checked with the Abyssal Element (T12) on Darkness Millennium: element 220 like the game.
