@@ -1,6 +1,24 @@
 {
- "version": "1.5.4",
+ "version": "1.5.5",
  "entries": [
+  {
+   "v": "1.5.5",
+   "date": "2026-11-27",
+   "fr": [
+    "Carquois : sans arc, arbalète ou fusil, le carquois est désactivé et n'apporte rien (règle du jeu). L'outil ne propose plus un carquois avec une épée.",
+    "Carquois avec un arc : « Synergie de l'arc », +30 % de bonus d'objet sur l'arc (valeur des fichiers du jeu).",
+    "Idole : l'effet de l'esprit enchanté est doublé (texte du jeu).",
+    "Esprit de dinosaure : compté pour moitié dans la puissance, comme l'Esprit de requin (même effet dans les fichiers du jeu).",
+    "Les meilleurs builds stockés sont recalculés."
+   ],
+   "en": [
+    "Quiver: without a bow, crossbow or gun, the quiver is disabled and gives nothing (game rule). The tool no longer suggests a quiver with a sword.",
+    "Quiver with a bow: “Bow Synergy”, +30% item bonus on the bow (value from the game files).",
+    "Idol: the effect of the enchanted spirit is doubled (game text).",
+    "Dinosaur Spirit: counted at half in power, like Shark Spirit (same effect in the game files).",
+    "The stored best builds are recalculated."
+   ]
+  },
   {
    "v": "1.5.4",
    "date": "2026-11-24",

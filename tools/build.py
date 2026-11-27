@@ -13,6 +13,7 @@ print('builds stockés',len(P['builds']),'version',P.get('version'))
 t=open(tpl,encoding='utf-8').read()
 t=t.replace('/*SHOTJS*/',open(os.path.join(src,'shot.js'),encoding='utf-8').read())
 EN=[
+('désactivé : sans arc, arbalète ou fusil','disabled: no bow, crossbow or gun'),
 ("Créer depuis des captures","Create from screenshots"),
 ("Ajoutez une ou plusieurs captures du jeu : l'onglet Infos du héros et, en option, l'onglet Capacités et la carte de collection. Vous pouvez aussi les glisser ici ou les coller (Ctrl+V). Tout reste dans votre navigateur. Les graines, la transcendance et le starforge ne sont pas visibles : réglez-les à gauche.",
  "Add one or more game screenshots: the hero Info tab and, optionally, the Abilities tab and the collection card. You can also drop them here or paste them (Ctrl+V). Everything stays in your browser. Seeds, transcendence and starforge are not visible: set them on the left."),
@@ -102,8 +103,8 @@ EN=[
 ('<h2>Toutes les stats</h2>','<h2>All stats</h2>'),
 ('<h2>Règles de calcul</h2>','<h2>Calculation rules</h2>'),
 ("<li>Puissance = puissance d'attaque + puissance de défense (formule publiée par ST Central).</li>","<li>Power = attack power + defense power (formula published by ST Central).</li>"),
-("<li>Puissance d'attaque = ATK × (1 + crit % × (multiplicateur crit − 1)) × 0,8. Des ajustements existent pour Ninja, Sensei, Samurai, Daimyo, Dancer, Acrobat, Conquistador, Berserker et Jarl. Tisse-Sort : +15 % de puissance (compétence innée). Bonus conditionnels (Esprit de requin, Esprit de Mundra contre les boss) : comptés pour moitié dans la puissance.</li>",
- "<li>Attack power = ATK × (1 + crit % × (crit multiplier − 1)) × 0.8. Adjustments exist for Ninja, Sensei, Samurai, Daimyo, Dancer, Acrobat, Conquistador, Berserker and Jarl. Fateweaver: +15% power (innate skill). Conditional bonuses (Shark Spirit, Mundra's Spirit against bosses): counted at half in power.</li>"),
+("<li>Puissance d'attaque = ATK × (1 + crit % × (multiplicateur crit − 1)) × 0,8. Des ajustements existent pour Ninja, Sensei, Samurai, Daimyo, Dancer, Acrobat, Conquistador, Berserker et Jarl. Tisse-Sort : +15 % de puissance (compétence innée). Bonus conditionnels (Esprit de requin, Esprit de dinosaure, Esprit de Mundra contre les boss) : comptés pour moitié dans la puissance. Carquois : désactivé sans arc, arbalète ou fusil ; avec un arc, +30 % de bonus sur l'arc. Idole : effet de l'esprit doublé.</li>",
+ "<li>Attack power = ATK × (1 + crit % × (crit multiplier − 1)) × 0.8. Adjustments exist for Ninja, Sensei, Samurai, Daimyo, Dancer, Acrobat, Conquistador, Berserker and Jarl. Fateweaver: +15% power (innate skill). Conditional bonuses (Shark Spirit, Dinosaur Spirit, Mundra's Spirit against bosses): counted at half in power. Quiver: disabled without a bow, crossbow or gun; with a bow, +30% bonus on the bow. Idol: spirit effect doubled.</li>"),
 ("<li>Puissance de défense = Menace × PV / (1 − Esq) × 0,025 + Menace × DEF × 0,008 + PV / (1 − Esq) × 5 + DEF × 1,2 (esquive max 75 %).</li>",
  "<li>Defense power = Threat × HP / (1 − Eva) × 0.025 + Threat × DEF × 0.008 + HP / (1 − Eva) × 5 + DEF × 1.2 (evasion max 75%).</li>"),
 ("<li>Stat = (base + graines + objets × (1 + bonus d'objet) + bonus fixes) × (1 + bonus %) × carte de collection. Les enchantements sont inclus dans la valeur des objets.</li>",

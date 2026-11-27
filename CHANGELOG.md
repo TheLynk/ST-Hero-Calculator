@@ -1,5 +1,13 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.5.5 — 2026-11-27
+
+- Carquois : sans arc, arbalète ou fusil, le carquois est désactivé et n'apporte rien (règle du jeu). L'outil ne propose plus un carquois avec une épée.
+- Carquois avec un arc : « Synergie de l'arc », +30 % de bonus d'objet sur l'arc (valeur des fichiers du jeu).
+- Idole : l'effet de l'esprit enchanté est doublé (texte du jeu).
+- Esprit de dinosaure : compté pour moitié dans la puissance, comme l'Esprit de requin (même effet dans les fichiers du jeu).
+- Les meilleurs builds stockés sont recalculés.
+
 ## v1.5.4 — 2026-11-24
 
 - Affinité, élément intégré et esprit intégré : stats ×2 pour un enchantement T14 et plus, ×1,5 en dessous (vérifié sur la Racine de Mornefleche et le Décret de Mundra).

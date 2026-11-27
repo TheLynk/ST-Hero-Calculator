@@ -39,7 +39,7 @@ th{color:var(--mut);font-weight:600;font-size:12px}
 td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 .tag{display:inline-block;font-size:11px;padding:1px 6px;border-radius:4px;background:var(--panel2);color:var(--mut);margin-left:4px}
 .tag.plus{background:#3b2f12;color:var(--acc)}
-.tag.prem{background:#2b2340;color:#b9a0ff}
+.tag.off{background:#7f1d1d;color:#fecaca}.tag.prem{background:#2b2340;color:#b9a0ff}
 .tag.chest{background:#16313a;color:#7fd3e8}
 .thr{color:var(--acc);font-weight:700}
 .grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
@@ -249,7 +249,7 @@ details.man>summary{cursor:pointer;font-weight:700;color:var(--txt);min-height:3
     <h2>Règles de calcul</h2>
     <ul>
       <li>Puissance = puissance d'attaque + puissance de défense (formule publiée par ST Central).</li>
-      <li>Puissance d'attaque = ATK × (1 + crit % × (multiplicateur crit − 1)) × 0,8. Des ajustements existent pour Ninja, Sensei, Samurai, Daimyo, Dancer, Acrobat, Conquistador, Berserker et Jarl. Tisse-Sort : +15 % de puissance (compétence innée). Bonus conditionnels (Esprit de requin, Esprit de Mundra contre les boss) : comptés pour moitié dans la puissance.</li>
+      <li>Puissance d'attaque = ATK × (1 + crit % × (multiplicateur crit − 1)) × 0,8. Des ajustements existent pour Ninja, Sensei, Samurai, Daimyo, Dancer, Acrobat, Conquistador, Berserker et Jarl. Tisse-Sort : +15 % de puissance (compétence innée). Bonus conditionnels (Esprit de requin, Esprit de dinosaure, Esprit de Mundra contre les boss) : comptés pour moitié dans la puissance. Carquois : désactivé sans arc, arbalète ou fusil ; avec un arc, +30 % de bonus sur l'arc. Idole : effet de l'esprit doublé.</li>
       <li>Puissance de défense = Menace × PV / (1 − Esq) × 0,025 + Menace × DEF × 0,008 + PV / (1 − Esq) × 5 + DEF × 1,2 (esquive max 75 %).</li>
       <li>Stat = (base + graines + objets × (1 + bonus d'objet) + bonus fixes) × (1 + bonus %) × carte de collection. Les enchantements sont inclus dans la valeur des objets.</li>
       <li>Graines : +4 ATK, +4 DEF ou +1 PV par graine, 80 max par stat avec les Blossoms. Carte de collection : chaque exemplaire de la carte de la classe donne de l'XP (commune 1, rare 5, mythique 10). Niveau 1 dès 1 exemplaire (×1,05), niveau 2 à 50 XP (×1,10), niveau 3 à 250 XP (×1,25).</li>
@@ -414,23 +414,30 @@ const FAMS=[];{let cur=null;for(const s of D.skills){if(s.tier===1||!cur||cur.ty
 function bestTier(fam,cls,el){let r=null;for(const s of fam.tiers) if(eligible(s,cls)&&(s.req||0)<=el) r=s;return r}
 
 /* ---------- modèle de stats et puissance ---------- */
+function dblFx(f){const o={...f,cond:f.cond.map(c=>({...c,v:c.v&&c.v*2,itemP:c.itemP&&c.itemP*2}))};for(const k in o) if(typeof o[k]==='number'&&k!=='critSet'&&k!=='evaSet') o[k]*=2;return o}
 function evaluate(ctx,picks,skillFams){
   const {cls}=ctx;
-  let el=0;for(const p of picks) el+=p.val;
+  // carquois : désactivé (aucun bonus) sans arc, arbalète ou fusil ; avec un arc, +30 % de bonus d'objet sur l'arc (q_quiverbowbonus)
+  const ranged=picks.some(p=>p.it.type==='Bow'||p.it.type==='Crossbow'||p.it.type==='Gun');
+  const off=new Set(picks.filter(p=>p.it.type==='Quiver'&&!ranged));
+  const quiv=picks.some(p=>p.it.type==='Quiver'&&!off.has(p));
+  const live=picks.filter(p=>!off.has(p));
+  let el=0;for(const p of live) el+=p.val;
   const fxs=[];
   const inn=ctx.innate?bestTier(ctx.innate,cls,el):null; if(inn) fxs.push(inn.fx);
   const skills=skillFams.map(f=>bestTier(f,cls,el)).filter(Boolean); for(const s of skills) fxs.push(s.fx);
-  for(const p of picks){ if(p.sfx) fxs.push(p.sfx); if(p.afx) fxs.push(p.afx); }
+  for(const p of live){ if(p.sfx) fxs.push(p.it.type==='Idol'?dblFx(p.sfx):p.sfx); if(p.afx) fxs.push(p.afx); } // idole : effet de l'esprit doublé (texte du jeu)
   let critSet=-1,evaSet=-1;for(const f of fxs){if(f.critSet>=0)critSet=f.critSet;if(f.evaSet>=0)evaSet=f.evaSet}
   const T={xp:0,xpToAtk:0,noWeapon:0,atkP:0,defP:0,hpP:0,atk:0,def:0,hp:0,crit:0,critD:0,eva:0,itemP:0,threat:0,thrToAtk:0,shark:0,dino:0,bossA:0,bossD:0,atkPerEl:0,shieldToAtk:0,innateElP:0};
-  let anyEl=0;for(const p of picks) anyEl+=p.anyVal;
+  let anyEl=0;for(const p of live) anyEl+=p.anyVal;
   const conds=[];
   for(const f of fxs){for(const k in T) T[k]+=f[k]; if(f.cond.length) conds.push(...f.cond)}
   const types=new Set(picks.map(p=>p.it.type));
   let ia=0,id=0,ih=0,ie=0,ic=0;const disp=[];
   for(const p of picks){
+    if(off.has(p)){disp.push({atk:0,def:0,hp:0,off:1});continue}
     if(T.noWeapon&&p===picks[0]) continue;
-    let b=1+T.itemP/100+(p.selfP||0)/100, ba=0,bd=0,bh=0; const bm=p.it.builtElem?1+T.innateElP/100:1; // Sorceguerre : ×1,5 sur tout le bonus (vérifié en jeu)
+    let b=1+T.itemP/100+(p.selfP||0)/100+(quiv&&p.it.type==='Bow'?0.3:0), ba=0,bd=0,bh=0; const bm=p.it.builtElem?1+T.innateElP/100:1; // Sorceguerre : ×1,5 sur tout le bonus (vérifié en jeu)
     for(const c of conds) if(c.types.includes(p.it.type)){
       if(c.itemP) b+=c.itemP/100;
       else if(c.stat==='Attack') ba+=c.v/100; else if(c.stat==='Defense') bd+=c.v/100; else if(c.stat==='Health') bh+=c.v/100;
@@ -444,8 +451,8 @@ function evaluate(ctx,picks,skillFams){
   const threat=cls.threat+T.threat, B=ctx.base, K=ctx.card;
   const atk=(B.atk+ia+T.atk)*(1+(T.atkP+T.atkPerEl*anyEl+T.xpToAtk/100*T.xp)/100)*K*(1+T.thrToAtk/100*threat/100);
   const def=(B.def+id+T.def)*(1+T.defP/100)*K;
-  // puissance : les bonus conditionnels (Requin : PV ennemis < 50 %, Mundra : contre les boss) comptent pour moitié (vérifié en jeu sur un Géomancien, avec et sans Requin)
-  const aBr=1+(T.atkP+T.atkPerEl*anyEl+T.xpToAtk/100*T.xp)/100, atkPw=atk*(aBr+(T.shark+T.bossA)/200)/aBr, defPw=def*(1+(T.defP+T.bossD/2)/100)/(1+T.defP/100);
+  // puissance : les bonus conditionnels (Requin et Dinosaure : même champ du jeu « monsAtkBuf » ; Mundra : contre les boss) comptent pour moitié (vérifié en jeu sur un Géomancien, avec et sans Requin)
+  const aBr=1+(T.atkP+T.atkPerEl*anyEl+T.xpToAtk/100*T.xp)/100, atkPw=atk*(aBr+(T.shark+T.dino+T.bossA)/200)/aBr, defPw=def*(1+(T.defP+T.bossD/2)/100)/(1+T.defP/100);
   const hp=(B.hp+ih+T.hp)*(1+T.hpP/100)*K;
   const crit=critSet>=0?critSet:Math.min(100,pct(cls.crit)*100+ic*100+T.crit);
   const cm=cls.critDmg+T.critD/100;
@@ -458,7 +465,6 @@ function evaluate(ctx,picks,skillFams){
   const e=Math.min(ev,n==='Pathfinder'?78:75)/100;
   let ap=atkPw*(1+crit/100*(cm-1))*0.8;
   const aMod=1+T.atkP/100;
-  // Dinosaure (1er tour) : non vérifié sur la puissance affichée → ignoré
   if(n==='Berserker'||n==='Jarl') ap*=(aMod+0.6)/aMod;
   if(n==='Ninja') ap+=atkPw*0.4*(0.5+eva/100)*(cm-1)*0.8;
   if(n==='Sensei') ap+=atkPw*0.4*(0.75+eva/100)*(cm-1)*0.8;
@@ -469,7 +475,7 @@ function evaluate(ctx,picks,skillFams){
   // Tisse-Sort (Fateweaver) : « +15 % power bonus » de la compétence innée, compté dans la puissance affichée (vérifié en jeu)
   const pbm=inn&&/\+(\d+)% power bonus/i.exec(inn.effect||''); const power=(ap+dp)*(pbm?1+pbm[1]/100:1);
   const score=ctx.obj==='threat'? threat*1e9+power : power;
-  return {score,power,ap,dp,atk,def,hp,crit,cm,eva,threat,el,anyEl,inn,skills,T,disp,ia,id,ih};
+  return {score,power,ap,dp,atk,def,hp,crit,cm,eva,threat,el,anyEl,inn,skills,T,disp,ia,id,ih,off:picks.map(p=>off.has(p))};
 }
 
 /* ---------- options par emplacement ---------- */
@@ -611,7 +617,7 @@ function evalBuild(gear,skillNames){
 // ---------- résultats stockés ----------
 // PRE : meilleurs builds pré-calculés pour les réglages courants (recalculés quand les données changent)
 const PRE=/*PRECOMP*/{version:'',builds:{}};
-const FORMULA='f5'; // à changer quand une formule de calcul change (invalide les builds stockés)
+const FORMULA='f6'; // à changer quand une formule de calcul change (invalide les builds stockés)
 const DATA_VERSION=DV+'-'+FORMULA;
 function settingsKey(ctx){
   return JSON.stringify([ctx.cls.name,ctx.obj,ctx.lvl,ctx.q,ctx.trans,ctx.star,ctx.eT,ctx.goldWild,$('srcCraft').checked,$('srcChest').checked,$('srcPrem').checked,ctx.base,ctx.card,+$('cardLv').value]);
@@ -663,7 +669,7 @@ function render(ctx,B){
     .map(([c,k,v])=>`<div class="${c}"><span>${sic[c]}${k}</span><b>${v}</b></div>`).join('');
   const tag=s=>s==='premium'?'<span class="tag prem">pack</span>':s==='chest'?'<span class="tag chest">coffre</span>':'';
   const enc=n=>{if(!n) return '—';const b=n.replace(' (intégré)',''),e=ENCH[b];return `<span class="cell">${icoItem(e,26)}<span title="${esc(b)}">${esc(e?nm(e):b)}${n!==b?' (intégré)':''}</span></span>`};
-  $('gear').innerHTML=B.picks.map((p,i)=>`<tr><td>${i+1}</td><td><div class="cell">${icoItem(p.it,40)}<div><b title="${esc(p.it.name)}">${esc(nm(p.it))}</b><span class="tag">${esc(typ(p.it.type))} · T${p.it.tier}</span>${tag(p.it.source)}${(p.it.elemAff||p.it.spiritAff)?`<div class="alt">Affinité : ${esc([p.it.elemAff,p.it.spiritAff].filter(Boolean).join(' · '))}</div>`:''}</div></div></td>
+  $('gear').innerHTML=B.picks.map((p,i)=>`<tr><td>${i+1}</td><td><div class="cell">${icoItem(p.it,40)}<div><b title="${esc(p.it.name)}">${esc(nm(p.it))}</b><span class="tag">${esc(typ(p.it.type))} · T${p.it.tier}</span>${tag(p.it.source)}${R.off[i]?'<span class="tag off">désactivé : sans arc, arbalète ou fusil</span>':''}${(p.it.elemAff||p.it.spiritAff)?`<div class="alt">Affinité : ${esc([p.it.elemAff,p.it.spiritAff].filter(Boolean).join(' · '))}</div>`:''}</div></div></td>
     <td>${enc(p.e.name)}${p.e.aff?'<span class="tag plus">affinité</span>':''}</td>
     <td>${enc(p.s.name)}${p.s.plus?'<span class="tag plus">+</span>':''}${p.s.threat?` <span class="thr">+${p.s.threat} menace</span>`:''}</td>
     <td class="n">${p.val}</td><td class="n">${fr(p.st.atk)}</td><td class="n">${fr(p.st.def_)}</td><td class="n">${fr(p.st.hp)}</td></tr>`).join('');

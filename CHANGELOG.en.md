@@ -1,5 +1,13 @@
 # Changelog — ST Hero Calculator
 
+## v1.5.5 — 2026-11-27
+
+- Quiver: without a bow, crossbow or gun, the quiver is disabled and gives nothing (game rule). The tool no longer suggests a quiver with a sword.
+- Quiver with a bow: “Bow Synergy”, +30% item bonus on the bow (value from the game files).
+- Idol: the effect of the enchanted spirit is doubled (game text).
+- Dinosaur Spirit: counted at half in power, like Shark Spirit (same effect in the game files).
+- The stored best builds are recalculated.
+
 ## v1.5.4 — 2026-11-24
 
 - Affinity, built-in element and built-in spirit: stats ×2 for a T14+ enchantment, ×1.5 below (checked on Bleakspire Roots and Mundra's Decree).
