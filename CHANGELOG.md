@@ -1,5 +1,10 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.5.7 — 2026-11-27
+
+- Lecture des captures : la classe « Chevalier de la mort » était lue « Chevalier ». À égalité, la page garde maintenant le nom de classe le plus long. Avec la bonne classe, les 6 objets de la capture sont reconnus.
+- Lecture des captures : la qualité est plus fiable. Un bord sombre ou la couleur propre de l'objet (épée de glace, objet de feu) n'est plus lu comme une lueur de qualité. Testé sur 10 captures : toutes les qualités connues sont justes.
+
 ## v1.5.6 — 2026-11-27
 
 - Puissance : l'Esprit de dinosaure (+25 % d'attaque au 1er tour) compte pour 1/5, et non pour moitié. Vérifié en jeu sur une Sorceguerre (Dinosaure sur une idole : 281 326 contre 281 317) et sur un Berserker.

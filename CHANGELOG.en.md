@@ -1,5 +1,10 @@
 # Changelog — ST Hero Calculator
 
+## v1.5.7 — 2026-11-27
+
+- Screenshot reading: the “Death Knight” class was read as “Knight”. On a tie, the page now keeps the longest class name. With the right class, the 6 items are recognized.
+- Screenshot reading: quality is more reliable. A dark edge or the item's own color (ice sword, fire item) is no longer read as a quality glow. Tested on 10 screenshots: all known qualities are right.
+
 ## v1.5.6 — 2026-11-27
 
 - Power: Dinosaur Spirit (+25% Attack on the first round) counts at 1/5, not at half. Checked in game on a Spellknight (Dinosaur on an idol: 281,326 vs 281,317) and on a Berserker.

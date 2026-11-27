@@ -1,6 +1,18 @@
 {
- "version": "1.5.6",
+ "version": "1.5.7",
  "entries": [
+  {
+   "v": "1.5.7",
+   "date": "2026-11-27",
+   "fr": [
+    "Lecture des captures : la classe « Chevalier de la mort » était lue « Chevalier ». À égalité, la page garde maintenant le nom de classe le plus long. Avec la bonne classe, les 6 objets de la capture sont reconnus.",
+    "Lecture des captures : la qualité est plus fiable. Un bord sombre ou la couleur propre de l'objet (épée de glace, objet de feu) n'est plus lu comme une lueur de qualité. Testé sur 10 captures : toutes les qualités connues sont justes."
+   ],
+   "en": [
+    "Screenshot reading: the “Death Knight” class was read as “Knight”. On a tie, the page now keeps the longest class name. With the right class, the 6 items are recognized.",
+    "Screenshot reading: quality is more reliable. A dark edge or the item's own color (ice sword, fire item) is no longer read as a quality glow. Tested on 10 screenshots: all known qualities are right."
+   ]
+  },
   {
    "v": "1.5.6",
    "date": "2026-11-27",

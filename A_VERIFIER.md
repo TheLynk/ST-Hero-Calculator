@@ -171,7 +171,7 @@ Reste à tester : la même chose avec une **arbalète** (l'outil ne donne pas le
 |---|---|---|
 | 14 | Jeu en **anglais** | 1 capture de l'onglet Info et 1 de l'onglet Abilities, jeu réglé en anglais |
 | 15 | Qualité **Impeccable** (bleu) et **Épique** (violet) | 1 capture d'un héros avec ces qualités. Dites quelle qualité a chaque objet |
-| 16 | Objet de **feu** avec lueur orange, lu « supérieur » alors qu'il est normal | 1 capture d'un héros avec un objet de feu de qualité normale |
+| 16 | Objet de **feu** ou de **glace** lu avec une fausse qualité | Corrigé en 1.5.7 (Couronne pyroclastique, Kiku-Ichimonji). Envoyez une capture si le problème revient |
 | 17 | **Esprits** presque identiques | Connu : l'Esprit de lion sur l'idole de PartoutV2 est lu « Bélier ». Si un esprit est mal lu : la capture et le bon esprit |
 | 18b | **Traductions** : textes anglais restants dans la version française | Signalez la phrase et l'endroit (capture). Contrôle automatique fait le 27/11/2026 sur tous les effets |
 | 18 | **Page publiée** en ligne | Ouvrez la page publiée, cliquez sur « Créer depuis des captures », et dites si un message d'erreur apparaît |

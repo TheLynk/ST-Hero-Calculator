@@ -91,7 +91,7 @@ function lev(a,b){const m=a.length,n=b.length,d=Array.from({length:m+1},(_,i)=>[
 const norm=s=>String(s).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z]/g,'');
 function classByName(t){const q=norm(t);if(q.length<3) return null;let best=null;
   for(const c of D.classes){const pa=SA.paragon&&SA.paragon[c.uid]||[];for(const [n,para] of [[c.name,0],[c.fr,0],[pa[0],1],[pa[1],1]]){if(!n) continue;const k=norm(n);let d=lev(q,k);
-    if(q.includes(k)) d=Math.min(d,(q.length-k.length)*0.3); const r=d/Math.max(k.length,1);if(!best||r<best.r) best={c,r,para}}}
+    if(q.includes(k)) d=Math.min(d,(q.length-k.length)*0.3); const r=d/Math.max(k.length,1);if(!best||r<best.r||(r===best.r&&k.length>best.len)) best={c,r,para,len:k.length}}}
   return best&&best.r<=0.34?best:null}
 // ---- repère : la ligne ESQ (valeur en %) et les valeurs alignées au-dessus ----
 function findAnchor(ws){const nums=ws.filter(w=>/^[\d.,]+$/.test(w.t)&&numOf(w.t)!=null);let best=null;
@@ -129,7 +129,7 @@ async function analyse(file,W,say){
   {const bx=[xR-4.35*s,yPV-6.15*s,xR-3.45*s,yPV-5.45*s];let r=await ocrLine(W,I,bx,'0123456789',60);if(!numOf(r.t)||r.c<60) r=await ocrLine(W,I,bx,'0123456789',60,'bright');const v=numOf(r.t);R.lvl=v&&v<=100?v:null;if(!R.lvl||r.c<60) R.unsure.add('lvl')}
   {const r=await ocrLine(W,I,[xR-1.85*s,yPV-5.75*s,xR+3.6*s,yPV-4.85*s],'',56);const t=r.t.replace(/[^\p{L}\p{N} _-]/gu,'').trim();if(r.c>55&&/^[\w -]{2,24}$/.test(t)) R.name=t}
   {const r=await ocrLine(W,I,[xR-3.15*s,yPV-2.8*s,xR+4.3*s,yPV-1.92*s],'',56,'bright');const ws2=r.t.split(/\s+/);let m=null;
-    for(let a=0;a<ws2.length;a++)for(let b=a+1;b<=Math.min(ws2.length,a+3);b++){const x=classByName(ws2.slice(a,b).join(''));if(x&&(!m||x.r<m.r)) m=x}R.dbgCls=[r.t,r.c,m&&m.r];
+    for(let a=0;a<ws2.length;a++)for(let b=a+1;b<=Math.min(ws2.length,a+4);b++){const x=classByName(ws2.slice(a,b).join(''));if(x&&(!m||x.r<m.r||(x.r===m.r&&x.len>m.len))) m=x}R.dbgCls=[r.t,r.c,m&&m.r];
     if(m){R.cls=m.c;R.para=m.para;if(m.r>0.15) R.unsure.add('cls');if(m.para) R.unsure.add('lvl')}}
   if(!R.cls){const ic=D.classes.filter(c=>c.icon!=null).map(c=>({c,P:tpl('cls:'+c.name,SH.cls,c.icon,Object.keys(AT.classes).length,48,16)}));
     const b=bestOf(I,xR-3.47*s,yPV-2.36*s,.66*s,ic,{N:16});if(b[0]&&b[0].v>.55){R.cls=b[0].c;R.unsure.add('cls')}}
@@ -181,9 +181,14 @@ function quality(I,cx,cy,S,P,x0,y0,s){const N=P.F.N,F=samp(I,cx,cy,S,N,2),inM=ne
   const d=[r/n-bg[0],g/n-bg[1],b/n-bg[2]],mx=Math.max(...d),mn=Math.min(...d),mag=Math.hypot(...d);
   let h=0;const c=mx-mn;if(c>0){if(mx===d[0]) h=((d[1]-d[2])/c)%6;else if(mx===d[1]) h=(d[2]-d[0])/c+2;else h=(d[0]-d[1])/c+4;h=(h*60+360)%360}
   const res={d,mag:Math.round(mag),h:Math.round(h)};
-  if(mag<42) return {...res,q:'1',unsure:mag>34};
+  // une lueur de qualité est plus claire que le fond : un bord plus sombre (ombre, objet sombre) n'est pas une qualité
+  if(mag<42||Math.max(...d)<22) return {...res,q:'1',unsure:mag>=42?Math.max(...d)>12:mag>34};
   const q=h<95||h>=345?'3':h<170?'1.25':h<250?'1.5':'2';
-  return {...res,q,unsure:mag<55||(h>85&&h<105)}}
+  // couleur propre de l'objet au bord du dessin : si elle ressemble à la lueur, le doute est grand (ex. épée de glace bleue)
+  let er=0,eg=0,eb=0,en=0;for(let j=1;j<N-1;j++)for(let i=1;i<N-1;i++){const q2=j*N+i;if(!inM[q2]) continue;let edge=false;for(let v=-1;v<=1&&!edge;v++)for(let u=-1;u<=1;u++) if(!inM[(j+v)*N+i+u]){edge=true;break}
+    if(edge){er+=P.F.R[q2];eg+=P.F.G[q2];eb+=P.F.B[q2];en++}}
+  let same=false;if(en){const a=[er/en,eg/en,eb/en],ax=Math.max(...a),an=Math.min(...a),ac=ax-an;if(ac>40){let eh=ax===a[0]?((a[1]-a[2])/ac)%6:ax===a[1]?(a[2]-a[0])/ac+2:(a[0]-a[1])/ac+4;eh=(eh*60+360)%360;const dh=Math.min(Math.abs(eh-h),360-Math.abs(eh-h));same=dh<30}}
+  return {...res,q,unsure:mag<55||(h>85&&h<105)||same}}
 // couleur du cadre d'une compétence : rose = innée, bleu-vert = rare, or = épique, cuivre = commune
 function frameRarity(I,cx,cy,S){let r=0,g=0,b=0,n=0;const o=[0,0,0,0];
   for(const d of [.41,.44,.47])for(let t=-.4;t<=.4;t+=.04)for(const [u,v] of [[t,-d],[t,d],[-d,t],[d,t]]){pxl(I,cx+u*S,cy+v*S,o);r+=o[0];g+=o[1];b+=o[2];n++}
