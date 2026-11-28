@@ -1,5 +1,11 @@
 # Changelog — ST Hero Calculator
 
+## v1.9.0 — 2026-11-28
+
+- Ninja and Sensei power: new formula, taken from the game code (Character.CalculateRawEvasionPower and CalculateCriticalRatePower). The “until damaged” innate skill bonuses count ×0.5 for the Ninja and ×0.75 for the Sensei. Example Sibyle (Sensei): the tool computes 404,753, the game shows 404,730 (before: 455,145, +12%).
+- Ninja and Sensei displayed evasion: it now includes the innate evasion bonus, like the game Info tab (Sibyle: 74%).
+- The precomputed best builds of Ninjas and Senseis are recomputed with the new formula. Builds stored in your browser will be recomputed once.
+
 ## v1.8.5 — 2026-11-28
 
 - Team and quests tab, result table: new Power column (saved game power, otherwise computed power with “≈” in front). Each column now has the game icon: power, ATK, DEF, HP, crit, evasion, threat, damage and death risk.

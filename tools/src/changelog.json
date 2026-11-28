@@ -1,6 +1,20 @@
 {
- "version": "1.8.5",
+ "version": "1.9.0",
  "entries": [
+  {
+   "v": "1.9.0",
+   "date": "2026-11-28",
+   "fr": [
+    "Puissance des Ninjas et des Senseis : nouvelle formule, reprise du code du jeu (Character.CalculateRawEvasionPower et CalculateCriticalRatePower). Les bonus de la compétence innée « jusqu'à subir des dégâts » comptent à ×0,5 pour le Ninja et ×0,75 pour le Sensei. Exemple Sibyle (Sensei) : l'outil calcule 404 753, le jeu affiche 404 730 (avant : 455 145, +12 %).",
+    "Esquive affichée des Ninjas et des Senseis : elle inclut maintenant le bonus d'esquive de la compétence innée, comme l'onglet Infos du jeu (Sibyle : 74 %).",
+    "Les meilleurs builds pré-calculés des Ninjas et des Senseis sont recalculés avec la nouvelle formule. Les builds enregistrés dans votre navigateur seront recalculés une fois."
+   ],
+   "en": [
+    "Ninja and Sensei power: new formula, taken from the game code (Character.CalculateRawEvasionPower and CalculateCriticalRatePower). The “until damaged” innate skill bonuses count ×0.5 for the Ninja and ×0.75 for the Sensei. Example Sibyle (Sensei): the tool computes 404,753, the game shows 404,730 (before: 455,145, +12%).",
+    "Ninja and Sensei displayed evasion: it now includes the innate evasion bonus, like the game Info tab (Sibyle: 74%).",
+    "The precomputed best builds of Ninjas and Senseis are recomputed with the new formula. Builds stored in your browser will be recomputed once."
+   ]
+  },
   {
    "v": "1.8.5",
    "date": "2026-11-28",

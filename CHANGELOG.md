@@ -1,5 +1,11 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.9.0 — 2026-11-28
+
+- Puissance des Ninjas et des Senseis : nouvelle formule, reprise du code du jeu (Character.CalculateRawEvasionPower et CalculateCriticalRatePower). Les bonus de la compétence innée « jusqu'à subir des dégâts » comptent à ×0,5 pour le Ninja et ×0,75 pour le Sensei. Exemple Sibyle (Sensei) : l'outil calcule 404 753, le jeu affiche 404 730 (avant : 455 145, +12 %).
+- Esquive affichée des Ninjas et des Senseis : elle inclut maintenant le bonus d'esquive de la compétence innée, comme l'onglet Infos du jeu (Sibyle : 74 %).
+- Les meilleurs builds pré-calculés des Ninjas et des Senseis sont recalculés avec la nouvelle formule. Les builds enregistrés dans votre navigateur seront recalculés une fois.
+
 ## v1.8.5 — 2026-11-28
 
 - Onglet Équipe et quêtes, tableau du résultat : nouvelle colonne Puissance (puissance du jeu enregistrée, sinon puissance calculée précédée de « ≈ »). Chaque colonne a maintenant l'icône du jeu : puissance, ATK, DEF, PV, crit, esquive, menace, dégâts et risque de mort.

@@ -27,7 +27,9 @@ def job(arg):
 with sync_playwright() as p:
     b=p.chromium.launch(executable_path='/usr/bin/google-chrome',args=['--no-sandbox']);pg=b.new_page();pg.goto('file://'+page)
     classes=pg.evaluate("STC.D.classes.map(c=>[c.name,c.promoted])"); b.close()
-tasks=[(c,o,l) for c,pr in classes for o in ('power','threat') for l in ([50,100] if pr else [40,50])]
+import os
+ONLY=[x for x in os.environ.get('ONLY','').split(',') if x]  # classes à recalculer (vide = toutes)
+tasks=[(c,o,l) for c,pr in classes for o in ('power','threat') for l in ([50,100] if pr else [40,50]) if not ONLY or c in ONLY]
 N=int(sys.argv[4]) if len(sys.argv)>4 else 4
 chunks=[(i,tasks[i::N]) for i in range(N)]
 builds={}

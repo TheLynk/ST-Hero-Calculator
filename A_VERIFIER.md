@@ -309,6 +309,12 @@ La puissance d'un champion suit la formule des héros, avec sa compétence de ch
 - À vérifier : les effets des esprits (ex. Tarasque, +% DEF) s'appliquent-ils aux stats d'un champion ? L'outil les applique, comme pour les héros (l'esquive d'Hemma avec l'esprit de griffon le confirme en partie).
 - ✅ Affinité « tous éléments » : bonus d'élément ×0,5 (constante du jeu affinity_all_bonus_mult).
 
+### Test 18 — Puissance Ninja / Sensei (v1.9.0)
+
+- ✅ Sibyle (Sensei, niveau 50) : 404 753 dans l'outil, 404 730 en jeu. Esquive 74 % (49 % + 25 % de la compétence innée).
+- Attention aux graines : Sibyle a 40 graines par stat, pas 80. Avec 80, l'outil donnait +5 % de PV et +3 % de DEF.
+- À vérifier : un Ninja (bonus compté à ×0,5).
+
 ## Lecture des captures (import)
 
 | # | Test | Quoi envoyer |

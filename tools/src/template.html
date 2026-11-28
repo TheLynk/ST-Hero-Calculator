@@ -478,14 +478,15 @@ function evaluate(ctx,picks,skillFams){
   // puissance (ST Central)
   const n=cls.name; let ev=eva;
   if(n==='Berserker'||n==='Jarl'||n==='Daimyo') ev=eva+15;
-  if(n==='Ninja') ev=eva+20*(0.5+eva/100);
-  if(n==='Sensei') ev=eva+20*(0.75+eva/100);
-  const e=Math.min(ev,n==='Pathfinder'?78:75)/100;
-  let ap=atkPw*(1+crit/100*(cm-1))*0.8;
+  // Ninja / Sensei : bonus « jusqu'à subir des dégâts » comptés à ×0,5 / ×0,75 (Character.CalculateRawEvasionPower / CalculateCriticalRatePower,
+  // SkillData.GetAverageBuffMultiplier, constantes adventurer_ninja/sensei_innate_power_mult) ; vérifié sur Sibyle (Sensei) : 404 746 contre 404 730
+  const nb=(n==='Ninja'||n==='Sensei')&&inn&&/\+(\d+)% Evasion and \+(\d+)% Critical Hit Chance until damaged/i.exec(inn.effect||''),nbm=n==='Sensei'?0.75:0.5;
+  const nEva=nb?+nb[1]:0,nCrit=nb?+nb[2]:0;
+  if(nb) ev=eva+nEva*nbm;
+  const e=Math.min(ev,n==='Pathfinder'?78:75)/100,critP=nb?Math.min(100,crit+nCrit*nbm):crit;
+  let ap=atkPw*(1+critP/100*(cm-1))*0.8;
   const aMod=1+T.atkP/100+cAtk;
   if(n==='Berserker'||n==='Jarl') ap*=(aMod+0.6)/aMod;
-  if(n==='Ninja') ap+=atkPw*0.4*(0.5+eva/100)*(cm-1)*0.8;
-  if(n==='Sensei') ap+=atkPw*0.4*(0.75+eva/100)*(cm-1)*0.8;
   if(n==='Samurai'||n==='Daimyo') ap+=atkPw*0.15*(cm-1)*0.8;
   if(n==='Dancer'||n==='Acrobat') ap+=atkPw*0.2*Math.min(eva,80)/100*(cm-1);
   if(n==='Conquistador') ap+=atkPw*crit/100*(cm-1)*0.12;
@@ -496,7 +497,7 @@ function evaluate(ctx,picks,skillFams){
   const exm=inn&&/defeat any enemy below (\d+)% HP/i.exec(inn.effect||'');
   const power=(ap+dp)*(pbm?1+pbm[1]/100:1)*(exm?1+exm[1]/100:1);
   const score=ctx.obj==='threat'? threat*1e9+power : power;
-  return {score,power,ap,dp,atk,def,hp,crit,cm,eva,threat,el,anyEl,inn,skills,T,disp,ia,id,ih,aBr,dBr:1+T.defP/100,off:picks.map(p=>off.has(p))};
+  return {score,power,ap,dp,atk,def,hp,crit,cm,eva,evaShow:eva+nEva,threat,el,anyEl,inn,skills,T,disp,ia,id,ih,aBr,dBr:1+T.defP/100,off:picks.map(p=>off.has(p))};
 }
 
 /* ---------- options par emplacement ---------- */
@@ -639,7 +640,7 @@ function evalBuild(gear,skillNames){
 // ---------- résultats stockés ----------
 // PRE : meilleurs builds pré-calculés pour les réglages courants (recalculés quand les données changent)
 const PRE=/*PRECOMP*/{version:'',builds:{}};
-const FORMULA='f11'; // à changer quand une formule de calcul change (invalide les builds stockés)
+const FORMULA='f12'; // à changer quand une formule de calcul change (invalide les builds stockés)
 const DATA_VERSION=DV+'-'+FORMULA;
 function settingsKey(ctx){
   return JSON.stringify([ctx.cls.name,ctx.obj,ctx.lvl,ctx.q,ctx.trans,ctx.star,ctx.eT,ctx.goldWild,$('srcCraft').checked,$('srcChest').checked,$('srcPrem').checked,ctx.base,ctx.card,+$('cardLv').value]);
@@ -687,7 +688,7 @@ function render(ctx,B){
     ?`<span class="pill">Puissance d'attaque <b>${fr(R.ap)}</b></span><span class="pill">Puissance de défense <b>${fr(R.dp)}</b></span><span class="pill">Menace <b>${fr(R.threat)}</b></span>`
     :`<span class="pill">Classe <b>${cls.threat}</b></span><span class="pill">Innée et compétences <b>+${R.threat-cls.threat-B.picks.reduce((a,p)=>a+p.s.threat,0)}</b></span><span class="pill">Esprits <b>+${B.picks.reduce((a,p)=>a+p.s.threat,0)}</b></span><span class="pill">Puissance <b>${fr(R.power)}</b></span>`);
   const sic={hp:ui('hp'),atk:ui('atk'),def:ui('defense'),eva:ui('eva'),el:elIco(cls.element)};
-  $('sheet').innerHTML=[['hp','PV',fr(R.hp)],['atk','ATQ',fr(R.atk)],['def','DEF',fr(R.def)],['eva','ESQ',Math.round(R.eva)+' %'],['el','ÉLÉMENT',R.el]]
+  $('sheet').innerHTML=[['hp','PV',fr(R.hp)],['atk','ATQ',fr(R.atk)],['def','DEF',fr(R.def)],['eva','ESQ',Math.round(R.evaShow??R.eva)+' %'],['el','ÉLÉMENT',R.el]]
     .map(([c,k,v])=>`<div class="${c}"><span>${sic[c]}${k}</span><b>${v}</b></div>`).join('');
   const tag=s=>s==='premium'?'<span class="tag prem">pack</span>':s==='chest'?'<span class="tag chest">coffre</span>':'';
   const enc=n=>{if(!n) return '—';const b=n.replace(' (intégré)',''),e=ENCH[b];return `<span class="cell">${icoItem(e,26)}<span title="${esc(b)}">${esc(e?nm(e):b)}${n!==b?' (intégré)':''}</span></span>`};
@@ -743,13 +744,13 @@ function manualCompute(){
   const R=evaluate(ctx,picks,uniq);
   man.s.forEach((n,k)=>{const el=document.querySelector(`[data-rank="${k}"]`);if(!el) return;const f=FAMS.find(f=>f.tiers[0].name===n);const t=f?bestTier(f,ctx.cls,R.el):null;el.textContent=f?(t?'Rang '+t.tier:'Rang —'):''});
   const sic={hp:ui('hp'),atk:ui('atk'),def:ui('defense'),eva:ui('eva'),el:elIco(ctx.cls.element),pw:ui('power')};
-  $('mSheet').innerHTML=[['pw','Puissance',fr(R.power)],['hp','PV',fr(R.hp)],['atk','ATQ',fr(R.atk)],['def','DEF',fr(R.def)],['eva','ESQ',Math.round(R.eva)+' %'],['el','ÉLÉMENT',R.el]]
+  $('mSheet').innerHTML=[['pw','Puissance',fr(R.power)],['hp','PV',fr(R.hp)],['atk','ATQ',fr(R.atk)],['def','DEF',fr(R.def)],['eva','ESQ',Math.round(R.evaShow??R.eva)+' %'],['el','ÉLÉMENT',R.el]]
     .map(([c,k,v])=>`<div class="${c}"><span>${sic[c]}${k}</span><b>${v}</b></div>`).join('')+`<div><span>Crit</span><b>${R.crit.toFixed(0)} % · ×${R.cm.toFixed(2)}</b></div><div><span>Menace</span><b>${fr(R.threat)}</b></div>`;
   const best=bestShown.R, isP=ctx.obj==='power', a=isP?R.power:R.threat, b=isP?best.power:best.threat, d=b?((a-b)/b*100):0;
   $('mDelta').className='delta '+(d<-0.05?'neg':d>0.05?'pos':'');
   $('mDelta').textContent=`${uniq.length<fams.length?'Compétence en double ignorée. ':''}Écart avec le meilleur build : ${d>=0?'+':''}${d.toFixed(1).replace('.',',')} % (${isP?'puissance':'menace'} ${fr(a)} contre ${fr(b)})`;
 // comparaison avec les valeurs du jeu
-  const gv={pw:'gPow',hp:'gHp',atk:'gAtk',def:'gDef',eva:'gEva',el:'gEl'}, mv={pw:R.power,hp:R.hp,atk:R.atk,def:R.def,eva:R.eva,el:R.el};
+  const gv={pw:'gPow',hp:'gHp',atk:'gAtk',def:'gDef',eva:'gEva',el:'gEl'}, mv={pw:R.power,hp:R.hp,atk:R.atk,def:R.def,eva:R.evaShow??R.eva,el:R.el};
   document.querySelectorAll('#mSheet > div').forEach(d=>{const k=[...d.classList][0];if(!gv[k]) return;const g=+$(gv[k]).value;if(!g) return;
     const e=(mv[k]-g)/g*100,c=document.createElement('span');c.className='cmp '+(Math.abs(e)<1?'ok':'bad');c.textContent=`jeu ${fr(g)} · ${e>=0?'+':''}${e.toFixed(1).replace('.',',')} %`;d.appendChild(c)});
 }
