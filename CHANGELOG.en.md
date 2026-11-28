@@ -1,5 +1,9 @@
 # Changelog — ST Hero Calculator
 
+## v1.9.8 — 2026-11-28
+
+- Team and quests tab, “Best champion” button: the top-ranked champion is now selected in the calculator, and the simulation runs again with it, like “Best team”. The ranking stays on screen.
+
 ## v1.9.7 — 2026-11-28
 
 - Team and quests tab, hero slots: the class icon shows in front of each chosen preset, with its stats (HP, ATK, DEF, evasion, element) below. The tool shows the game values saved in the preset; without them, it shows the computed values.

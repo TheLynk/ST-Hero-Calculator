@@ -1,6 +1,16 @@
 {
- "version": "1.9.7",
+ "version": "1.9.8",
  "entries": [
+  {
+   "v": "1.9.8",
+   "date": "2026-11-28",
+   "fr": [
+    "Onglet Équipe et quêtes, bouton « Meilleur champion » : le champion classé 1er est maintenant choisi dans le calculateur, et la simulation se relance avec lui, comme pour « Meilleure équipe ». Le classement reste affiché."
+   ],
+   "en": [
+    "Team and quests tab, “Best champion” button: the top-ranked champion is now selected in the calculator, and the simulation runs again with it, like “Best team”. The ranking stays on screen."
+   ]
+  },
   {
    "v": "1.9.7",
    "date": "2026-11-28",

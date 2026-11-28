@@ -1,5 +1,9 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.9.8 — 2026-11-28
+
+- Onglet Équipe et quêtes, bouton « Meilleur champion » : le champion classé 1er est maintenant choisi dans le calculateur, et la simulation se relance avec lui, comme pour « Meilleure équipe ». Le classement reste affiché.
+
 ## v1.9.7 — 2026-11-28
 
 - Onglet Équipe et quêtes, emplacements des héros : l'icône de classe s'affiche devant chaque preset choisi, et ses stats (PV, ATK, DEF, esquive, élément) s'affichent dessous. L'outil montre les valeurs du jeu enregistrées dans le preset ; sans elles, il montre le calcul.
