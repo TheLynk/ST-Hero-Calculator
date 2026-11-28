@@ -1,5 +1,9 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.8.3 — 2026-11-28
+
+- Import de captures (héros) : l'outil trouve maintenant la fiche quand la lecture de l'esquive se trompe sur le signe « % » (exemple : « 48% » lu « 489, »). L'esquive lue est alors marquée en orange, à vérifier.
+
 ## v1.8.2 — 2026-11-28
 
 - Champions : la puissance (étoile) s'affiche maintenant dans la liste des champions, dans la fiche du champion et dans le résumé de l'onglet Équipe et quêtes. Elle compte la compétence de chef et le chant d'aura, comme le jeu (Maladie : 35 518 contre 35 516 en jeu).

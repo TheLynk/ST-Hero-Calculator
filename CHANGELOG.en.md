@@ -1,5 +1,9 @@
 # Changelog — ST Hero Calculator
 
+## v1.8.3 — 2026-11-28
+
+- Screenshot import (heroes): the tool now finds the sheet when the evasion reading gets the “%” sign wrong (example: “48%” read as “489,”). The evasion is then marked in orange, to check.
+
 ## v1.8.2 — 2026-11-28
 
 - Champions: power (star) now shows in the champion list, in the champion sheet and in the summary of the Team and quests tab. It counts the leader skill and the aurasong, like the game (Malady: 35,518 vs 35,516 in game).

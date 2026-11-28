@@ -1,6 +1,16 @@
 {
- "version": "1.8.2",
+ "version": "1.8.3",
  "entries": [
+  {
+   "v": "1.8.3",
+   "date": "2026-11-28",
+   "fr": [
+    "Import de captures (héros) : l'outil trouve maintenant la fiche quand la lecture de l'esquive se trompe sur le signe « % » (exemple : « 48% » lu « 489, »). L'esquive lue est alors marquée en orange, à vérifier."
+   ],
+   "en": [
+    "Screenshot import (heroes): the tool now finds the sheet when the evasion reading gets the “%” sign wrong (example: “48%” read as “489,”). The evasion is then marked in orange, to check."
+   ]
+  },
   {
    "v": "1.8.2",
    "date": "2026-11-28",

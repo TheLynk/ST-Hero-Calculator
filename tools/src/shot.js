@@ -94,21 +94,24 @@ function classByName(t){const q=norm(t);if(q.length<3) return null;let best=null
     if(q.includes(k)) d=Math.min(d,(q.length-k.length)*0.3); const r=d/Math.max(k.length,1);if(!best||r<best.r||(r===best.r&&k.length>best.len)) best={c,r,para,len:k.length}}}
   return best&&best.r<=0.34?best:null}
 // ---- repère : la ligne ESQ (valeur en %) et les valeurs alignées au-dessus ----
-function findAnchor(ws){const nums=ws.filter(w=>/^[\d.,]+$/.test(w.t)&&numOf(w.t)!=null);let best=null;
+// loose : le « % » de l'esquive est parfois lu « 9, » ou « 96 » (ex. « 48% » → « 489, ») ; essayé seulement si la lecture stricte échoue
+const EVA_LOOSE=/^([\dOo]{1,2})(9,|96|9)$/;
+function findAnchor(ws,loose){const nums=ws.filter(w=>/^[\d.,]+$/.test(w.t)&&numOf(w.t)!=null);let best=null;
   // le haut des chiffres est aligné (les virgules allongent le bas des boîtes) ; le pas des lignes est essayé à partir de chaque valeur au-dessus
-  for(const P of ws){if(!/^[\dOo]{1,2}\s?%$/.test(P.t)) continue;const band=nums.filter(w=>w.x1>=P.x1-6*P.h&&w.x1<=P.x1+P.h);
+  for(const P of ws){if(!(loose?EVA_LOOSE.test(P.t):/^[\dOo]{1,2}\s?%$/.test(P.t))) continue;const band=nums.filter(w=>w.x1>=P.x1-6*P.h&&w.x1<=P.x1+P.h);
     const steps=[];for(const w of band){const dy=P.y0-w.y0;for(const k of [1,2,3]) if(dy>0){const s0=dy/k;if(s0>1.6*P.h&&s0<4*P.h) steps.push(s0)}}
     for(const s0 of steps){const rows={};let sk=0,kk=0;
       for(const w of band){if(w.x1<P.x1-2.2*s0||w.x1>P.x1+0.3*s0) continue;const dy=P.y0-w.y0,k=Math.round(dy/s0);
         if([3,2,1,-1].includes(k)&&Math.abs(dy/s0-k)<0.15&&!rows[k]){rows[k]=w;sk+=k*dy;kk+=k*k}}
-      const n=Object.keys(rows).length;if(n>=2&&(!best||n>best.n)) best={P,rows,n,s:sk/kk}}}
+      const n=Object.keys(rows).length;if(n>=(loose?3:2)&&(!best||n>best.n)) best={P,rows,n,s:sk/kk,loose:!!loose}}}
   return best}
 async function analyse(file,W,say){
   const bmp=await createImageBitmap(file),cv=document.createElement('canvas');cv.width=bmp.width;cv.height=bmp.height;const cx=cv.getContext('2d',{willReadFrequently:true});cx.drawImage(bmp,0,0);
   const I=cx.getImageData(0,0,cv.width,cv.height),R={unsure:new Set(),gear:[],skills:null};
-  let A=null,ws=[];
+  let A=null,ws=[];const wsAll=[];
   for(const mult of [1,2]){const sc=Math.min(3,Math.max(1,1400/I.height))*mult;if(I.width*I.height*sc*sc>4.2e7) break;
-    const m=whiteMask(I,0,0,I.width,I.height,sc);ws=words(await ocrAll(W,m,11),sc);window.STC_ws=ws;A=findAnchor(ws);if(A) break}
+    const m=whiteMask(I,0,0,I.width,I.height,sc);ws=words(await ocrAll(W,m,11),sc);window.STC_ws=ws;wsAll.push(ws);A=findAnchor(ws);if(A) break}
+  if(!A) for(const w of wsAll){A=findAnchor(w,true);if(A){ws=w;break}}
   if(!A){const sc=Math.min(3,Math.max(1,1400/I.height));const wg=words(await ocrAll(W,grayCanvas(I,sc),11),sc),all=ws.concat(wg);
     return analyseCard(all,R)||await analyseSkills(I,W,R,all)}
   R.dbgA=[A.s,A.P.x1,A.P.yc,A.P.t,Object.entries(A.rows).map(([k,w])=>k+':'+w.t+'@'+w.x1.toFixed(0)+','+w.yc.toFixed(0))];const s=A.s,xE=A.P.x1,yE=A.P.y0+A.P.h/2,xR=xE-0.806*s,yPV=yE-3*s;
@@ -122,7 +125,7 @@ async function analyse(file,W,say){
   await rowVal(3,'hp',[xR-2.9*s,yPV-.42*s,xE+.12*s,yPV+.42*s]);
   await rowVal(2,'atk',[xR-2.9*s,yPV+.58*s,xE+.12*s,yPV+1.42*s]);
   await rowVal(1,'def',[xR-2.9*s,yPV+1.58*s,xE+.12*s,yPV+2.42*s]);
-  R.eva=numOf(A.P.t)||0;
+  R.eva=A.loose?+(EVA_LOOSE.exec(A.P.t)[1].replace(/[Oo]/g,'0')):numOf(A.P.t)||0;if(A.loose) R.unsure.add('eva');
   await rowVal(-1,'el',[xR-2.9*s,yPV+3.58*s,xE+.12*s,yPV+4.42*s]);
   if(R.el==null&&ws.some(w=>/L[EÉ]M[EÉ]NT/i.test(w.t))){R.el=0}
   {const r=await ocrLine(W,I,[xR-3.8*s,yPV-1.95*s,xR+1.4*s,yPV-.78*s],'0123456789,.',70);R.power=numOf(r.t);if(R.power==null||r.c<60) R.unsure.add('power')}
@@ -260,7 +263,7 @@ function shotApply(list){
     else if(m=/^sk(\d)$/.exec(k)) mark(document.querySelector(`#mSkills select[data-i="${m[1]}"]`));
     else if(k==='sk') document.querySelectorAll('#mSkills select').forEach(mark);
     else if(k==='cls') mark($('clsName'));
-    else mark($({power:'gPow',hp:'gHp',atk:'gAtk',def:'gDef',el:'gEl',lvl:'lvl'}[k]));}
+    else mark($({power:'gPow',hp:'gHp',atk:'gAtk',def:'gDef',eva:'gEva',el:'gEl',lvl:'lvl'}[k]));}
   return R}
 async function shotRun(files){
   files=[...files].filter(f=>/^image\//.test(f.type));if(!files.length){pmsg(SHT.noImg);return}
