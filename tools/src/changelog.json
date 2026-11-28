@@ -1,6 +1,18 @@
 {
- "version": "1.8.0",
+ "version": "1.8.1",
  "entries": [
+  {
+   "v": "1.8.1",
+   "date": "2026-11-28",
+   "fr": [
+    "Meilleur équipement des champions, mode Briseur de barrière : l'outil propose maintenant une variante avec un peu moins d'élément (au plus −10) mais plus de puissance. Une affinité « tous éléments » (Cyberdragon X, Aura d'inspiration) ne donne que la moitié du bonus d'élément (+5 au lieu de +10, constante du jeu affinity_all_bonus_mult = 0,5), mais de meilleures stats.",
+    "Le tri rapide compte maintenant les effets des esprits (+% DEF, +% crit, menace). Le résultat est plus juste : Argon passe de 105 137 à 114 199 de puissance en mode Puissance."
+   ],
+   "en": [
+    "Best champion gear, Barrier breaker mode: the tool now shows a variant with a little less element (at most −10) but more power. An “all elements” affinity (Cyberdragon X, Aura of Inspiration) gives only half the element bonus (+5 instead of +10, game constant affinity_all_bonus_mult = 0.5), but better stats.",
+    "The fast ranking now counts spirit effects (+% DEF, +% crit, threat). The result is more accurate: Argon goes from 105,137 to 114,199 power in Power mode."
+   ]
+  },
   {
    "v": "1.8.0",
    "date": "2026-11-28",

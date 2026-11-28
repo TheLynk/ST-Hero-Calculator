@@ -1,5 +1,10 @@
 # Changelog — ST Hero Calculator
 
+## v1.8.1 — 2026-11-28
+
+- Best champion gear, Barrier breaker mode: the tool now shows a variant with a little less element (at most −10) but more power. An “all elements” affinity (Cyberdragon X, Aura of Inspiration) gives only half the element bonus (+5 instead of +10, game constant affinity_all_bonus_mult = 0.5), but better stats.
+- The fast ranking now counts spirit effects (+% DEF, +% crit, threat). The result is more accurate: Argon goes from 105,137 to 114,199 power in Power mode.
+
 ## v1.8.0 — 2026-11-28
 
 - Champions tab: new “Best champion gear” calculator. For each champion, the tool looks for the best familiar and the best aurasong, with their element and spirit, for 3 goals: Power (default), Barrier breaker (highest element) or Fast (aurasong that cuts quest time the most). You choose the item quality and the max enchantment tier. The “Apply” button saves the gear in the champion sheet.

@@ -1,5 +1,10 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.8.1 — 2026-11-28
+
+- Meilleur équipement des champions, mode Briseur de barrière : l'outil propose maintenant une variante avec un peu moins d'élément (au plus −10) mais plus de puissance. Une affinité « tous éléments » (Cyberdragon X, Aura d'inspiration) ne donne que la moitié du bonus d'élément (+5 au lieu de +10, constante du jeu affinity_all_bonus_mult = 0,5), mais de meilleures stats.
+- Le tri rapide compte maintenant les effets des esprits (+% DEF, +% crit, menace). Le résultat est plus juste : Argon passe de 105 137 à 114 199 de puissance en mode Puissance.
+
 ## v1.8.0 — 2026-11-28
 
 - Onglet Champions : nouveau calculateur « Meilleur équipement des champions ». Pour chaque champion, l'outil cherche le meilleur familier et le meilleur chant d'aura, avec leur élément et leur esprit, selon 3 objectifs : Puissance (par défaut), Briseur de barrière (élément le plus haut) ou Rapide (chant d'aura qui réduit le plus le temps de quête). Vous choisissez la qualité des objets et le tier max des enchantements. Le bouton « Appliquer » enregistre l'équipement dans la fiche du champion.

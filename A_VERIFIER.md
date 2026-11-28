@@ -306,6 +306,8 @@ La puissance d'un champion suit la formule des héros, avec sa compétence de ch
 - ✅ Maladie (rang 11 +4, niveau 40, Xzyurnip + Assistant A.U.R.A.) : l'outil calcule 35 518, le jeu affiche 35 516.
 - À vérifier : la puissance d'un autre champion, surtout avec un chant d'aura qui donne des PV % (Aura de transmutation, Aura d'inspiration).
 - À vérifier : la menace des esprits (Mammouth, Père Fouettard) compte-t-elle dans la puissance d'un champion ? L'outil la compte, comme pour les héros.
+- À vérifier : les effets des esprits (ex. Tarasque, +% DEF) s'appliquent-ils aux stats d'un champion ? L'outil les applique, comme pour les héros (l'esquive d'Hemma avec l'esprit de griffon le confirme en partie).
+- ✅ Affinité « tous éléments » : bonus d'élément ×0,5 (constante du jeu affinity_all_bonus_mult).
 
 ## Lecture des captures (import)
 
