@@ -1,6 +1,20 @@
 {
- "version": "1.7.11",
+ "version": "1.8.0",
  "entries": [
+  {
+   "v": "1.8.0",
+   "date": "2026-11-28",
+   "fr": [
+    "Onglet Champions : nouveau calculateur « Meilleur équipement des champions ». Pour chaque champion, l'outil cherche le meilleur familier et le meilleur chant d'aura, avec leur élément et leur esprit, selon 3 objectifs : Puissance (par défaut), Briseur de barrière (élément le plus haut) ou Rapide (chant d'aura qui réduit le plus le temps de quête). Vous choisissez la qualité des objets et le tier max des enchantements. Le bouton « Appliquer » enregistre l'équipement dans la fiche du champion.",
+    "Puissance des champions : l'outil calcule la puissance comme le jeu, avec la compétence de chef et le chant d'aura (Maladie : 35 518 contre 35 516 en jeu).",
+    "Les effets des chants d'aura et des compétences de chef montrent maintenant le temps de quête, le repos et l'XP (exemple : Assistant A.U.R.A., −5 % temps de quête)."
+   ],
+   "en": [
+    "Champions tab: new “Best champion gear” calculator. For each champion, the tool looks for the best familiar and the best aurasong, with their element and spirit, for 3 goals: Power (default), Barrier breaker (highest element) or Fast (aurasong that cuts quest time the most). You choose the item quality and the max enchantment tier. The “Apply” button saves the gear in the champion sheet.",
+    "Champion power: the tool computes power like the game, with the leader skill and the aurasong (Malady: 35,518 vs 35,516 in game).",
+    "Aurasong and leader skill effects now show quest time, rest and XP (example: A.U.R.A. Assistant, −5% quest time)."
+   ]
+  },
   {
    "v": "1.7.11",
    "date": "2026-11-28",

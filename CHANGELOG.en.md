@@ -1,5 +1,11 @@
 # Changelog — ST Hero Calculator
 
+## v1.8.0 — 2026-11-28
+
+- Champions tab: new “Best champion gear” calculator. For each champion, the tool looks for the best familiar and the best aurasong, with their element and spirit, for 3 goals: Power (default), Barrier breaker (highest element) or Fast (aurasong that cuts quest time the most). You choose the item quality and the max enchantment tier. The “Apply” button saves the gear in the champion sheet.
+- Champion power: the tool computes power like the game, with the leader skill and the aurasong (Malady: 35,518 vs 35,516 in game).
+- Aurasong and leader skill effects now show quest time, rest and XP (example: A.U.R.A. Assistant, −5% quest time).
+
 ## v1.7.11 — 2026-11-28
 
 - Champions tab: seed help text fixed. Game version 26.12.0 is not out yet: it is only announced. With it, champions will appear in the seed list opened from the inventory. Until then, the “Find the seeds from the game stats” button is the only way to know their seeds.

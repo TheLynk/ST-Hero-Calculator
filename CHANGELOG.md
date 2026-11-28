@@ -1,5 +1,11 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.8.0 — 2026-11-28
+
+- Onglet Champions : nouveau calculateur « Meilleur équipement des champions ». Pour chaque champion, l'outil cherche le meilleur familier et le meilleur chant d'aura, avec leur élément et leur esprit, selon 3 objectifs : Puissance (par défaut), Briseur de barrière (élément le plus haut) ou Rapide (chant d'aura qui réduit le plus le temps de quête). Vous choisissez la qualité des objets et le tier max des enchantements. Le bouton « Appliquer » enregistre l'équipement dans la fiche du champion.
+- Puissance des champions : l'outil calcule la puissance comme le jeu, avec la compétence de chef et le chant d'aura (Maladie : 35 518 contre 35 516 en jeu).
+- Les effets des chants d'aura et des compétences de chef montrent maintenant le temps de quête, le repos et l'XP (exemple : Assistant A.U.R.A., −5 % temps de quête).
+
 ## v1.7.11 — 2026-11-28
 
 - Onglet Champions : texte d'aide des graines corrigé. La version 26.12.0 du jeu n'est pas encore sortie : elle est seulement annoncée. Avec elle, les champions apparaîtront dans la liste des graines ouverte depuis l'inventaire. En attendant, le bouton « Trouver les graines avec les stats du jeu » reste le seul moyen de connaître leurs graines.

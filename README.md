@@ -15,6 +15,7 @@ Calculateur pour **Shop Titans** : il trouve le meilleur équipement (objets, é
 - **Preset depuis des captures** : la page lit les captures du jeu (onglet Infos, onglet Capacités, carte de collection) et remplit le mode manuel. Comparaison d'icônes avec les images du jeu, lecture des chiffres avec [Tesseract.js](https://github.com/naptha/tesseract.js) (Apache-2.0) dans `ocr.js`. Tout reste local.
 - **Équipe et quêtes** (onglet) : simulation de combat d'une équipe de 3 ou 4 héros (presets) avec un champion, contre une quête, une quête éclair ou un boss. Taux de victoire, risque de mort et note par héros, meilleure équipe parmi les presets, meilleur champion. Règles reprises du code du jeu, lu sans lancer le jeu.
 - **Champions** (onglet) : configuration enregistrée de chaque champion (rang, renforts, graines, familier, chant d'aura), réutilisée par le simulateur.
+- **Meilleur équipement des champions** (onglet Champions) : meilleur familier et meilleur chant d'aura (avec élément et esprit) pour chaque champion, selon 3 objectifs : Puissance, Briseur de barrière (élément max) ou Rapide (chant d'aura qui réduit le temps de quête).
 - Version de l'outil dans l'en-tête (clic = journal des modifications). Voir `CHANGELOG.md` / `CHANGELOG.en.md`.
 
 ## Utilisation

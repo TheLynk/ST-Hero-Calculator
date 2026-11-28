@@ -21,7 +21,7 @@ for u,q in Q.items():
       'hp':q.get('monsterHp',0),'dmg':q.get('dmg',0),'aoe':q.get('aoe',0),'ao':f(q.get('aoeOdds')),'cr':f(q.get('crit')),'cm':f(q.get('critMult')),'td':q.get('tdef',0),
       'dr':f(q.get('dmgRed')),'acc':f(q.get('accuracy')),'po':f(q.get('poise')),'bp':q.get('barrierPower',0),'el':(q['element'] or '').split(',') if q['element'] else [],
       'mb':f(q.get('miniboss')),'ul':q.get('minLevel') or q.get('unlockLevel',0)})
-MK=['atk','def','hp','hpAbs','shieldHp','evasion','critical','critMult','aggro','regen','atkClass','hpClass','evasionClass','criticalClass','classes','barrierPowerMult','bossMult','FlashQuestModMult','randomAttackBonus','hpConsumption','atkFromAdvMult','hpReceived','mHp','mDmg','mDmgPerRound','mCrit','mCritMult','mAoe','mAoeOdds','mEva','duration','isAurastone','modifierProvider']
+MK=['time','rest','xp','atk','def','hp','hpAbs','shieldHp','evasion','critical','critMult','aggro','regen','atkClass','hpClass','evasionClass','criticalClass','classes','barrierPowerMult','bossMult','FlashQuestModMult','randomAttackBonus','hpConsumption','atkFromAdvMult','hpReceived','mHp','mDmg','mDmgPerRound','mCrit','mCritMult','mAoe','mAoeOdds','mEva','duration','isAurastone','modifierProvider']
 mods={}
 for u,m in M.items():
     if not(u.endswith(tuple('12345')) and 'leader' in u or u.endswith('aura') or u.startswith('si_atk') or m.get('isMiniBoss')): continue
