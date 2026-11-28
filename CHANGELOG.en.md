@@ -1,5 +1,9 @@
 # Changelog — ST Hero Calculator
 
+## v1.8.2 — 2026-11-28
+
+- Champions: power (star) now shows in the champion list, in the champion sheet and in the summary of the Team and quests tab. It counts the leader skill and the aurasong, like the game (Malady: 35,518 vs 35,516 in game).
+
 ## v1.8.1 — 2026-11-28
 
 - Best champion gear, Barrier breaker mode: the tool now shows a variant with a little less element (at most −10) but more power. An “all elements” affinity (Cyberdragon X, Aura of Inspiration) gives only half the element bonus (+5 instead of +10, game constant affinity_all_bonus_mult = 0.5), but better stats.

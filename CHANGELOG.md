@@ -1,5 +1,9 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.8.2 — 2026-11-28
+
+- Champions : la puissance (étoile) s'affiche maintenant dans la liste des champions, dans la fiche du champion et dans le résumé de l'onglet Équipe et quêtes. Elle compte la compétence de chef et le chant d'aura, comme le jeu (Maladie : 35 518 contre 35 516 en jeu).
+
 ## v1.8.1 — 2026-11-28
 
 - Meilleur équipement des champions, mode Briseur de barrière : l'outil propose maintenant une variante avec un peu moins d'élément (au plus −10) mais plus de puissance. Une affinité « tous éléments » (Cyberdragon X, Aura d'inspiration) ne donne que la moitié du bonus d'élément (+5 au lieu de +10, constante du jeu affinity_all_bonus_mult = 0,5), mais de meilleures stats.
