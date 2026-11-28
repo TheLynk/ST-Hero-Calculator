@@ -1,6 +1,18 @@
 {
- "version": "1.11.0",
+ "version": "1.12.0",
  "entries": [
+  {
+   "v": "1.12.0",
+   "date": "2026-11-28",
+   "fr": [
+    "Onglet Équipe et quêtes : les résultats des simulations sont maintenant enregistrés dans le navigateur (Simuler, Meilleure équipe, Meilleur champion, Meilleure équipe + champion, Équipe théorique). Si vous relancez avec exactement les mêmes données (quête, bonus, héros, champion, réglages, version de l'outil), le résultat est rechargé sans recalcul, avec la mention « Résultat déjà simulé ». Si une donnée change, l'outil recalcule. Le lien « Recalculer » force un nouveau calcul. L'outil garde les 150 derniers résultats.",
+    "Les builds des héros étaient déjà enregistrés (onglet Héros et équipe théorique). Le cache des simulations n'est pas inclus dans « Exporter tout »."
+   ],
+   "en": [
+    "Team and quests tab: simulation results are now saved in the browser (Simulate, Best team, Best champion, Best team + champion, Theoretical team). If you run again with exactly the same data (quest, booster, heroes, champion, settings, tool version), the result is loaded without recomputing, with the note “Already simulated”. If any data changes, the tool recomputes. The “Recompute” link forces a new computation. The tool keeps the last 150 results.",
+    "Hero builds were already saved (Hero tab and theoretical team). The simulation cache is not included in “Export all”."
+   ]
+  },
   {
    "v": "1.11.0",
    "date": "2026-11-28",

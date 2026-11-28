@@ -1,5 +1,10 @@
 # Changelog — ST Hero Calculator
 
+## v1.12.0 — 2026-11-28
+
+- Team and quests tab: simulation results are now saved in the browser (Simulate, Best team, Best champion, Best team + champion, Theoretical team). If you run again with exactly the same data (quest, booster, heroes, champion, settings, tool version), the result is loaded without recomputing, with the note “Already simulated”. If any data changes, the tool recomputes. The “Recompute” link forces a new computation. The tool keeps the last 150 results.
+- Hero builds were already saved (Hero tab and theoretical team). The simulation cache is not included in “Export all”.
+
 ## v1.11.0 — 2026-11-28
 
 - Team and quests tab: new “Theoretical team (heroes you do not own)” block. You set the level, the classes (promoted or base), item quality, max enchantment tier, seeds, transcendence and chest or pack items. The tool creates the best build of each class (like the Hero tab), then looks for the best combination of classes and champion for the chosen quest. The table shows the top 10 teams, and the details of the 1st one show in “Result”.

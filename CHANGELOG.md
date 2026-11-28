@@ -1,5 +1,10 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.12.0 — 2026-11-28
+
+- Onglet Équipe et quêtes : les résultats des simulations sont maintenant enregistrés dans le navigateur (Simuler, Meilleure équipe, Meilleur champion, Meilleure équipe + champion, Équipe théorique). Si vous relancez avec exactement les mêmes données (quête, bonus, héros, champion, réglages, version de l'outil), le résultat est rechargé sans recalcul, avec la mention « Résultat déjà simulé ». Si une donnée change, l'outil recalcule. Le lien « Recalculer » force un nouveau calcul. L'outil garde les 150 derniers résultats.
+- Les builds des héros étaient déjà enregistrés (onglet Héros et équipe théorique). Le cache des simulations n'est pas inclus dans « Exporter tout ».
+
 ## v1.11.0 — 2026-11-28
 
 - Onglet Équipe et quêtes : nouveau bloc « Équipe théorique (héros non possédés) ». Vous réglez le niveau, les classes (promues ou de base), la qualité des objets, le tier max des enchantements, les graines, la transcendance et les objets de coffre ou de pack. L'outil crée le meilleur build de chaque classe (comme l'onglet Héros), puis cherche la meilleure combinaison de classes et de champion pour la quête choisie. Le tableau montre les 10 meilleures équipes, et le détail de la 1re s'affiche dans « Résultat ».
