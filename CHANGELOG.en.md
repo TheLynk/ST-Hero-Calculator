@@ -1,5 +1,10 @@
 # Changelog — ST Hero Calculator
 
+## v1.7.5 — 2026-11-28
+
+- Champions: exact computation. The tool uses the exact game level curve (CharacterData.ScaleStatToLevel: +1%, 2%, 3%, 4% per level up to level 40, then linear) with the game fixed-point numbers (0.01 is 0.0099945). Rank upgrades are no longer rounded, and the stats of each item are rounded to a whole number.
+- Argon: 2,053 HP, 7,438 ATK, 15,573 DEF, element 135, exactly as in game (before: 7,440 ATK and 15,575 DEF).
+
 ## v1.7.4 — 2026-11-28
 
 - Champions: champion collection card added (common +5%, rare +10%, mythic +25%, as for heroes).

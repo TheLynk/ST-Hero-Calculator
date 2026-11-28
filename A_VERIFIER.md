@@ -198,6 +198,9 @@ Seule la 3e ligne donne les 2 chiffres. Mais elle utilise 2 règles inconnues, s
 
 ### Test 12 — Niveaux bas
 
+**Info (28/11, code du jeu) :** la vraie courbe de niveau est en paliers (+1 %, 2 %, 3 %, 4 % par niveau de 1 à 40), pas la courbe ((L−1)/39)^1,55 utilisée pour les héros. Les champions utilisent déjà la vraie courbe (v1.7.5). Pour les héros, l'écart n'existe que sous le niveau 40.
+
+
 **Ce que l'outil fait :** courbe des fichiers du jeu du niveau 1 au niveau 40. Vérifiée seulement au niveau 39 (Albin) et 40.
 
 **Étapes :** un héros de niveau 10 à 30, **sans aucun objet**. Capture de l'onglet Infos + son niveau + les graines + la carte.
@@ -267,7 +270,7 @@ Seule la 3e ligne donne les 2 chiffres. Mais elle utilise 2 règles inconnues, s
 
 **Comparaison :** entrez les stats du jeu dans « Stats affichées dans le jeu » : l'outil affiche l'écart pour chaque stat.
 
-**Résultat (28/11, Argon rang 11 +20, niveau 50, titan, 80/80/80 graines, Avatar épique + Lumière, Réacteur d'aura épique, carte rare) :** outil 2 053 PV / 7 440 ATQ / 15 575 DEF / élément 135 ; jeu 2 053 / 7 438 / 15 573 / 135. ✓ La carte de collection du champion compte comme pour les héros (rare ×1,10).
+**Résultat (28/11, Argon rang 11 +20, niveau 50, titan, 80/80/80 graines, Avatar épique + Lumière, Réacteur d'aura épique, carte rare) :** outil (v1.7.5) 2 053 PV / 7 438 ATQ / 15 573 DEF / élément 135 ; jeu 2 053 / 7 438 / 15 573 / 135, au point près. ✓ La carte de collection du champion compte comme pour les héros (rare ×1,10).
 
 **Déjà juste :** élément de Lilu (125) et niveau de compétence (4/5 au rang 11 avec titan).
 

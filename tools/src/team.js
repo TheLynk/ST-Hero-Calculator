@@ -90,24 +90,30 @@ const cn0=(k,d)=>SD.cons[k]!=null?+SD.cons[k]:d;
 function champStats(u,lvl,rank,reinf,titan,gear,seeds,par,card){
   const c=SD.champs[u];if(!c) return null;
   lvl=Math.max(1,Math.min(par?100:50,lvl)); // niveaux 51 à 100 : âme de Parangon (Hero.CanUseParagonSoul)
-  const cur=a=>{const[v1,v40,v50,v100]=a;if(lvl<=40) return v1+(v40-v1)*Math.pow((lvl-1)/39,1.55);if(lvl<=50) return v40+(v50-v40)*(lvl-40)/10;return v50+(v100-v50)*(lvl-50)/50};
+  // courbe de niveau du jeu (CharacterData.ScaleStatToLevel) en virgule fixe 16 bits : +1 %, 2 %, 3 %, 4 % de (niv. 40 − niv. 1) par niveau (2–9, 10–20, 21–30, 31–40),
+  // puis +10 % de (niv. 50 − niv. 40) et +2 % de (niv. 100 − niv. 50) par niveau ; 0,01 est tronqué (0,0099945) → −0,055 %, visible sur Argon
+  const FX=x=>Math.floor(x*65536)/65536, H=FX(0.01);
+  const cur=a=>{const[v1,v40,v50,v100]=a;const X=v40-v1;let v=v1;for(let l=2;l<=lvl;l++) v+=l<=9?H*X:l<=20?2*H*X:l<=30?3*H*X:l<=40?4*H*X:l<=50?10*H*(v50-v40):2*H*((v100||v50)-v50);return Math.round(v)};
   const story=rank+(rank>=11?reinf:0);let pct=0,sk=1;
-  for(let i=0;i<story-1;i++){const x=c.upg[Math.min(i,c.upg.length-1)];if(!x) continue;const m=/stat\+([\d.]+)/.exec(x);if(m) pct+=+m[1];if(/skl\+1/.test(x)&&i<c.upg.length) sk++}
-  if(titan&&c.titan){const m=/stat\+([\d.]+)/.exec(c.titan);if(m) pct+=+m[1]}
+  for(let i=0;i<story-1;i++){const x=c.upg[Math.min(i,c.upg.length-1)];if(!x) continue;const m=/stat\+([\d.]+)/.exec(x);if(m) pct+=FX(+m[1]);if(/skl\+1/.test(x)&&i<c.upg.length) sk++}
+  if(titan&&c.titan){const m=/stat\+([\d.]+)/.exec(c.titan);if(m) pct+=FX(+m[1])}
   // amélioration Parangon (upgPrgnlvl100) au niveau 100
   if(par&&lvl>=cn0('champion_paragon_soul_skill_unlock_level',100)&&c.prg){const m=/stat\+([\d.]+)/.exec(c.prg);if(m) pct+=+m[1];if(/skl\+1/.test(c.prg)) sk++}
   sk=Math.min(titan?5:cn0('max_skill_level_non_titan',3),sk);
   const tm=titan?cn0('champion_titan_soul_story_stat_mult',1.5):1, st=c.st||[0,0,0,0,0];
   // graines (Character.seedsAtk/Def/Hp, communes aux héros et aux champions) : +4 ATQ, +4 DEF, +1 PV par graine
   const sd=k=>Math.max(0,Math.min(80,+((seeds||{})[k])||0));
-  const base={hp:Math.round(cur(c.hp)+pct*st[0]*tm)+sd('hp'),atk:Math.round(cur(c.atk)+pct*st[1]*tm)+4*sd('atk'),def:Math.round(cur(c.def)+pct*st[2]*tm)+4*sd('def')};
+  // niveau (entier) + améliorations (virgule fixe, sans arrondi : Hero.get_SpecificAttack)
+  const base={hp:cur(c.hp)+pct*st[0]*tm+sd('hp'),atk:cur(c.atk)+pct*st[1]*tm+4*sd('atk'),def:cur(c.def)+pct*st[2]*tm+4*sd('def')};
   const elB=String(SD.cons.hero_element_rank_and_value||'').split(';').map(x=>x.split(',').map(Number)).filter(x=>x[0]<=story).pop();
   const Cap=x=>x?x[0].toUpperCase()+x.slice(1):x;
   const cls={name:'Champion',family:famOf(c.cls),element:Cap(c.el),crit:c.cr,critDmg:c.cm,eva:c.eva,threat:c.aggro,slots:[],skillUnlock:[]};
   // carte de collection du champion (commune ×1,05, rare ×1,10, mythique ×1,25 : comme les héros) — Argon : écart de −9,1 % sur PV, ATQ et DEF sans la carte rare
-  const ctx={cls,lvl,maxT:16,base,card:[1,1.05,1.10,1.25][+card||0]||1,trans:0,star:false,q:3,eT:16,goldWild:false,obj:'power',nSlots:0,innate:null,fams:[]};
+  const ctx={cls,lvl,maxT:16,base,card:FX([1,1.05,1.10,1.25][+card||0]||1),trans:0,star:false,q:3,eT:16,goldWild:false,obj:'power',nSlots:0,innate:null,fams:[]};
   let R=null;
-  try{const picks=(gear||[]).filter(g=>g&&g.i&&ITEM[g.i]).map(g=>{const it=ITEM[g.i];return makePick({...ctx,q:+g.q||3},g.i,it.builtElem?null:(g.e||null),it.builtSpirit?null:(g.s||null))});
+  try{const picks=(gear||[]).filter(g=>g&&g.i&&ITEM[g.i]).map(g=>{const it=ITEM[g.i];const pk=makePick({...ctx,q:+g.q||3},g.i,it.builtElem?null:(g.e||null),it.builtSpirit?null:(g.s||null));
+      // stats de chaque objet arrondies à l'entier (Argon : Avatar + Lumière, 2 686,5 DEF → 2 687)
+      pk.st={atk:Math.round(pk.st.atk),def_:Math.round(pk.st.def_),hp:Math.round(pk.st.hp)};return pk});
     R=evaluate(ctx,picks,[])}catch(e){R=null}
   return {lvl,atk:Math.round(R?R.atk:base.atk),def:Math.round(R?R.def:base.def),hp:Math.round(R?R.hp:base.hp),eva:R?R.eva/100:c.eva,crit:R?R.crit/100:c.cr,cm:R?R.cm:c.cm,
     el:(elB?elB[1]:0)+(R?R.el:0),sk,story,base};

@@ -1,5 +1,10 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.7.5 — 2026-11-28
+
+- Champions : calcul au point près. L'outil reprend la courbe de niveau exacte du jeu (CharacterData.ScaleStatToLevel : +1 %, 2 %, 3 %, 4 % par niveau jusqu'au niveau 40, puis linéaire) avec la virgule fixe du jeu (0,01 vaut 0,0099945). Les améliorations de rang ne sont plus arrondies, et les stats de chaque objet sont arrondies à l'entier.
+- Argon : 2 053 PV, 7 438 ATQ, 15 573 DEF, élément 135, exactement comme dans le jeu (avant : 7 440 ATQ et 15 575 DEF).
+
 ## v1.7.4 — 2026-11-28
 
 - Champions : ajout de la carte de collection du champion (commune +5 %, rare +10 %, mythique +25 %, comme pour les héros).
