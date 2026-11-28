@@ -496,7 +496,7 @@ function evaluate(ctx,picks,skillFams){
   const exm=inn&&/defeat any enemy below (\d+)% HP/i.exec(inn.effect||'');
   const power=(ap+dp)*(pbm?1+pbm[1]/100:1)*(exm?1+exm[1]/100:1);
   const score=ctx.obj==='threat'? threat*1e9+power : power;
-  return {score,power,ap,dp,atk,def,hp,crit,cm,eva,threat,el,anyEl,inn,skills,T,disp,ia,id,ih,off:picks.map(p=>off.has(p))};
+  return {score,power,ap,dp,atk,def,hp,crit,cm,eva,threat,el,anyEl,inn,skills,T,disp,ia,id,ih,aBr,dBr:1+T.defP/100,off:picks.map(p=>off.has(p))};
 }
 
 /* ---------- options par emplacement ---------- */
@@ -797,6 +797,7 @@ $('manual').addEventListener('change',e=>{const s=e.target.closest('select[data-
   manualCompute()});
 $('mCopy').addEventListener('click',()=>{man=null;renderManual()});
 /*SHOTJS*/
+/*TEAMJS*/
 setClass();
 }
 // ===== Données : chargement, détection des mises à jour =====

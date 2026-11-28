@@ -212,6 +212,47 @@ Seule la 3e ligne donne les 2 chiffres. Mais elle utilise 2 règles inconnues, s
 
 ---
 
+### Test 14 — Simulation de quête (onglet « Équipe et quêtes », v1.6.0)
+
+**Ce que l'outil fait :** il rejoue le combat avec les règles du code du jeu (`Quest.DoCombat`, lu sans lancer le jeu), 1 000 fois. Le jeu fait la même chose 50 fois pour la note de la quête.
+
+**Règles reprises du jeu :**
+
+- Le monstre attaque en premier, puis les héros dans l'ordre de l'équipe.
+- Attaque de zone (si l'équipe a 2 héros vivants ou plus) : chance « aoeOdds » ; sinon une cible tirée au sort selon la menace.
+- Dégâts reçus × multiplicateur de DEF : 1 + (DEF cible − DEF) / (2 × DEF cible), entre 0,5 et 2. Au-delà de 2 × la DEF cible : 50 % → 30 % → 25 %. Un coup critique ne descend jamais sous ×1.
+- Esquive : esquive − précision de la quête, 75 % max (78 % Éclaireur).
+- Barrière non brisée : −80 % de dégâts. Les éléments des héros vivants sont additionnés à chaque tour.
+- Classes : Samouraï et Daimyo (1er tour), Danseur et Acrobate (critique après une esquive), Ninja et Sensei, Berserker et Jarl, Seigneur (protège un allié), Clerc et Évêque (survit une fois), Conquistador, Chevalier noir et de la mort (achève sous 10 %), Chronomancien et Tisse-Sort (2e essai).
+- Champion : compétence de chef selon le rang, Mercenaire +25 %, Bjorn ×2 en quête éclair, Ashley ×2 contre un boss, Hemma (absorbe des PV).
+
+**Ce qui n'est pas encore vérifié :**
+
+1. Les stats des champions : l'outil ne sait pas les calculer (renforcements, familier). Recopiez l'onglet Infos du champion.
+4. Le bouclier de mana des objets n'est pas compté.
+
+**Étapes :**
+
+1. Dans le jeu, préparez une quête avec 3 ou 4 héros enregistrés en presets dans l'outil.
+2. Faites une capture de l'écran de préparation de la quête, avec la note de chaque héros (les visages de couleur).
+3. Dans l'outil, ouvrez « Équipe et quêtes ». Choisissez la même zone, la même difficulté, le même champion (rang, niveau) et les mêmes héros.
+4. Envoyez-moi la capture du jeu et la capture du résultat de l'outil.
+
+**Ce que je vérifie :** la note de chaque héros dans le jeu doit correspondre au risque de mort de l'outil.
+
+**Résultat 1 (28/11, Elysium Difficile, boss Avatar, champion Yami) : ✅ 4 visages sur 4 identiques**, avec les vraies stats de Yami.
+
+| Héros | Jeu | Outil |
+|---|---|---|
+| B1 (Tisse-Sort) | vert | S (7 %) |
+| PartoutV2 (Sorceguerre) | jaune | A (35 %) |
+| Yami | vert | S (1 %) |
+| PassePartout (Sorceguerre) | vert | S (2 %) |
+
+- Barrière : le jeu affiche 458 / 260. L'outil trouve 263 pour les héros + 195 pour Yami = 458. ✓ Les Sorceguerres (« tous éléments ») comptent bien pour 50 %, et l'élément du champion compte en entier.
+- Les stats estimées des champions étaient fausses (Yami : 7 134 ATK au lieu de 13 546). Elles dépendent des renforcements et du familier. Depuis la 1.6.2, recopiez l'onglet Infos du champion.
+- Encore utile : une quête où un héros a un visage orange, rouge ou violet. Une quête facile (tous verts) et une quête difficile (au moins un héros en danger) sont les plus utiles.
+
 ## Lecture des captures (import)
 
 | # | Test | Quoi envoyer |

@@ -1,5 +1,22 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.6.2 — 2026-11-28
+
+- Équipe et quêtes : les stats du champion (PV, ATQ, DEF, esquive, élément) sont maintenant toujours visibles. Recopiez l'onglet Infos du champion dans le jeu. L'outil les garde pour chaque champion, et « Meilleur champion » les utilise.
+- Champion : ajout de l'esquive. L'estimation des stats reste disponible si les champs sont vides, mais elle ignore les renforcements et le familier.
+- Premier test comparé au jeu (Elysium Difficile, boss, Yami) : les 4 visages sont identiques, et la barrière donne le même total (458 / 260).
+
+## v1.6.1 — 2026-11-28
+
+- Équipe et quêtes : la note de chaque héros s'affiche aussi avec le visage du jeu (violet D, rouge C, orange B, jaune A, vert S, lunettes SSS). Images extraites des fichiers du jeu (outil tools/faces.py). Le classement « Meilleure équipe » et « Meilleur champion » montre aussi le visage du héros le plus en danger.
+
+## v1.6.0 — 2026-11-27
+
+- Nouvel onglet « Équipe et quêtes » : simulation de combat d'une équipe de 3 ou 4 héros (vos presets) et d'un champion, contre une quête (Facile à Extrême), un boss, une quête éclair ou la Mystérieuse cité d'or. Résultat : taux de victoire, tours, risque de mort et note par héros, dégâts de chaque héros, barrière brisée ou non.
+- Règles de combat reprises du code du jeu (Quest.DoCombat), lu sans lancer le jeu : ordre des attaques, attaques de zone, cible selon la menace, effet de la DEF, esquive et précision, coups critiques, barrière élémentaire (−80 %), capacités des classes (Samouraï, Daimyo, Danseur, Ninja, Sensei, Berserker, Seigneur, Clerc, Conquistador, Chevalier noir, Chronomancien), compétences de chef des champions, pierres d'aura, bonus d'ATQ et mini-boss.
+- Boutons « Meilleure équipe » (toutes les combinaisons de vos presets) et « Meilleur champion » (les 11 champions pour l'équipe choisie).
+- Données des quêtes, des champions et des modificateurs extraites des fichiers du jeu (outil tools/simdata.py).
+
 ## v1.5.10 — 2026-11-27
 
 - Objets à esprit intégré (Mundra) avec un élément ajouté : l'élément compte ×1,5, et élément + esprit ne dépassent pas la stat de la fiche de l'objet (base + esprit intégré). Vérifié sur le Crâne de Mundra + Oubli : 864 DEF et 97 PV dans le jeu, 863 et 97 dans l'outil (avant : 809 et 89). Règle tirée d'un seul objet : à confirmer.

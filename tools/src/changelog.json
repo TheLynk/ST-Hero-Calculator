@@ -1,6 +1,46 @@
 {
- "version": "1.5.10",
+ "version": "1.6.2",
  "entries": [
+  {
+   "v": "1.6.2",
+   "date": "2026-11-28",
+   "fr": [
+    "Équipe et quêtes : les stats du champion (PV, ATQ, DEF, esquive, élément) sont maintenant toujours visibles. Recopiez l'onglet Infos du champion dans le jeu. L'outil les garde pour chaque champion, et « Meilleur champion » les utilise.",
+    "Champion : ajout de l'esquive. L'estimation des stats reste disponible si les champs sont vides, mais elle ignore les renforcements et le familier.",
+    "Premier test comparé au jeu (Elysium Difficile, boss, Yami) : les 4 visages sont identiques, et la barrière donne le même total (458 / 260)."
+   ],
+   "en": [
+    "Team & quests: the champion stats (HP, ATK, DEF, evasion, element) are now always visible. Copy the champion Info tab from the game. The tool keeps them for each champion, and “Best champion” uses them.",
+    "Champion: evasion added. The stat estimate is still used when the fields are empty, but it ignores reinforcements and the familiar.",
+    "First test compared with the game (Elysium Hard, boss, Yami): the 4 faces are the same, and the barrier gives the same total (458 / 260)."
+   ]
+  },
+  {
+   "v": "1.6.1",
+   "date": "2026-11-28",
+   "fr": [
+    "Équipe et quêtes : la note de chaque héros s'affiche aussi avec le visage du jeu (violet D, rouge C, orange B, jaune A, vert S, lunettes SSS). Images extraites des fichiers du jeu (outil tools/faces.py). Le classement « Meilleure équipe » et « Meilleur champion » montre aussi le visage du héros le plus en danger."
+   ],
+   "en": [
+    "Team & quests: each hero's rating is also shown with the game face (purple D, red C, orange B, yellow A, green S, sunglasses SSS). Images extracted from the game files (tools/faces.py tool). The “Best team” and “Best champion” rankings also show the face of the hero most at risk."
+   ]
+  },
+  {
+   "v": "1.6.0",
+   "date": "2026-11-27",
+   "fr": [
+    "Nouvel onglet « Équipe et quêtes » : simulation de combat d'une équipe de 3 ou 4 héros (vos presets) et d'un champion, contre une quête (Facile à Extrême), un boss, une quête éclair ou la Mystérieuse cité d'or. Résultat : taux de victoire, tours, risque de mort et note par héros, dégâts de chaque héros, barrière brisée ou non.",
+    "Règles de combat reprises du code du jeu (Quest.DoCombat), lu sans lancer le jeu : ordre des attaques, attaques de zone, cible selon la menace, effet de la DEF, esquive et précision, coups critiques, barrière élémentaire (−80 %), capacités des classes (Samouraï, Daimyo, Danseur, Ninja, Sensei, Berserker, Seigneur, Clerc, Conquistador, Chevalier noir, Chronomancien), compétences de chef des champions, pierres d'aura, bonus d'ATQ et mini-boss.",
+    "Boutons « Meilleure équipe » (toutes les combinaisons de vos presets) et « Meilleur champion » (les 11 champions pour l'équipe choisie).",
+    "Données des quêtes, des champions et des modificateurs extraites des fichiers du jeu (outil tools/simdata.py)."
+   ],
+   "en": [
+    "New “Team & quests” tab: combat simulation of a team of 3 or 4 heroes (your presets) and a champion, against a quest (Easy to Extreme), a boss, a flash quest or the Lost City of Gold. Result: win rate, rounds, death risk and rating per hero, damage of each hero, barrier shattered or not.",
+    "Combat rules taken from the game code (Quest.DoCombat), read without running the game: attack order, area attacks, target by threat, DEF effect, evasion and accuracy, critical hits, elemental barrier (−80%), class abilities (Samurai, Daimyo, Dancer, Ninja, Sensei, Berserker, Lord, Cleric, Conquistador, Dark Knight, Chronomancer), champion leader skills, aurastones, ATK boosters and mini-bosses.",
+    "“Best team” (all combinations of your presets) and “Best champion” (the 11 champions for the chosen team) buttons.",
+    "Quest, champion and modifier data extracted from the game files (tools/simdata.py tool)."
+   ]
+  },
   {
    "v": "1.5.10",
    "date": "2026-11-27",

@@ -1,5 +1,22 @@
 # Changelog — ST Hero Calculator
 
+## v1.6.2 — 2026-11-28
+
+- Team & quests: the champion stats (HP, ATK, DEF, evasion, element) are now always visible. Copy the champion Info tab from the game. The tool keeps them for each champion, and “Best champion” uses them.
+- Champion: evasion added. The stat estimate is still used when the fields are empty, but it ignores reinforcements and the familiar.
+- First test compared with the game (Elysium Hard, boss, Yami): the 4 faces are the same, and the barrier gives the same total (458 / 260).
+
+## v1.6.1 — 2026-11-28
+
+- Team & quests: each hero's rating is also shown with the game face (purple D, red C, orange B, yellow A, green S, sunglasses SSS). Images extracted from the game files (tools/faces.py tool). The “Best team” and “Best champion” rankings also show the face of the hero most at risk.
+
+## v1.6.0 — 2026-11-27
+
+- New “Team & quests” tab: combat simulation of a team of 3 or 4 heroes (your presets) and a champion, against a quest (Easy to Extreme), a boss, a flash quest or the Lost City of Gold. Result: win rate, rounds, death risk and rating per hero, damage of each hero, barrier shattered or not.
+- Combat rules taken from the game code (Quest.DoCombat), read without running the game: attack order, area attacks, target by threat, DEF effect, evasion and accuracy, critical hits, elemental barrier (−80%), class abilities (Samurai, Daimyo, Dancer, Ninja, Sensei, Berserker, Lord, Cleric, Conquistador, Dark Knight, Chronomancer), champion leader skills, aurastones, ATK boosters and mini-bosses.
+- “Best team” (all combinations of your presets) and “Best champion” (the 11 champions for the chosen team) buttons.
+- Quest, champion and modifier data extracted from the game files (tools/simdata.py tool).
+
 ## v1.5.10 — 2026-11-27
 
 - Items with a built-in spirit (Mundra) with an added element: the element counts ×1.5, and element + spirit do not go above the item's sheet stat (base + built-in spirit). Checked on Mundra's Skull + Oblivion: 864 DEF and 97 HP in game, 863 and 97 in the tool (before: 809 and 89). Rule taken from one item only: to be confirmed.
