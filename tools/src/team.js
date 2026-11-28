@@ -185,10 +185,12 @@ function fqInit(){const box=$t('tFq');
   const draw=()=>{const t=Date.now();const L0=Object.keys(SD.names).filter(f=>FQDAY[f]||FQWE[f]).map(f=>{const w=fqNext(f,t);return {f,a:w[0],b:w[1]}}).sort((x,y)=>x.a-y.a);
     const fmtD=ms=>new Date(ms).toLocaleString(EN?'en-GB':'fr-FR',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
     box.querySelector('tbody').innerHTML=L0.slice(0,8).map(x=>{const on=x.a<=t;return `<tr class="${on?'fqon':''}"><td><button type="button" class="fqgo" data-f="${x.f}">${areaIco(x.f,26)}<span><b>${esc(fqName(x.f))}</b><span class="alt">${esc(areaName(x.f))}${fqLvl(x.f)?' · '+(EN?'lvl ':'niv. ')+fqLvl(x.f):''}</span></span></button></td><td>${on?`<b class="g5">${TT.fqNow}</b>`:fmtD(x.a)}</td><td class="n"><b>${on?TT.fqLeft+' '+dur(x.b-t):TT.fqIn+' '+dur(x.a-t)}</b></td></tr>`}).join('')};
-  const hrs=Array.from({length:24},(_,h)=>{const d=new Date(Date.UTC(2026,0,1,h));return `<option value="${h}">${d.toLocaleTimeString(EN?'en-GB':'fr-FR',{hour:'2-digit',minute:'2-digit'})}</option>`}).join('');
+  // heure UTC → heure locale du jour (suit l'heure d'été et d'hiver)
+  const uDay=h=>{const t=new Date();return new Date(Date.UTC(t.getUTCFullYear(),t.getUTCMonth(),t.getUTCDate(),h))};
+  const hrs=Array.from({length:24},(_,h)=>{const d=uDay(h);return `<option value="${h}">${d.toLocaleTimeString(EN?'en-GB':'fr-FR',{hour:'2-digit',minute:'2-digit'})}</option>`}).join('');
   // fuseau de l'appareil, ex. « Europe/Paris, UTC+1 »
   const tz=(()=>{let n='';try{n=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(x){}const o=-new Date().getTimezoneOffset(),hh=Math.floor(Math.abs(o)/60),mm=Math.abs(o)%60;return (n?n.replace(/_/g,' ')+', ':'')+'UTC'+(o<0?'−':'+')+hh+(mm?':'+String(mm).padStart(2,'0'):'')})();
-  const locH=h=>new Date(Date.UTC(2026,0,1,h)).toLocaleTimeString(EN?'en-GB':'fr-FR',{hour:'2-digit',minute:'2-digit'});
+  const locH=h=>uDay(h).toLocaleTimeString(EN?'en-GB':'fr-FR',{hour:'2-digit',minute:'2-digit'});
   box.innerHTML=`<h2 style="display:flex;gap:8px;align-items:center">${ta('icon_global_flashquest',26)} ${TT.fqTitle}</h2><div class="scroll"><table class="fqt"><thead><tr><th>${TT.quest}</th><th>${TT.fqStart}</th><th class="n">${TT.fqTimer}</th></tr></thead><tbody></tbody></table></div>
    <div class="fqsync"><b>${TT.fqSync}</b><ol>${TT.fqSteps.map(x=>`<li>${x}</li>`).join('')}</ol>
    <div class="fqin"><label><input type="number" id="tFqRh" min="0" max="47" inputmode="numeric" placeholder="7"> ${TT.fqH}</label><label><input type="number" id="tFqRm" min="0" max="59" inputmode="numeric" placeholder="38"> ${TT.fqM}</label><button type="button" id="tFqGo">${TT.fqGo}</button></div>

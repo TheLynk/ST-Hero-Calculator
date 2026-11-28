@@ -1,5 +1,9 @@
 # Changelog — ST Hero Calculator
 
+## v1.9.3 — 2026-11-28
+
+- Flash quest calendar: the displayed start time now follows daylight saving time. Before, the hour list always used winter time; in summer it would have shown 1 hour less. Calendar dates and timers were already correct.
+
 ## v1.9.2 — 2026-11-28
 
 - Flash quest calendar: the start time now shows only in your local time, with your time zone name (example: “Europe/Paris, UTC+1”). The confusing UTC time in brackets is no longer shown.

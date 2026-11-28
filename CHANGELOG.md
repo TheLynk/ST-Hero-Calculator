@@ -1,5 +1,9 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.9.3 — 2026-11-28
+
+- Calendrier des quêtes éclair : l'heure de début affichée suit maintenant l'heure d'été et l'heure d'hiver. Avant, la liste des heures utilisait toujours l'heure d'hiver ; en été, elle aurait affiché 1 heure de moins. Les dates du calendrier et les minuteurs étaient déjà justes.
+
 ## v1.9.2 — 2026-11-28
 
 - Calendrier des quêtes éclair : l'heure de début s'affiche seulement à l'heure de chez vous, avec le nom de votre fuseau (exemple : « Europe/Paris, UTC+1 »). L'heure UTC entre parenthèses, source de confusion, n'est plus affichée.

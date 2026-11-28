@@ -1,6 +1,16 @@
 {
- "version": "1.9.2",
+ "version": "1.9.3",
  "entries": [
+  {
+   "v": "1.9.3",
+   "date": "2026-11-28",
+   "fr": [
+    "Calendrier des quêtes éclair : l'heure de début affichée suit maintenant l'heure d'été et l'heure d'hiver. Avant, la liste des heures utilisait toujours l'heure d'hiver ; en été, elle aurait affiché 1 heure de moins. Les dates du calendrier et les minuteurs étaient déjà justes."
+   ],
+   "en": [
+    "Flash quest calendar: the displayed start time now follows daylight saving time. Before, the hour list always used winter time; in summer it would have shown 1 hour less. Calendar dates and timers were already correct."
+   ]
+  },
   {
    "v": "1.9.2",
    "date": "2026-11-28",
