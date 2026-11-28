@@ -1,5 +1,12 @@
 # Changelog — ST Hero Calculator
 
+## v1.7.0 — 2026-11-28
+
+- New “Champions” tab: set each champion once (rank, reinforcements, level, titan soul, seeds, familiar, aurasong, corrected stats). Everything is saved in the browser.
+- The list shows the 11 champions with their rank, level and computed stats. A champion that is not set uses the default values.
+- Team & quests: just choose the champion. The simulator and “Best champion” use the saved settings. The “Edit this champion” button opens the Champions tab.
+- Preset export and import also contain the champion settings.
+
 ## v1.6.6 — 2026-11-28
 
 - Champion: ATK, DEF and HP seeds added (+4 ATK, +4 DEF, +1 HP per seed, as for heroes: the game stores seeds in the same record for heroes and champions). The tool keeps them for each champion.

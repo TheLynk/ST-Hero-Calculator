@@ -269,7 +269,7 @@ Seule la 3e ligne donne les 2 chiffres. Mais elle utilise 2 règles inconnues, s
 
 1. Ouvrez un champion dans le jeu, onglet Infos.
 2. Touchez le familier et le chant d'aura. Notez l'objet, la qualité, l'élément et l'esprit.
-3. Entrez la même chose dans l'outil (rang, renforts, niveau, titan, familier, chant d'aura).
+3. Entrez la même chose dans l'onglet « Champions » (rang, renforts, niveau, titan, graines, familier, chant d'aura).
 4. Comparez la ligne « Calcul » avec PV, ATQ, DEF, ESQ et élément du jeu.
 
 **Ce que je vérifie :** les 5 valeurs doivent être égales à ±1 %. Lilu (Avatar seul) : 887 PV et 8 594 DEF sans le chant d'aura, contre 916 et 10 359 dans le jeu. Il manque donc le chant d'aura et les enchantements.

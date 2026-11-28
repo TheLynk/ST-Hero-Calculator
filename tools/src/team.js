@@ -2,7 +2,7 @@
 (()=>{
 const S=window.STSIM; if(!S||!S.SD) return;
 const SD=S.SD, EN=LANG_UI==='en', L=a=>Array.isArray(a)?(EN?a[1]||a[0]:a[0]||a[1]):(a||'');
-const TT={fr:{tabHero:'Héros',tabTeam:'Équipe et quêtes',quest:'Quête',area:'Zone',diff:'Difficulté',boss:'Boss',normal:'Normal',flash:'Quêtes éclair',areas:'Zones',special:'Autres',
+const TT={fr:{tabHero:'Héros',tabTeam:'Équipe et quêtes',tabChamps:'Champions',editC:'Modifier ce champion',notSet:'non configuré (valeurs par défaut)',cHelp:'Configurez chaque champion une seule fois : rang, renforts, niveau, graines, familier et chant d’aura. L’outil enregistre tout dans ce navigateur, et le simulateur réutilise ces réglages.',savedAuto:'Enregistré automatiquement dans ce navigateur.',quest:'Quête',area:'Zone',diff:'Difficulté',boss:'Boss',normal:'Normal',flash:'Quêtes éclair',areas:'Zones',special:'Autres',
   mini:'Mini-boss',none:'Aucun',barrier:'Barrière élémentaire',champ:'Champion',noChamp:'Aucun champion',rank:'Rang',titan:'Âme de titan',lvl:'Niveau',skill:'Compétence de chef',
   aura:'Chant d’aura',booster:'Bonus de quête',heroes:'Héros (presets)',emptyP:'— vide —',pick:'— choisir un preset —',sims:'Simulations',run:'Simuler',
   bestTeam:'Meilleure équipe',bestChamp:'Meilleur champion',res:'Résultat',win:'Victoire',rounds:'Tours (moy.)',mhp:'PV du monstre',death:'Risque de mort',grade:'Note',
@@ -11,7 +11,7 @@ const TT={fr:{tabHero:'Héros',tabTeam:'Équipe et quêtes',quest:'Quête',area:
   topTeams:'Meilleures équipes parmi vos presets',topChamps:'Champions classés pour cette équipe',combos:'combinaisons testées',
   note:'Moteur repris du code du jeu (Quest.DoCombat), lu sans lancer le jeu. Note par héros, avec le visage du jeu : SSS = jamais mort, S < 15 %, A < 40 %, B < 60 %, C < 100 %, D = toujours mort. À vérifier avec la note affichée dans le jeu (A_VERIFIER.md, test 14).',
   prog:'PV du monstre retirés',shatter:'Barrière brisée',fqTitle:'Quêtes éclair : calendrier',fqStart:'Début',fqTimer:'Minuteur',fqNow:'En cours',fqLeft:'reste',fqIn:'dans',fqHour:'Heure de début des quêtes éclair (à régler une fois)',fqNote:'Jours du mois : notes de version 12.0.0 (Kabam). Donjon Parangon et Nullysium : 1 week-end sur 2, dès le 14/11/2026 (information à confirmer). Touchez une quête pour la simuler. L’heure de début n’est pas dans les fichiers du jeu : réglez-la avec le minuteur du jeu.',notShatter:'Barrière NON brisée : −80 % de dégâts',power:'Puissance d’élément'},
- en:{tabHero:'Hero',tabTeam:'Team & quests',quest:'Quest',area:'Area',diff:'Difficulty',boss:'Boss',normal:'Normal',flash:'Flash quests',areas:'Areas',special:'Other',
+ en:{tabHero:'Hero',tabTeam:'Team & quests',tabChamps:'Champions',editC:'Edit this champion',notSet:'not set (default values)',cHelp:'Set each champion once: rank, reinforcements, level, seeds, familiar and aurasong. The tool saves everything in this browser, and the simulator reuses these settings.',savedAuto:'Saved automatically in this browser.',quest:'Quest',area:'Area',diff:'Difficulty',boss:'Boss',normal:'Normal',flash:'Flash quests',areas:'Areas',special:'Other',
   mini:'Mini-boss',none:'None',barrier:'Elemental barrier',champ:'Champion',noChamp:'No champion',rank:'Rank',titan:'Titan soul',lvl:'Level',skill:'Leader skill',
   aura:'Aurasong',booster:'Quest booster',heroes:'Heroes (presets)',emptyP:'— empty —',pick:'— choose a preset —',sims:'Simulations',run:'Simulate',
   bestTeam:'Best team',bestChamp:'Best champion',res:'Result',win:'Win',rounds:'Rounds (avg.)',mhp:'Monster HP',death:'Death risk',grade:'Rating',
@@ -34,19 +34,21 @@ const fmt=n=>Math.round(n).toLocaleString(EN?'en-US':'fr-FR'), pc=x=>(x*100).toF
 // ----- onglets -----
 const main=document.querySelector('main');
 const nav=document.createElement('nav');nav.className='tabs';nav.setAttribute('role','tablist');
-nav.innerHTML=`<button type="button" role="tab" data-t="hero" class="on" aria-selected="true">${ui('power',20)} ${TT.tabHero}</button><button type="button" role="tab" data-t="team" aria-selected="false">${ui('defense',20)} ${TT.tabTeam}</button>`;
+nav.innerHTML=`<button type="button" role="tab" data-t="hero" class="on" aria-selected="true">${ui('power',20)} ${TT.tabHero}</button><button type="button" role="tab" data-t="team" aria-selected="false">${ui('defense',20)} ${TT.tabTeam}</button><button type="button" role="tab" data-t="champs" aria-selected="false">${ta('championtitansoul',22)} ${TT.tabChamps}</button>`;
 main.parentNode.insertBefore(nav,main);
-const tm=document.createElement('main');tm.id='team';tm.hidden=true;main.parentNode.insertBefore(tm,main.nextSibling);
+const tm=document.createElement('main');tm.id='team';tm.className='tmx';tm.hidden=true;main.parentNode.insertBefore(tm,main.nextSibling);
+const cm=document.createElement('main');cm.id='champs';cm.className='tmx';cm.hidden=true;main.parentNode.insertBefore(cm,tm.nextSibling);
 const st=document.createElement('style');st.textContent=`.tabs{display:flex;gap:6px;padding:0 16px;max-width:1400px;margin:8px auto 0}.tabs button{min-height:44px;padding:0 16px;border-radius:10px 10px 0 0;border:1px solid var(--line);border-bottom:0;background:var(--panel2);color:var(--mut);font:600 15px system-ui,sans-serif;cursor:pointer;display:inline-flex;gap:8px;align-items:center}.tabs button.on{background:var(--panel);color:var(--txt);border-color:var(--acc)}
-#team .tgear{border:1px solid var(--line);border-radius:10px;padding:6px 10px 10px;margin:10px 0 0}#team .tgear legend{font-size:13px;color:var(--mut);padding:0 4px}#team .ti{display:grid;grid-template-columns:38px minmax(0,1fr);gap:8px;align-items:center;margin-top:6px}#team .ti>span{display:flex;justify-content:center}#team .tit{display:flex;align-items:center;gap:6px;margin-top:30px;cursor:pointer}#team .lead{display:flex;gap:8px;align-items:center;margin-top:6px}#team .cstat{display:inline-flex;flex-wrap:wrap;gap:4px 10px;align-items:center;font-weight:600;color:var(--txt)}#team .cstat .ui{vertical-align:middle}#team .sr{position:absolute;left:-9999px}#team .fqt td{vertical-align:middle}#team .fqgo{display:flex;gap:8px;align-items:center;background:none;border:0;color:inherit;text-align:left;cursor:pointer;padding:2px 0;min-height:40px;font:inherit}#team .fqgo .alt{display:block}#team tr.fqon td{background:rgba(92,194,138,.10)}#team .fqh{display:grid;grid-template-columns:auto minmax(0,260px);gap:10px;align-items:center;margin-top:10px}@media(max-width:600px){#team .fqh{grid-template-columns:1fr}}#team .tslot{display:grid;grid-template-columns:28px minmax(0,1fr);gap:8px;align-items:center;margin:6px 0}#team .tslot b{font-size:14px;color:var(--mut)}#team select,#team input[type=number]{width:100%}
-#team .kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:8px 0 14px}#team .kpi div{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px}#team .kpi span{display:block;font-size:12px;color:var(--mut)}#team .kpi b{font-size:22px}
-#team .g5{color:#5cc28a}#team .g4{color:#9bd35c}#team .g3{color:#e6c34a}#team .g2{color:#f59e0b}#team .g1,#team .g0{color:var(--acc2)}#team .grade{font-weight:800}
-#team .face{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}#team .face img{display:block}#team .bar{height:6px;border-radius:3px;background:var(--line);overflow:hidden}#team .bar i{display:block;height:100%;background:var(--acc)}
-#team .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}#team .row4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}@media(max-width:600px){#team .row4{grid-template-columns:1fr 1fr}}`;
+.tmx .tgear{border:1px solid var(--line);border-radius:10px;padding:6px 10px 10px;margin:10px 0 0}.tmx .tgear legend{font-size:13px;color:var(--mut);padding:0 4px}.tmx .ti{display:grid;grid-template-columns:38px minmax(0,1fr);gap:8px;align-items:center;margin-top:6px}.tmx .ti>span{display:flex;justify-content:center}.tmx .tit{display:flex;align-items:center;gap:6px;margin-top:30px;cursor:pointer}.tmx .lead{display:flex;gap:8px;align-items:center;margin-top:6px}.tmx .cstat{display:inline-flex;flex-wrap:wrap;gap:4px 10px;align-items:center;font-weight:600;color:var(--txt)}.tmx .cstat .ui{vertical-align:middle}.tmx .sr{position:absolute;left:-9999px}.tmx .fqt td{vertical-align:middle}.tmx .fqgo{display:flex;gap:8px;align-items:center;background:none;border:0;color:inherit;text-align:left;cursor:pointer;padding:2px 0;min-height:40px;font:inherit}.tmx .fqgo .alt{display:block}.tmx tr.fqon td{background:rgba(92,194,138,.10)}.tmx .fqh{display:grid;grid-template-columns:auto minmax(0,260px);gap:10px;align-items:center;margin-top:10px}@media(max-width:600px){.tmx .fqh{grid-template-columns:1fr}}.tmx .clist{display:grid;gap:6px}.tmx .cbtn{display:flex;gap:10px;align-items:center;text-align:left;width:100%;min-height:56px;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--panel2);color:var(--txt);cursor:pointer;font:inherit}.tmx .cbtn.on{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc) inset}.tmx .cbtn .alt{display:block}.tmx .cbtn .cstat{font-weight:500;font-size:12px;gap:2px 8px}.tmx .ctitle{display:flex;gap:10px;align-items:center;font-size:18px}.tmx .cinfo{margin-top:12px}.tmx .tslot{display:grid;grid-template-columns:28px minmax(0,1fr);gap:8px;align-items:center;margin:6px 0}.tmx .tslot b{font-size:14px;color:var(--mut)}.tmx select,.tmx input[type=number]{width:100%}
+.tmx .kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:8px 0 14px}.tmx .kpi div{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px}.tmx .kpi span{display:block;font-size:12px;color:var(--mut)}.tmx .kpi b{font-size:22px}
+.tmx .g5{color:#5cc28a}.tmx .g4{color:#9bd35c}.tmx .g3{color:#e6c34a}.tmx .g2{color:#f59e0b}.tmx .g1,.tmx .g0{color:var(--acc2)}.tmx .grade{font-weight:800}
+.tmx .face{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}.tmx .face img{display:block}.tmx .bar{height:6px;border-radius:3px;background:var(--line);overflow:hidden}.tmx .bar i{display:block;height:100%;background:var(--acc)}
+.tmx .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.tmx .row4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}@media(max-width:600px){.tmx .row4{grid-template-columns:1fr 1fr}}`;
 document.head.appendChild(st);
 nav.addEventListener('click',e=>{const b=e.target.closest('button[data-t]');if(!b) return;const t=b.dataset.t;
   nav.querySelectorAll('button').forEach(x=>{const on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-selected',on)});
-  main.hidden=t!=='hero';tm.hidden=t!=='team';if(t==='team') initTeam()});
+  main.hidden=t!=='hero';tm.hidden=t!=='team';cm.hidden=t!=='champs';if(t==='team') initTeam();if(t==='champs') initChamps()});
+const goTab=t=>nav.querySelector(`button[data-t="${t}"]`).click();
 // ----- héros d'un preset → combattant -----
 function fighterFromPreset(p){
   const c=D.classes.find(x=>x.name===p.cls); if(!c||!p.man) return null;
@@ -127,23 +129,23 @@ function fqNext(f,t){const h=fqHour()*36e5;
   if(FQWE[f]){const p=14*DAY,a0=FQWE[f]+h;const n=Math.max(0,Math.ceil((t-a0-FQWE_LEN)/p));const a=a0+n*p;return [a,a+FQWE_LEN]}
   return null}
 const dur=ms=>{ms=Math.max(0,ms);const d=Math.floor(ms/DAY),h=Math.floor(ms%DAY/36e5),m=Math.floor(ms%36e5/6e4),s=Math.floor(ms%6e4/1e3);return (d?d+(EN?'d ':' j '):'')+String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')};
+const QOPT=[[1,EN?'Normal':'Normale'],[1.25,EN?'Superior':'Supérieure'],[1.5,EN?'Flawless':'Impeccable'],[2,EN?'Epic':'Épique'],[3,EN?'Legendary':'Légendaire']];
+const enN=e=>EN?e.name:(e.fr||e.name);
+const eList=k=>D.enchants.filter(e=>e.kind===k).sort((a,b)=>b.tier-a.tier||enN(a).localeCompare(enN(b))).map(e=>`<option value="${esc(e.name)}">${esc(enN(e))} · T${e.tier}${k==='element'?' · '+esc(EN?e.element:(ELFR[e.element]||e.element)):''}</option>`).join('');
+const eOpts=k=>`<option value="">—</option>`+D.enchants.filter(e=>e.kind===k).sort((a,b)=>b.tier-a.tier||enN(a).localeCompare(enN(b))).map(e=>`<option value="${esc(e.name)}">T${e.tier} ${esc(enN(e))}</option>`).join('');
+const gearRow=(id,lab,type)=>`<fieldset class="tgear"><legend>${lab}</legend>
+    <div class="ti"><span id="t${id}Ii"></span><select id="t${id}I" aria-label="${lab}"><option value="">${TT.none}</option>${D.items.filter(i=>i.type===type).sort((a,b)=>b.tier-a.tier).map(i=>`<option value="${esc(i.name)}">${esc(nm(i))} · T${i.tier}</option>`).join('')}</select></div>
+    <div class="ti"><span id="t${id}Qi"></span><select id="t${id}Q" aria-label="${TT.qual}">${QOPT.map(([v,n])=>`<option value="${v}"${v===3?' selected':''}>${n}</option>`).join('')}</select></div>
+    <div class="ti"><span id="t${id}Ei"></span><select id="t${id}E" aria-label="${TT.el}"><option value="">— ${TT.noEl} —</option>${eList('element')}</select></div>
+    <div class="ti"><span id="t${id}Si"></span><select id="t${id}S" aria-label="${TT.spirit}"><option value="">— ${TT.noSp} —</option>${eList('spirit')}</select></div></fieldset>`;
 function initTeam(){
-  if(inited){refreshPresets();return} inited=true;
+  if(inited){refreshPresets();tSum();return} inited=true;
   const reg=famList.filter(f=>!byFam[f][0].fl&&f!=='goldcity'), fl=famList.filter(f=>byFam[f][0].fl).sort((a,b)=>(FQDAY[a]||(FQWE[a]?40:99))-(FQDAY[b]||(FQWE[b]?40:99))||fqName(a).localeCompare(fqName(b))), oth=famList.filter(f=>f==='goldcity');
   const og=(lab,arr,fq)=>`<optgroup label="${esc(lab)}">${arr.map(f=>`<option value="${f}">${esc(fq?fqLabel(f):areaName(f))}</option>`).join('')}</optgroup>`;
   const fqLabel=f=>fqName(f)+(FQDAY[f]?` · ${EN?'day':'le'} ${FQDAY[f]}`:FQWE[f]?` · ${EN?'weekend':'week-end'}`:` · ${EN?'event':'événement'}`)+(fqLvl(f)?` · ${EN?'lvl':'niv.'} ${fqLvl(f)}`:'');
   const champOpts=`<option value="">${TT.noChamp}</option>`+Object.entries(SD.champs).map(([u,c])=>`<option value="${u}">${esc(L(c.n))}</option>`).join('');
   const boostOpts=`<option value="">${TT.none}</option>`+['si_atk1','si_atk2','si_atk3'].filter(u=>SD.mods[u]).map(u=>`<option value="${u}">${esc(L(SD.mods[u].n)||u)}</option>`).join('');
   const miniOpts=`<option value="">${TT.none}</option>`+['agile','huge','dire','wealthy','epic'].filter(u=>SD.mods[u]).map(u=>`<option value="${u}">${esc((L(SD.mods[u].n)||u).replace('{0}','').trim())}</option>`).join('');
-  const QOPT=[[1,EN?'Normal':'Normale'],[1.25,EN?'Superior':'Supérieure'],[1.5,EN?'Flawless':'Impeccable'],[2,EN?'Epic':'Épique'],[3,EN?'Legendary':'Légendaire']];
-  const enN=e=>EN?e.name:(e.fr||e.name);
-  const eList=k=>D.enchants.filter(e=>e.kind===k).sort((a,b)=>b.tier-a.tier||enN(a).localeCompare(enN(b))).map(e=>`<option value="${esc(e.name)}">${esc(enN(e))} · T${e.tier}${k==='element'?' · '+esc(EN?e.element:(ELFR[e.element]||e.element)):''}</option>`).join('');
-  const eOpts=k=>`<option value="">—</option>`+D.enchants.filter(e=>e.kind===k).sort((a,b)=>b.tier-a.tier||enN(a).localeCompare(enN(b))).map(e=>`<option value="${esc(e.name)}">T${e.tier} ${esc(enN(e))}</option>`).join('');
-  const gearRow=(id,lab,type)=>`<fieldset class="tgear"><legend>${lab}</legend>
-    <div class="ti"><span id="t${id}Ii"></span><select id="t${id}I" aria-label="${lab}"><option value="">${TT.none}</option>${D.items.filter(i=>i.type===type).sort((a,b)=>b.tier-a.tier).map(i=>`<option value="${esc(i.name)}">${esc(nm(i))} · T${i.tier}</option>`).join('')}</select></div>
-    <div class="ti"><span id="t${id}Qi"></span><select id="t${id}Q" aria-label="${TT.qual}">${QOPT.map(([v,n])=>`<option value="${v}"${v===3?' selected':''}>${n}</option>`).join('')}</select></div>
-    <div class="ti"><span id="t${id}Ei"></span><select id="t${id}E" aria-label="${TT.el}"><option value="">— ${TT.noEl} —</option>${eList('element')}</select></div>
-    <div class="ti"><span id="t${id}Si"></span><select id="t${id}S" aria-label="${TT.spirit}"><option value="">— ${TT.noSp} —</option>${eList('spirit')}</select></div></fieldset>`;
   tm.innerHTML=`<aside class="card">
   <h2>${TT.quest}</h2>
   <label for="tArea">${TT.area}</label><div class="ti"><span id="tAreaI"></span><select id="tArea">${og(TT.areas,reg)}${og(TT.flash,fl,1)}${og(TT.special,oth)}</select></div>
@@ -153,13 +155,7 @@ function initTeam(){
   <p class="note" id="tQinfo"></p>
   <h2 style="margin-top:18px">${TT.champ}</h2>
   <div class="ti"><span id="tChampI"></span><select id="tChamp" aria-label="${TT.champ}">${champOpts}</select></div>
-  <div class="row2"><div><label for="tCRank">${TT.rank}</label><select id="tCRank">${Array.from({length:11},(_,i)=>`<option value="${i+1}"${i===10?' selected':''}>${i+1}</option>`).join('')}</select></div>
-  <div><label for="tCRe">${TT.reinf}</label><input id="tCRe" type="number" min="0" max="999" value="0"></div>
-  <div><label for="tCLvl">${TT.lvl}</label><input id="tCLvl" type="number" min="1" max="100" value="50"></div><div><label class="chk tit" for="tCTitan"><input type="checkbox" id="tCTitan" checked>${ta('championtitansoul',28)}<span>${TT.titan}</span></label></div></div>
-  <p class="note" style="margin:10px 0 0">${TT.seeds}</p><div class="row3"><div><label for="tCSa">${ui('seedattack1',20)} ATK</label><input id="tCSa" type="number" min="0" max="80" value="0"></div><div><label for="tCSd">${ui('seeddef1',20)} DEF</label><input id="tCSd" type="number" min="0" max="80" value="0"></div><div><label for="tCSh">${ui('seedhp1',20)} ${EN?'HP':'PV'}</label><input id="tCSh" type="number" min="0" max="80" value="0"></div></div>
-  ${gearRow('Fam',TT.fam,'Familiar')}${gearRow('Aur',TT.aura,'Aurasong')}
-  <p class="note" id="tCInfo"></p>
-  <details><summary>${TT.chStats}</summary><p class="note">${TT.chHelp}</p><div class="row4" style="grid-template-columns:repeat(auto-fit,minmax(78px,1fr))"><div><label for="tCHp">${EN?'HP':'PV'}</label><input id="tCHp" type="number" min="0"></div><div><label for="tCAtk">ATK</label><input id="tCAtk" type="number" min="0"></div><div><label for="tCDef">DEF</label><input id="tCDef" type="number" min="0"></div><div><label for="tCEva">${TT.eva} %</label><input id="tCEva" type="number" min="0" max="100"></div><div><label for="tCEl">${TT.el}</label><input id="tCEl" type="number" min="0"></div></div></details>
+  <div id="tCSum"></div><button type="button" class="fbtn" id="tCEdit" style="margin-top:8px">${TT.editC}</button>
   <label for="tBoost" style="margin-top:8px">${TT.booster}</label><select id="tBoost">${boostOpts}</select>
   <h2 style="margin-top:18px">${TT.heroes}</h2><p class="note" id="tParty"></p><div id="tSlots"></div>
   <div class="row2"><div><label for="tN">${TT.sims}</label><select id="tN"><option>200</option><option selected>1000</option><option>5000</option></select></div><div style="display:flex;align-items:flex-end"><button type="button" class="fbtn acc" id="tRun" style="width:100%">${TT.run}</button></div></div>
@@ -169,11 +165,11 @@ function initTeam(){
   const sel=id=>tm.querySelector('#'+id);
   sel('tArea').addEventListener('change',()=>{fillDiff();upd()});['tDiff','tMini','tBar','tBoost'].forEach(k=>sel(k).addEventListener('change',upd));
   sel('tKind').addEventListener('click',e=>{const b=e.target.closest('button');if(!b) return;sel('tKind').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));upd()});
-  sel('tChamp').addEventListener('input',()=>{champLoad(sel('tChamp').value);champFill();upd()});CF.forEach(k=>{sel(k).addEventListener('input',()=>{champSave();champFill()});sel(k).addEventListener('change',()=>{champSave();champFill()})});
+  sel('tChamp').addEventListener('input',()=>{tSum();upd()});sel('tCEdit').addEventListener('click',()=>{edU=sel('tChamp').value||edU;goTab('champs')});
   sel('tRun').addEventListener('click',()=>go());sel('tBestT').addEventListener('click',bestTeam);sel('tBestC').addEventListener('click',bestChamp);
-  fqInit();fillDiff();champLoad(sel('tChamp').value);champFill();refreshPresets();upd();
+  fqInit();fillDiff();tSum();refreshPresets();upd();
 }
-const $t=id=>tm.querySelector('#'+id);
+const $t=id=>document.getElementById(id);
 function fqInit(){const box=$t('tFq');
   const draw=()=>{const t=Date.now();const L0=Object.keys(SD.names).filter(f=>FQDAY[f]||FQWE[f]).map(f=>{const w=fqNext(f,t);return {f,a:w[0],b:w[1]}}).sort((x,y)=>x.a-y.a);
     const fmtD=ms=>new Date(ms).toLocaleString(EN?'en-GB':'fr-FR',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
@@ -192,22 +188,44 @@ const CSK='sthc:champstats';const cGet=()=>{try{return JSON.parse(localStorage.g
 const CF=['tCRank','tCRe','tCLvl','tCTitan','tCSa','tCSd','tCSh','tFamI','tFamQ','tFamE','tFamS','tAurI','tAurQ','tAurE','tAurS','tCHp','tCAtk','tCDef','tCEva','tCEl'];
 const fv=k=>{const e=$t(k);return e.type==='checkbox'?e.checked:e.value};
 const CDEF={tCSa:'0',tCSd:'0',tCSh:'0',tCRank:'11',tCRe:'0',tCLvl:'50',tCTitan:true,tFamQ:'3',tAurQ:'3'};
-function champLoad(u){const v=cGet()[u]||{};CF.forEach(k=>{const e=$t(k),x=v[k]!=null?v[k]:(CDEF[k]!=null?CDEF[k]:'');if(e.type==='checkbox') e.checked=!!x;else e.value=x})}
-function champSave(){const u=$t('tChamp').value;if(!u) return;const a=cGet();a[u]={};CF.forEach(k=>{const x=fv(k);if(x!=='') a[u][k]=x});try{localStorage.setItem(CSK,JSON.stringify(a))}catch(e){}}
-const gearOf=()=>['Fam','Aur'].map(x=>({i:$t('t'+x+'I').value,q:$t('t'+x+'Q').value,e:$t('t'+x+'E').value,s:$t('t'+x+'S').value}));
-const cStats=u=>champStats(u,Math.max(1,Math.min(100,+$t('tCLvl').value||1)),+$t('tCRank').value,Math.max(0,+$t('tCRe').value||0),$t('tCTitan').checked,gearOf(),{atk:$t('tCSa').value,def:$t('tCSd').value,hp:$t('tCSh').value});
+let edU=Object.keys(SD.champs)[0];
+const cfg=u=>({...CDEF,...(cGet()[u]||{})});
+const gearCfg=v=>['Fam','Aur'].map(x=>({i:v['t'+x+'I']||'',q:v['t'+x+'Q']||'3',e:v['t'+x+'E']||'',s:v['t'+x+'S']||''}));
+const cfgStats=u=>{const v=cfg(u);return champStats(u,Math.max(1,Math.min(100,+v.tCLvl||1)),+v.tCRank||11,Math.max(0,+v.tCRe||0),!!v.tCTitan,gearCfg(v),{atk:v.tCSa,def:v.tCSd,hp:v.tCSh})};
+const auraModU=u=>{const n=cfg(u).tAurI;const g=n&&GM&&GM.items&&GM.items[n];const id=g&&g.uid;return id&&SD.mods[id]&&SD.mods[id].isAurastone?SD.mods[id]:null};
+const isSaved=u=>!!cGet()[u];
+function champLoad(u){const v=cfg(u);CF.forEach(k=>{const e=$t(k),x=v[k]!=null?v[k]:'';if(e.type==='checkbox') e.checked=!!x;else e.value=x})}
+function champSave(){const u=edU;if(!u) return;const a=cGet();a[u]={};CF.forEach(k=>{const x=fv(k);if(x!=='') a[u][k]=x});try{localStorage.setItem(CSK,JSON.stringify(a))}catch(e){}}
 const QIC={'1':'q_common','1.25':'q_uncommon','1.5':'q_flawless','2':'q_epic','3':'q_legendary'};
 function gearIcons(){for(const x of ['Fam','Aur']){const it=ITEM[$t('t'+x+'I').value];$t('t'+x+'Ii').innerHTML=it?icoItem(it,36):'';$t('t'+x+'Qi').innerHTML=ui(QIC[$t('t'+x+'Q').value]||'q_legendary',30);
-  for(const k of ['E','S']){const e=ENCH[$t('t'+x+k).value];$t('t'+x+k+'i').innerHTML=e?icoItem(e,36):''}}
-  const u=$t('tChamp').value;$t('tChampI').innerHTML=u?ta('icon_global_'+u,36):''}
-function champFill(){const u=$t('tChamp').value;const on=!!u;CF.forEach(k=>$t(k).disabled=!on);gearIcons();
-  if(!on){$t('tCInfo').textContent='';return}
-  const s=cStats(u),c=SD.champs[u];
+  for(const k of ['E','S']){const e=ENCH[$t('t'+x+k).value];$t('t'+x+k+'i').innerHTML=e?icoItem(e,36):''}}}
+// résumé d'un champion (stats calculées ou corrigées, compétence de chef, chant d'aura)
+function champSummary(u,big){const c=SD.champs[u],v=cfg(u),s=cfgStats(u),m=SD.mods[c.sk[s.sk-1]],am=auraModU(u);
+  const o=k=>v[k]!=null&&v[k]!=='';const val=(k,d)=>o(k)?+v[k]:d;const ov=['tCHp','tCAtk','tCDef','tCEva','tCEl'].some(o);
+  return `${ov?`<b class="g2">${TT.ovOn}</b><br>`:''}<span class="cstat"><span class="sr">${TT.calc} :</span>${ui('hp',18)}${fmt(val('tCHp',s.hp))} ${ui('atk',18)}${fmt(val('tCAtk',s.atk))} ${ui('defense',18)}${fmt(val('tCDef',s.def))} ${ui('eva',18)}${Math.round(val('tCEva',s.eva*100))} % ${ui('icon_global_element_'+c.el,18)}${fmt(val('tCEl',s.el))}</span>`+
+   (big?`<div class="lead">${ta('icon_global_skill_hero_'+c.sk[s.sk-1],32)}<span>${TT.skill} ${s.sk}/5${m?' · <b>'+esc(L(m.n)||'')+'</b> : '+modTxt(m):''}</span></div>${am?`<div class="lead">${icoItem(ITEM[v.tAurI],32)}<span><b>${esc(L(am.n)||'')}</b> : ${modTxt(am)}</span></div>`:''}`:'')}
+function champFill(){const u=edU;gearIcons();
+  const s=cfgStats(u);
   $t('tCAtk').placeholder=s.atk;$t('tCDef').placeholder=s.def;$t('tCHp').placeholder=s.hp;$t('tCEva').placeholder=Math.round(s.eva*100);$t('tCEl').placeholder=s.el;
-  const m=SD.mods[c.sk[s.sk-1]];
-  const am=auraMod();const ov=['tCHp','tCAtk','tCDef','tCEva','tCEl'].filter(k=>$t(k).value!=='');if(ov.length) tm.querySelector('#tCInfo+details').open=true;
-  $t('tCInfo').innerHTML=`${ov.length?`<b class="g2">${TT.ovOn}</b><br>`:''}<span class="cstat" title="${TT.calc}"><span class="sr">${TT.calc} :</span>${ui('hp',18)}${fmt(s.hp)} ${ui('atk',18)}${fmt(s.atk)} ${ui('defense',18)}${fmt(s.def)} ${ui('eva',18)}${Math.round(s.eva*100)} % ${ui('icon_global_element_'+SD.champs[u].el,18)}${fmt(s.el)}</span><div class="lead">${ta('icon_global_skill_hero_'+c.sk[s.sk-1],32)}<span>${TT.skill} ${s.sk}/5${m?' · <b>'+esc(L(m.n)||'')+'</b> : '+modTxt(m):''}</span></div>${am?`<div class="lead">${icoItem(ITEM[$t('tAurI').value],32)}<span><b>${esc(L(am.n)||'')}</b> : ${modTxt(am)}</span></div>`:''}`;}
-const auraMod=()=>{const n=$t('tAurI').value;const g=n&&GM&&GM.items&&GM.items[n];const u=g&&g.uid;return u&&SD.mods[u]&&SD.mods[u].isAurastone?SD.mods[u]:null};
+  if(['tCHp','tCAtk','tCDef','tCEva','tCEl'].some(k=>$t(k).value!=='')) $t('cOv').open=true;
+  $t('tCInfo').innerHTML=champSummary(u,true);$t('cTitle').innerHTML=`${ta('icon_global_'+u,40)} <span>${esc(L(SD.champs[u].n))}</span>`;cList()}
+function cList(){const box=$t('cList');if(!box) return;box.innerHTML=Object.keys(SD.champs).map(u=>{const v=cfg(u);return `<button type="button" class="cbtn${u===edU?' on':''}" data-u="${u}" aria-pressed="${u===edU}">${ta('icon_global_'+u,40)}<span><b>${esc(L(SD.champs[u].n))}</b><span class="alt">${isSaved(u)?`${TT.rank} ${v.tCRank}${+v.tCRe?' +'+v.tCRe:''} · ${TT.lvl} ${v.tCLvl}${v.tCTitan?' · '+TT.titan:''}`:TT.notSet}</span><span class="alt">${champSummary(u)}</span></span></button>`}).join('')}
+let cInited=false;
+function initChamps(){if(cInited){champLoad(edU);champFill();return} cInited=true;
+  cm.innerHTML=`<aside class="card"><h2>${TT.tabChamps}</h2><p class="note">${TT.cHelp}</p><div id="cList" class="clist"></div></aside>
+  <section class="right"><div class="card"><h2 id="cTitle" class="ctitle"></h2>
+  <div class="row2"><div><label for="tCRank">${TT.rank}</label><select id="tCRank">${Array.from({length:11},(_,i)=>`<option value="${i+1}"${i===10?' selected':''}>${i+1}</option>`).join('')}</select></div>
+  <div><label for="tCRe">${TT.reinf}</label><input id="tCRe" type="number" min="0" max="999" value="0"></div>
+  <div><label for="tCLvl">${TT.lvl}</label><input id="tCLvl" type="number" min="1" max="100" value="50"></div><div><label class="chk tit" for="tCTitan"><input type="checkbox" id="tCTitan" checked>${ta('championtitansoul',28)}<span>${TT.titan}</span></label></div></div>
+  <p class="note" style="margin:10px 0 0">${TT.seeds}</p><div class="row3"><div><label for="tCSa">${ui('seedattack1',20)} ATK</label><input id="tCSa" type="number" min="0" max="80" value="0"></div><div><label for="tCSd">${ui('seeddef1',20)} DEF</label><input id="tCSd" type="number" min="0" max="80" value="0"></div><div><label for="tCSh">${ui('seedhp1',20)} ${EN?'HP':'PV'}</label><input id="tCSh" type="number" min="0" max="80" value="0"></div></div>
+  ${gearRow('Fam',TT.fam,'Familiar')}${gearRow('Aur',TT.aura,'Aurasong')}
+  <div id="tCInfo" class="cinfo"></div>
+  <details id="cOv"><summary>${TT.chStats}</summary><p class="note">${TT.chHelp}</p><div class="row4" style="grid-template-columns:repeat(auto-fit,minmax(78px,1fr))"><div><label for="tCHp">${EN?'HP':'PV'}</label><input id="tCHp" type="number" min="0"></div><div><label for="tCAtk">ATK</label><input id="tCAtk" type="number" min="0"></div><div><label for="tCDef">DEF</label><input id="tCDef" type="number" min="0"></div><div><label for="tCEva">${TT.eva} %</label><input id="tCEva" type="number" min="0" max="100"></div><div><label for="tCEl">${TT.el}</label><input id="tCEl" type="number" min="0"></div></div></details>
+  <p class="note">${TT.savedAuto}</p></div></section>`;
+  cm.querySelector('#cList').addEventListener('click',e=>{const b=e.target.closest('.cbtn');if(!b) return;edU=b.dataset.u;champLoad(edU);champFill()});
+  CF.forEach(k=>{const e=$t(k);const f=()=>{champSave();champFill()};e.addEventListener('input',f);e.addEventListener('change',f)});
+  champLoad(edU);champFill();}
+function tSum(){const u=$t('tChamp').value;$t('tChampI').innerHTML=u?ta('icon_global_'+u,36):'';$t('tCSum').innerHTML=u?`<p class="note">${isSaved(u)?'':`<b class="g2">${TT.notSet}</b> · `}${TT.rank} ${cfg(u).tCRank}${+cfg(u).tCRe?' +'+cfg(u).tCRe:''} · ${TT.lvl} ${cfg(u).tCLvl}</p>`+champSummary(u,true):'';$t('tCEdit').hidden=!u}
 function modTxt(m){const o=[];const P=(k,l)=>{if(m[k]) o.push(`${m[k]>0?'+':''}${Math.round(m[k]*100)} % ${l}`)};
   P('atk','ATK');P('def','DEF');P('hp',EN?'HP':'PV');P('evasion',EN?'evasion':'esquive');P('critical','crit');P('critMult',EN?'crit dmg':'dégâts crit');
   if(m.regen) o.push(`+${m.regen} ${EN?'HP/round':'PV/tour'}`);if(m.barrierPowerMult&&m.barrierPowerMult!==1) o.push(`×${m.barrierPowerMult} ${TT.power}`);if(m.bossMult&&m.bossMult!==1) o.push(`×${m.bossMult} boss`);if(m.FlashQuestModMult&&m.FlashQuestModMult!==1) o.push(`×${m.FlashQuestModMult} ${EN?'flash':'éclair'}`);
@@ -224,12 +242,11 @@ function upd(){const q=curQuest();if(!q) return;$t('tAreaI').innerHTML=areaIco(q
   $t('tQinfo').innerHTML=`${esc(L(SD.names[q.f]&&(q.b?SD.names[q.f].boss:SD.names[q.f].mob)))} · ${EN?'HP':'PV'} ${fmt(q.hp)} · ${EN?'damage':'dégâts'} ${fmt(q.dmg)} (${EN?'area':'zone'} ${fmt(q.aoe)}, ${pc(q.ao)}) · ${EN?'target DEF':'DEF cible'} ${fmt(q.td)} · crit ${pc(q.cr)} ×${q.cm}${q.acc?` · ${EN?'accuracy':'précision'} ${pc(q.acc)}`:''}${q.bp?` · ${TT.barrier} ${fmt(q.bp)}`:''}`;
   $t('tParty').textContent=`${TT.party} ${q.p} ${TT.slots}${$t('tChamp').value?' (1 = '+TT.champ.toLowerCase()+')':''}.`;
   refreshPresets();}
-function champFighter(){const u=$t('tChamp').value;if(!u) return null;const c=SD.champs[u];
-  const s=cStats(u);
-  const v=(id,d)=>{const x=$t(id).value;return x===''?d:+x};
+function champFighter(u){u=u||$t('tChamp').value;if(!u) return null;const c=SD.champs[u],s=cfgStats(u),v=cfg(u);
+  const val=(k,d)=>v[k]!=null&&v[k]!==''?+v[k]:d;
   return {name:L(c.n),cname:TT.champ,cls:'champion',family:famOf(c.cls),gcls:c.cls,champ:u,hemma:u==='hemma',
-    atk:v('tCAtk',s.atk),def:v('tCDef',s.def),hp:v('tCHp',s.hp),crit:c.cr,cm:c.cm,eva:v('tCEva',c.eva*100)/100,aggro:c.aggro,el:v('tCEl',0),elem:c.el,
-    aBr:1,dBr:1,card:1,bossA:0,bossD:1,shark:0,dino:0,maxEva:cn0('quest_evasion_max',0.75),survive:0,regen:0,champB:0,leader:SD.mods[c.sk[s.sk-1]],aura:auraMod()}}
+    atk:val('tCAtk',s.atk),def:val('tCDef',s.def),hp:val('tCHp',s.hp),crit:s.crit,cm:s.cm,eva:val('tCEva',s.eva*100)/100,aggro:c.aggro,el:val('tCEl',s.el),elem:c.el,
+    aBr:1,dBr:1,card:1,bossA:0,bossD:1,shark:0,dino:0,maxEva:cn0('quest_evasion_max',0.75),survive:0,regen:0,champB:0,leader:SD.mods[c.sk[s.sk-1]],aura:auraModU(u)}}
 function setup(){const q=curQuest();const mods=[];const ch=champFighter();if(ch&&ch.leader) mods.push(ch.leader);if(ch&&ch.aura) mods.push(ch.aura);
   ['tBoost','tMini'].forEach(k=>{const u=$t(k).value;if(u&&SD.mods[u]) mods.push(SD.mods[u])});
   const party=[];if(ch) party.push(ch);
@@ -262,11 +279,10 @@ async function bestTeam(){const {q,mods,opts}=setup();const pre=plist(),ids=pre.
   const b=res[0];if(b) tm.querySelectorAll('.tslot select').forEach((s,j)=>s.value=b.c[j]!=null?String(b.c[j]):'');go();}
 async function bestChamp(){const {q,opts}=setup();const pre=plist();const heroes=[];tm.querySelectorAll('.tslot select').forEach(s=>{if(s.value==='') return;const f=fighterFromPreset(pre[+s.value]);if(f) heroes.push(f)});
   if(!heroes.length){$t('tRes').innerHTML=`<p class="note">${TT.needHero}</p>`;return}
-  const keep=$t('tChamp').value,box=$t('tExtra');box.hidden=false;box.innerHTML=`<h2>${TT.topChamps}</h2><p class="note">${TT.busy}</p>`;await new Promise(z=>setTimeout(z,0));
-  const out=[];for(const u of Object.keys(SD.champs)){$t('tChamp').value=u;champLoad(u);const ch=champFighter();const mods=[ch.leader,ch.aura].filter(Boolean);
+  const box=$t('tExtra');box.hidden=false;box.innerHTML=`<h2>${TT.topChamps}</h2><p class="note">${TT.busy}</p>`;await new Promise(z=>setTimeout(z,0));
+  const out=[];for(const u of Object.keys(SD.champs)){const ch=champFighter(u);const mods=[ch.leader,ch.aura].filter(Boolean);
     ['tBoost','tMini'].forEach(k=>{const v=$t(k).value;if(v&&SD.mods[v]) mods.push(SD.mods[v])});
     const party=[ch].concat(heroes.slice(0,Math.max(1,q.p-1)).map(h=>({...h})));out.push({u,r:S.run(q,mods,party,{...opts,n:Math.min(1000,opts.n)})})}
-  $t('tChamp').value=keep;champLoad(keep);champFill();
   out.sort(cmpR);
   box.innerHTML=`<h2>${TT.topChamps}</h2><p class="note">${TT.savedC}</p><div class="scroll"><table><thead><tr><th>#</th><th>${TT.champ}</th><th class="n">${TT.win}</th><th class="n">${TT.rounds}</th><th class="n">${TT.prog}</th><th class="n">${TT.death} max</th></tr></thead><tbody>${out.map((x,i)=>`<tr><td>${i+1}</td><td>${ta('icon_global_'+x.u,26)} ${esc(L(SD.champs[x.u].n))}</td><td class="n">${pc(x.r.win)}</td><td class="n">${rTxt(x.r)}</td><td class="n">${pc(x.r.prog)}</td><td class="n">${face(gOf(Math.max(...x.r.death)),22)} ${pc(Math.max(...x.r.death))}</td></tr>`).join('')}</tbody></table></div>`;}
 window.STC_team={fighterFromPreset,champStats,setup,run:()=>go()};

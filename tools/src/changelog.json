@@ -1,6 +1,22 @@
 {
- "version": "1.6.6",
+ "version": "1.7.0",
  "entries": [
+  {
+   "v": "1.7.0",
+   "date": "2026-11-28",
+   "fr": [
+    "Nouvel onglet « Champions » : configurez chaque champion une seule fois (rang, renforts, niveau, âme de titan, graines, familier, chant d'aura, stats corrigées). Tout est enregistré dans le navigateur.",
+    "La liste montre les 11 champions avec leur rang, leur niveau et leurs stats calculées. Un champion non configuré utilise les valeurs par défaut.",
+    "Équipe et quêtes : il suffit de choisir le champion. Le simulateur et « Meilleur champion » utilisent les réglages enregistrés. Le bouton « Modifier ce champion » ouvre l'onglet Champions.",
+    "L'export et l'import des presets contiennent aussi la configuration des champions."
+   ],
+   "en": [
+    "New “Champions” tab: set each champion once (rank, reinforcements, level, titan soul, seeds, familiar, aurasong, corrected stats). Everything is saved in the browser.",
+    "The list shows the 11 champions with their rank, level and computed stats. A champion that is not set uses the default values.",
+    "Team & quests: just choose the champion. The simulator and “Best champion” use the saved settings. The “Edit this champion” button opens the Champions tab.",
+    "Preset export and import also contain the champion settings."
+   ]
+  },
   {
    "v": "1.6.6",
    "date": "2026-11-28",

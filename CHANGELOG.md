@@ -1,5 +1,12 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.7.0 — 2026-11-28
+
+- Nouvel onglet « Champions » : configurez chaque champion une seule fois (rang, renforts, niveau, âme de titan, graines, familier, chant d'aura, stats corrigées). Tout est enregistré dans le navigateur.
+- La liste montre les 11 champions avec leur rang, leur niveau et leurs stats calculées. Un champion non configuré utilise les valeurs par défaut.
+- Équipe et quêtes : il suffit de choisir le champion. Le simulateur et « Meilleur champion » utilisent les réglages enregistrés. Le bouton « Modifier ce champion » ouvre l'onglet Champions.
+- L'export et l'import des presets contiennent aussi la configuration des champions.
+
 ## v1.6.6 — 2026-11-28
 
 - Champion : ajout des graines d'ATQ, de DEF et de PV (+4 ATQ, +4 DEF, +1 PV par graine, comme pour les héros : le jeu range les graines dans la même fiche pour les héros et les champions). L'outil les garde pour chaque champion.

@@ -781,10 +781,10 @@ $('pLoad').addEventListener('click',()=>{
 });
 $('pDel').addEventListener('click',()=>{const i=+$('pSlot').value,a=plist();if(!a[i]){pmsg('Cet emplacement est déjà vide.');return}
   const n=a[i].name;a[i]=null;psave(a);pfill(i);pmsg(`Preset ${i+1} supprimé : ${n}.`)});
-$('pExp').addEventListener('click',()=>{const a=plist();const blob=new Blob([JSON.stringify({tool:'ST Hero Calculator',version:'/*VERSTR*/',presets:a},null,1)],{type:'application/json'});
+$('pExp').addEventListener('click',()=>{const a=plist();const blob=new Blob([JSON.stringify({tool:'ST Hero Calculator',version:'/*VERSTR*/',presets:a,champions:sget0('sthc:champstats')||{}},null,1)],{type:'application/json'});
   const u=URL.createObjectURL(blob),l=document.createElement('a');l.href=u;l.download='sthc-presets.json';document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);pmsg(`${a.filter(Boolean).length} preset(s) exporté(s).`)});
 $('pImp').addEventListener('change',async e=>{const f=e.target.files[0];if(!f) return;
-  try{const j=JSON.parse(await f.text()),a=(j.presets||j);if(!Array.isArray(a)) throw 0;psave(a.slice(0,PMAX));pfill(0);pmsg(`${a.filter(Boolean).length} preset(s) importé(s).`)}catch(err){pmsg('Fichier de presets invalide.')}
+  try{const j=JSON.parse(await f.text()),a=(j.presets||j);if(!Array.isArray(a)) throw 0;psave(a.slice(0,PMAX));if(j.champions&&typeof j.champions==='object'){try{localStorage.setItem('sthc:champstats',JSON.stringify(j.champions))}catch(x){}}pfill(0);pmsg(`${a.filter(Boolean).length} preset(s) importé(s)${j.champions?' + '+Object.keys(j.champions).length+' champion(s)':''}.`)}catch(err){pmsg('Fichier de presets invalide.')}
   e.target.value=''});
 GV_IDS.forEach(k=>$(k).addEventListener('input',()=>{if($('manual').open) manualCompute()}));
 pfill(0);
