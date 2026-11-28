@@ -13,14 +13,14 @@ for u,q in Q.items():
     if fam=='titantower': continue
     flash=u.startswith('FQ')
     if fam not in names:
-        if flash: names[fam]={'area':nm('fq_'+fam+'_name'),'mob':nm('fq_monster_'+fam+'_name'),'boss':nm('fq_monster_'+fam+'_name')}
+        if flash: names[fam]={'area':(lambda a:['Donjon Parangon',a[1]] if len(a[0])>40 else a)(nm('fq_'+fam+'_name')),'mob':nm('fq_monster_'+fam+'_name'),'boss':nm('fq_monster_'+fam+'_name')}
         else:
             area=nm(fam+'_name') if TE.get(fam+'_name') else nm('clean_name_'+fam)
             names[fam]={'area':area,'mob':nm(fam+'_monster_name') if TE.get(fam+'_monster_name') else nm(fam+'_mob_name'),'boss':nm(fam+'_boss_name')}
     quests.append({'u':u,'f':fam,'d':q['difficultyLvl'],'b':1 if q['isBoss'] else 0,'fl':1 if flash else 0,'p':q.get('party',0),
       'hp':q.get('monsterHp',0),'dmg':q.get('dmg',0),'aoe':q.get('aoe',0),'ao':f(q.get('aoeOdds')),'cr':f(q.get('crit')),'cm':f(q.get('critMult')),'td':q.get('tdef',0),
       'dr':f(q.get('dmgRed')),'acc':f(q.get('accuracy')),'po':f(q.get('poise')),'bp':q.get('barrierPower',0),'el':(q['element'] or '').split(',') if q['element'] else [],
-      'mb':f(q.get('miniboss')),'ul':q.get('unlockLevel',0)})
+      'mb':f(q.get('miniboss')),'ul':q.get('minLevel') or q.get('unlockLevel',0)})
 MK=['atk','def','hp','hpAbs','shieldHp','evasion','critical','critMult','aggro','regen','atkClass','hpClass','evasionClass','criticalClass','classes','barrierPowerMult','bossMult','FlashQuestModMult','randomAttackBonus','hpConsumption','atkFromAdvMult','hpReceived','mHp','mDmg','mDmgPerRound','mCrit','mCritMult','mAoe','mAoeOdds','mEva','duration','isAurastone','modifierProvider']
 mods={}
 for u,m in M.items():

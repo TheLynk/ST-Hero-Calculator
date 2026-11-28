@@ -4,11 +4,12 @@ import UnityPy,sys,io,base64,json,math
 from PIL import Image
 bundle,simf,out=sys.argv[1:4]
 SD=json.load(open(simf,encoding='utf-8'))
-want=['championtitansoul','icon_global_questarea_flashquest_bg']
+want=['championtitansoul','icon_global_questarea_flashquest_bg','icon_global_flashquest']
 for u,c in SD['champs'].items():
     want.append('icon_global_'+u)
     want+=['icon_global_skill_hero_'+s for s in c['sk'] if s]
-for f in sorted(set(q['f'] for q in SD['quests'])): want.append('icon_global_questarea_'+f+'_small')
+for f in sorted(set(q['f'] for q in SD['quests'])): want+=['icon_global_questarea_'+f+'_small','FQ'+f,'fq'+f]
+want.append('FQparagondust')
 env=UnityPy.load(bundle);got={};ws=set(want)
 for o in env.objects:
     if o.type.name=='Sprite':

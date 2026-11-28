@@ -274,6 +274,22 @@ Seule la 3e ligne donne les 2 chiffres. Mais elle utilise 2 règles inconnues, s
 
 **Ce que je vérifie :** les 5 valeurs doivent être égales à ±1 %. Lilu (Avatar seul) : 887 PV et 8 594 DEF sans le chant d'aura, contre 916 et 10 359 dans le jeu. Il manque donc le chant d'aura et les enchantements.
 
+### Test 16 — Minuteurs des quêtes éclair (v1.6.5)
+
+**Ce qui est sûr :** les jours du mois (notes de version 12.0.0 de Kabam) et le niveau de départ (données du jeu).
+
+**Ce qui est à confirmer :**
+
+1. L'heure de début. Elle n'est pas dans les fichiers du jeu. L'outil prend 00:00 UTC (01:00 en France en hiver).
+2. Donjon Parangon et Nullysium : 1 week-end sur 2, dès le 14/11/2026, 48 h (source : Gemini).
+
+**Étapes :**
+
+1. Dans le jeu, ouvrez la quête éclair en cours (aujourd'hui : Champion d'Anubis, ou le Roi du Bling).
+2. Notez le temps restant.
+3. Comparez avec le minuteur de l'outil. S'il y a un écart d'heures entières, changez « Heure de début » et dites-moi la bonne valeur.
+4. Pour le Donjon Parangon : notez le jour et l'heure de fin.
+
 ## Lecture des captures (import)
 
 | # | Test | Quoi envoyer |

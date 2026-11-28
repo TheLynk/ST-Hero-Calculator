@@ -1,5 +1,12 @@
 # Changelog — ST Hero Calculator
 
+## v1.6.5 — 2026-11-28
+
+- Flash quests: the list shows the monster name (Gold Golem, Scholarly Harpy…), the day of the month and the starting level, in calendar order.
+- New flash quest calendar with timers: live quest (time left) and next quests (time before the start). Tap a quest to simulate it.
+- Days of the month taken from Kabam's version 12.0.0 release notes. Paragon Dungeon and Nullysium: every other weekend (to be confirmed). The start time is set once.
+- Game icons for each flash quest. The Paragon Dungeon now has a real name (the French game text was a description).
+
 ## v1.6.4 — 2026-11-28
 
 - Team & quests: game icons for the area, the champion, its leader skill, the titan soul, the familiar, the aurasong, the quality, the element and the spirit (icons extracted from the game files, tools/teamatlas.py tool).

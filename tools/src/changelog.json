@@ -1,6 +1,22 @@
 {
- "version": "1.6.4",
+ "version": "1.6.5",
  "entries": [
+  {
+   "v": "1.6.5",
+   "date": "2026-11-28",
+   "fr": [
+    "Quêtes éclair : la liste montre le nom du monstre (Golem d'or, Harpie érudite…), le jour du mois et le niveau de départ, dans l'ordre du calendrier.",
+    "Nouveau calendrier des quêtes éclair avec minuteurs : quête en cours (temps restant) et prochaines quêtes (temps avant le début). Touchez une quête pour la simuler.",
+    "Jours du mois repris des notes de version 12.0.0 de Kabam. Donjon Parangon et Nullysium : 1 week-end sur 2 (à confirmer). L'heure de début se règle une fois.",
+    "Icônes du jeu pour chaque quête éclair. Le Donjon Parangon a maintenant un vrai nom (le texte français du jeu était une description)."
+   ],
+   "en": [
+    "Flash quests: the list shows the monster name (Gold Golem, Scholarly Harpy…), the day of the month and the starting level, in calendar order.",
+    "New flash quest calendar with timers: live quest (time left) and next quests (time before the start). Tap a quest to simulate it.",
+    "Days of the month taken from Kabam's version 12.0.0 release notes. Paragon Dungeon and Nullysium: every other weekend (to be confirmed). The start time is set once.",
+    "Game icons for each flash quest. The Paragon Dungeon now has a real name (the French game text was a description)."
+   ]
+  },
   {
    "v": "1.6.4",
    "date": "2026-11-28",

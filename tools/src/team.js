@@ -10,7 +10,7 @@ const TT={fr:{tabHero:'Héros',tabTeam:'Équipe et quêtes',quest:'Quête',area:
   busy:'Calcul…',party:'Équipe de',slots:'emplacements',chStats:'Corriger les stats (facultatif)',chHelp:'Si le calcul diffère de l’onglet Infos du jeu, entrez les vraies valeurs. Vide = calcul.',reinf:'Renforts (+)',fam:'Familier',qual:'Qualité',spirit:'Esprit',calc:'Calcul',noEl:'aucun élément',noSp:'aucun esprit',ovOn:'Stats corrigées à la main : elles remplacent le calcul.',savedC:'Chaque champion utilise son rang, son familier et son chant d’aura enregistrés (ou les valeurs par défaut).',el:'Élément',eva:'Esq.',crit:'Crit',thr:'Menace',
   topTeams:'Meilleures équipes parmi vos presets',topChamps:'Champions classés pour cette équipe',combos:'combinaisons testées',
   note:'Moteur repris du code du jeu (Quest.DoCombat), lu sans lancer le jeu. Note par héros, avec le visage du jeu : SSS = jamais mort, S < 15 %, A < 40 %, B < 60 %, C < 100 %, D = toujours mort. À vérifier avec la note affichée dans le jeu (A_VERIFIER.md, test 14).',
-  prog:'PV du monstre retirés',shatter:'Barrière brisée',notShatter:'Barrière NON brisée : −80 % de dégâts',power:'Puissance d’élément'},
+  prog:'PV du monstre retirés',shatter:'Barrière brisée',fqTitle:'Quêtes éclair : calendrier',fqStart:'Début',fqTimer:'Minuteur',fqNow:'En cours',fqLeft:'reste',fqIn:'dans',fqHour:'Heure de début des quêtes éclair (à régler une fois)',fqNote:'Jours du mois : notes de version 12.0.0 (Kabam). Donjon Parangon et Nullysium : 1 week-end sur 2, dès le 14/11/2026 (information à confirmer). Touchez une quête pour la simuler. L’heure de début n’est pas dans les fichiers du jeu : réglez-la avec le minuteur du jeu.',notShatter:'Barrière NON brisée : −80 % de dégâts',power:'Puissance d’élément'},
  en:{tabHero:'Hero',tabTeam:'Team & quests',quest:'Quest',area:'Area',diff:'Difficulty',boss:'Boss',normal:'Normal',flash:'Flash quests',areas:'Areas',special:'Other',
   mini:'Mini-boss',none:'None',barrier:'Elemental barrier',champ:'Champion',noChamp:'No champion',rank:'Rank',titan:'Titan soul',lvl:'Level',skill:'Leader skill',
   aura:'Aurasong',booster:'Quest booster',heroes:'Heroes (presets)',emptyP:'— empty —',pick:'— choose a preset —',sims:'Simulations',run:'Simulate',
@@ -19,12 +19,12 @@ const TT={fr:{tabHero:'Héros',tabTeam:'Équipe et quêtes',quest:'Quête',area:
   busy:'Computing…',party:'Party of',slots:'slots',chStats:'Correct the stats (optional)',chHelp:'If the result differs from the game Info tab, enter the real values. Empty = computed.',reinf:'Reinforcements (+)',fam:'Familiar',qual:'Quality',spirit:'Spirit',calc:'Computed',noEl:'no element',noSp:'no spirit',ovOn:'Stats corrected by hand: they replace the computed values.',savedC:'Each champion uses its saved rank, familiar and aurasong (or the defaults).',el:'Element',eva:'Eva.',crit:'Crit',thr:'Threat',
   topTeams:'Best teams among your presets',topChamps:'Champions ranked for this team',combos:'combinations tested',
   note:'Engine taken from the game code (Quest.DoCombat), read without running the game. Hero rating, with the game face: SSS = never dies, S < 15%, A < 40%, B < 60%, C < 100%, D = always dies. To check against the rating shown in game (A_VERIFIER.md, test 14).',
-  prog:'Monster HP removed',shatter:'Barrier shattered',notShatter:'Barrier NOT shattered: −80% damage',power:'Element power'}}[EN?'en':'fr'];
+  prog:'Monster HP removed',shatter:'Barrier shattered',fqTitle:'Flash quests: calendar',fqStart:'Start',fqTimer:'Timer',fqNow:'Live',fqLeft:'ends in',fqIn:'in',fqHour:'Flash quest start time (set it once)',fqNote:'Days of the month: version 12.0.0 release notes (Kabam). Paragon Dungeon and Nullysium: every other weekend, from 14/11/2026 (to be confirmed). Tap a quest to simulate it. The start time is not in the game files: set it with the in-game timer.',notShatter:'Barrier NOT shattered: −80% damage',power:'Element power'}}[EN?'en':'fr'];
 const ELN={fire:['Feu','Fire'],water:['Eau','Water'],air:['Air','Air'],earth:['Terre','Earth'],light:['Lumière','Light'],dark:['Ténèbres','Dark']};
 const GRADE=['D','C','B','A','S','SSS'];
 const TA=/*TEAMATLAS*/null; // icônes du jeu : champions, compétences de chef, zones, âme de titan
 const ta=(n,sz=32)=>{if(!TA) return '';const i=TA.i[n];if(i==null) return '';const c=TA.cols;return `<span class="ui" style="display:inline-block;flex:none;width:${sz}px;height:${sz}px;background-image:url(${TA.img});background-size:${c*sz}px auto;background-position:-${(i%c)*sz}px -${Math.floor(i/c)*sz}px" aria-hidden="true"></span>`};
-const areaIco=(f,sz)=>ta('icon_global_questarea_'+f+'_small',sz)||ta('icon_global_questarea_flashquest_bg',sz);
+const areaIco=(f,sz)=>ta('icon_global_questarea_'+f+'_small',sz)||ta('FQ'+f,sz)||ta('fq'+f,sz)||ta('FQ'+f[0].toUpperCase()+f.slice(1),sz)||ta('icon_global_flashquest',sz);
 const FACES=/*FACES*/null; // visages de note du jeu (icon_shop_face_D…SSS)
 const face=(g,sz=28)=>`<span class="face">${FACES&&FACES[g]?`<img src="${FACES[g]}" width="${sz}" height="${sz}" alt="">`:''}<b class="grade g${g}">${GRADE[g]}</b></span>`;
 const gOf=d=>d<=0?5:d<0.15?4:d<0.4?3:d<0.6?2:d<1?1:0;
@@ -38,7 +38,7 @@ nav.innerHTML=`<button type="button" role="tab" data-t="hero" class="on" aria-se
 main.parentNode.insertBefore(nav,main);
 const tm=document.createElement('main');tm.id='team';tm.hidden=true;main.parentNode.insertBefore(tm,main.nextSibling);
 const st=document.createElement('style');st.textContent=`.tabs{display:flex;gap:6px;padding:0 16px;max-width:1400px;margin:8px auto 0}.tabs button{min-height:44px;padding:0 16px;border-radius:10px 10px 0 0;border:1px solid var(--line);border-bottom:0;background:var(--panel2);color:var(--mut);font:600 15px system-ui,sans-serif;cursor:pointer;display:inline-flex;gap:8px;align-items:center}.tabs button.on{background:var(--panel);color:var(--txt);border-color:var(--acc)}
-#team .tgear{border:1px solid var(--line);border-radius:10px;padding:6px 10px 10px;margin:10px 0 0}#team .tgear legend{font-size:13px;color:var(--mut);padding:0 4px}#team .ti{display:grid;grid-template-columns:38px minmax(0,1fr);gap:8px;align-items:center;margin-top:6px}#team .ti>span{display:flex;justify-content:center}#team .tit{display:flex;align-items:center;gap:6px;margin-top:30px;cursor:pointer}#team .lead{display:flex;gap:8px;align-items:center;margin-top:6px}#team .cstat{display:inline-flex;flex-wrap:wrap;gap:4px 10px;align-items:center;font-weight:600;color:var(--txt)}#team .cstat .ui{vertical-align:middle}#team .sr{position:absolute;left:-9999px}#team .tslot{display:grid;grid-template-columns:28px minmax(0,1fr);gap:8px;align-items:center;margin:6px 0}#team .tslot b{font-size:14px;color:var(--mut)}#team select,#team input[type=number]{width:100%}
+#team .tgear{border:1px solid var(--line);border-radius:10px;padding:6px 10px 10px;margin:10px 0 0}#team .tgear legend{font-size:13px;color:var(--mut);padding:0 4px}#team .ti{display:grid;grid-template-columns:38px minmax(0,1fr);gap:8px;align-items:center;margin-top:6px}#team .ti>span{display:flex;justify-content:center}#team .tit{display:flex;align-items:center;gap:6px;margin-top:30px;cursor:pointer}#team .lead{display:flex;gap:8px;align-items:center;margin-top:6px}#team .cstat{display:inline-flex;flex-wrap:wrap;gap:4px 10px;align-items:center;font-weight:600;color:var(--txt)}#team .cstat .ui{vertical-align:middle}#team .sr{position:absolute;left:-9999px}#team .fqt td{vertical-align:middle}#team .fqgo{display:flex;gap:8px;align-items:center;background:none;border:0;color:inherit;text-align:left;cursor:pointer;padding:2px 0;min-height:40px;font:inherit}#team .fqgo .alt{display:block}#team tr.fqon td{background:rgba(92,194,138,.10)}#team .fqh{display:grid;grid-template-columns:auto minmax(0,260px);gap:10px;align-items:center;margin-top:10px}@media(max-width:600px){#team .fqh{grid-template-columns:1fr}}#team .tslot{display:grid;grid-template-columns:28px minmax(0,1fr);gap:8px;align-items:center;margin:6px 0}#team .tslot b{font-size:14px;color:var(--mut)}#team select,#team input[type=number]{width:100%}
 #team .kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:8px 0 14px}#team .kpi div{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px}#team .kpi span{display:block;font-size:12px;color:var(--mut)}#team .kpi b{font-size:22px}
 #team .g5{color:#5cc28a}#team .g4{color:#9bd35c}#team .g3{color:#e6c34a}#team .g2{color:#f59e0b}#team .g1,#team .g0{color:var(--acc2)}#team .grade{font-weight:800}
 #team .face{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}#team .face img{display:block}#team .bar{height:6px;border-radius:3px;background:var(--line);overflow:hidden}#team .bar i{display:block;height:100%;background:var(--acc)}
@@ -110,10 +110,26 @@ let inited=false;
 const QS=SD.quests, byFam={};QS.forEach(q=>(byFam[q.f]=byFam[q.f]||[]).push(q));
 const famList=Object.keys(byFam);
 const areaName=f=>L(SD.names[f]&&SD.names[f].area)||f;
+// ----- calendrier des quêtes éclair -----
+// jour du mois : notes de version 12.0.0 (playshoptitans.com) ; niveau de départ = minLevel des données du jeu
+const FQDAY={lcog:2,enchant:4,sigil:6,training:8,moon:10,gear:12,research:14,rune:16,repair:18,chest:20,ascension:22,key:24,fancygear:26,champion:28};
+// quêtes du week-end, 1 week-end sur 2 (à confirmer) : Donjon Parangon dès le 14/11/2026, Nullysium le week-end suivant
+const FQWE={paragondust:Date.UTC(2026,10,14),transcendence:Date.UTC(2026,10,21)};
+const FQWE_LEN=2*864e5, DAY=864e5;
+const FQH_KEY='sthc:fqhour';const fqHour=()=>{const v=+(localStorage.getItem(FQH_KEY)??0);return isNaN(v)?0:v};
+const fqName=f=>{const n=SD.names[f]||{};return L(n.mob)||areaName(f)};
+const fqLvl=f=>{const q=byFam[f]&&byFam[f][0];return q&&q.ul||null};
+// prochaine fenêtre [début, fin] qui finit après t
+function fqNext(f,t){const h=fqHour()*36e5;
+  if(FQDAY[f]){const d=new Date(t);for(let k=-1;k<3;k++){const y=d.getUTCFullYear(),m=d.getUTCMonth()+k;const a=Date.UTC(y,m,FQDAY[f])+h;if(a+DAY>t) return [a,a+DAY]}}
+  if(FQWE[f]){const p=14*DAY,a0=FQWE[f]+h;const n=Math.max(0,Math.ceil((t-a0-FQWE_LEN)/p));const a=a0+n*p;return [a,a+FQWE_LEN]}
+  return null}
+const dur=ms=>{ms=Math.max(0,ms);const d=Math.floor(ms/DAY),h=Math.floor(ms%DAY/36e5),m=Math.floor(ms%36e5/6e4),s=Math.floor(ms%6e4/1e3);return (d?d+(EN?'d ':' j '):'')+String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')};
 function initTeam(){
   if(inited){refreshPresets();return} inited=true;
-  const reg=famList.filter(f=>!byFam[f][0].fl&&f!=='goldcity'), fl=famList.filter(f=>byFam[f][0].fl), oth=famList.filter(f=>f==='goldcity');
-  const og=(lab,arr)=>`<optgroup label="${esc(lab)}">${arr.map(f=>`<option value="${f}">${esc(areaName(f))}</option>`).join('')}</optgroup>`;
+  const reg=famList.filter(f=>!byFam[f][0].fl&&f!=='goldcity'), fl=famList.filter(f=>byFam[f][0].fl).sort((a,b)=>(FQDAY[a]||(FQWE[a]?40:99))-(FQDAY[b]||(FQWE[b]?40:99))||fqName(a).localeCompare(fqName(b))), oth=famList.filter(f=>f==='goldcity');
+  const og=(lab,arr,fq)=>`<optgroup label="${esc(lab)}">${arr.map(f=>`<option value="${f}">${esc(fq?fqLabel(f):areaName(f))}</option>`).join('')}</optgroup>`;
+  const fqLabel=f=>fqName(f)+(FQDAY[f]?` · ${EN?'day':'le'} ${FQDAY[f]}`:FQWE[f]?` · ${EN?'weekend':'week-end'}`:` · ${EN?'event':'événement'}`)+(fqLvl(f)?` · ${EN?'lvl':'niv.'} ${fqLvl(f)}`:'');
   const champOpts=`<option value="">${TT.noChamp}</option>`+Object.entries(SD.champs).map(([u,c])=>`<option value="${u}">${esc(L(c.n))}</option>`).join('');
   const boostOpts=`<option value="">${TT.none}</option>`+['si_atk1','si_atk2','si_atk3'].filter(u=>SD.mods[u]).map(u=>`<option value="${u}">${esc(L(SD.mods[u].n)||u)}</option>`).join('');
   const miniOpts=`<option value="">${TT.none}</option>`+['agile','huge','dire','wealthy','epic'].filter(u=>SD.mods[u]).map(u=>`<option value="${u}">${esc((L(SD.mods[u].n)||u).replace('{0}','').trim())}</option>`).join('');
@@ -128,7 +144,7 @@ function initTeam(){
     <div class="ti"><span id="t${id}Si"></span><select id="t${id}S" aria-label="${TT.spirit}"><option value="">— ${TT.noSp} —</option>${eList('spirit')}</select></div></fieldset>`;
   tm.innerHTML=`<aside class="card">
   <h2>${TT.quest}</h2>
-  <label for="tArea">${TT.area}</label><div class="ti"><span id="tAreaI"></span><select id="tArea">${og(TT.areas,reg)}${og(TT.flash,fl)}${og(TT.special,oth)}</select></div>
+  <label for="tArea">${TT.area}</label><div class="ti"><span id="tAreaI"></span><select id="tArea">${og(TT.areas,reg)}${og(TT.flash,fl,1)}${og(TT.special,oth)}</select></div>
   <label for="tDiff">${TT.diff}</label><select id="tDiff"></select>
   <div class="seg" id="tKind"><button type="button" data-v="0" class="on">${TT.normal}</button><button type="button" data-v="1">${TT.boss}</button></div>
   <div class="row2"><div><label for="tMini">${TT.mini}</label><select id="tMini">${miniOpts}</select></div><div><label for="tBar">${TT.barrier}</label><select id="tBar"></select></div></div>
@@ -146,15 +162,25 @@ function initTeam(){
   <div class="row2"><div><label for="tN">${TT.sims}</label><select id="tN"><option>200</option><option selected>1000</option><option>5000</option></select></div><div style="display:flex;align-items:flex-end"><button type="button" class="fbtn acc" id="tRun" style="width:100%">${TT.run}</button></div></div>
   <div class="mtools" style="margin-top:8px"><button type="button" id="tBestT">${TT.bestTeam}</button><button type="button" id="tBestC">${TT.bestChamp}</button></div>
   </aside>
-  <section class="right"><div class="card"><h2>${TT.res}</h2><div id="tRes"><p class="note">${TT.note}</p></div></div><div class="card" id="tExtra" hidden></div></section>`;
+  <section class="right"><div class="card" id="tFq"></div><div class="card"><h2>${TT.res}</h2><div id="tRes"><p class="note">${TT.note}</p></div></div><div class="card" id="tExtra" hidden></div></section>`;
   const sel=id=>tm.querySelector('#'+id);
   sel('tArea').addEventListener('change',()=>{fillDiff();upd()});['tDiff','tMini','tBar','tBoost'].forEach(k=>sel(k).addEventListener('change',upd));
   sel('tKind').addEventListener('click',e=>{const b=e.target.closest('button');if(!b) return;sel('tKind').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));upd()});
   sel('tChamp').addEventListener('input',()=>{champLoad(sel('tChamp').value);champFill();upd()});CF.forEach(k=>{sel(k).addEventListener('input',()=>{champSave();champFill()});sel(k).addEventListener('change',()=>{champSave();champFill()})});
   sel('tRun').addEventListener('click',()=>go());sel('tBestT').addEventListener('click',bestTeam);sel('tBestC').addEventListener('click',bestChamp);
-  fillDiff();champLoad(sel('tChamp').value);champFill();refreshPresets();upd();
+  fqInit();fillDiff();champLoad(sel('tChamp').value);champFill();refreshPresets();upd();
 }
 const $t=id=>tm.querySelector('#'+id);
+function fqInit(){const box=$t('tFq');
+  const draw=()=>{const t=Date.now();const L0=Object.keys(SD.names).filter(f=>FQDAY[f]||FQWE[f]).map(f=>{const w=fqNext(f,t);return {f,a:w[0],b:w[1]}}).sort((x,y)=>x.a-y.a);
+    const fmtD=ms=>new Date(ms).toLocaleString(EN?'en-GB':'fr-FR',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+    box.querySelector('tbody').innerHTML=L0.slice(0,8).map(x=>{const on=x.a<=t;return `<tr class="${on?'fqon':''}"><td><button type="button" class="fqgo" data-f="${x.f}">${areaIco(x.f,26)}<span><b>${esc(fqName(x.f))}</b><span class="alt">${esc(areaName(x.f))}${fqLvl(x.f)?' · '+(EN?'lvl ':'niv. ')+fqLvl(x.f):''}</span></span></button></td><td>${on?`<b class="g5">${TT.fqNow}</b>`:fmtD(x.a)}</td><td class="n"><b>${on?TT.fqLeft+' '+dur(x.b-t):TT.fqIn+' '+dur(x.a-t)}</b></td></tr>`}).join('')};
+  const hrs=Array.from({length:24},(_,h)=>{const d=new Date(Date.UTC(2026,0,1,h));return `<option value="${h}">${String(h).padStart(2,'0')}:00 UTC (${d.toLocaleTimeString(EN?'en-GB':'fr-FR',{hour:'2-digit',minute:'2-digit'})} ${EN?'your time':'chez vous'})</option>`}).join('');
+  box.innerHTML=`<h2 style="display:flex;gap:8px;align-items:center">${ta('icon_global_flashquest',26)} ${TT.fqTitle}</h2><div class="scroll"><table class="fqt"><thead><tr><th>${TT.quest}</th><th>${TT.fqStart}</th><th class="n">${TT.fqTimer}</th></tr></thead><tbody></tbody></table></div>
+   <div class="fqh"><label for="tFqH">${TT.fqHour}</label><select id="tFqH">${hrs}</select></div><p class="note">${TT.fqNote}</p>`;
+  $t('tFqH').value=String(fqHour());$t('tFqH').addEventListener('change',e=>{try{localStorage.setItem(FQH_KEY,e.target.value)}catch(x){}draw()});
+  box.addEventListener('click',e=>{const b=e.target.closest('.fqgo');if(!b) return;$t('tArea').value=b.dataset.f;fillDiff();upd()});
+  draw();clearInterval(window.__fqT);window.__fqT=setInterval(()=>{if(!tm.hidden) draw()},1000);}
 function curQuest(){const f=$t('tArea').value,d=+$t('tDiff').value,b=+$t('tKind').querySelector('.on').dataset.v;const L0=byFam[f]||[];return L0.find(q=>q.d===d&&q.b===b)||L0.find(q=>q.d===d)||L0[0]}
 function fillDiff(){const f=$t('tArea').value,L0=byFam[f]||[],ds=[...new Set(L0.map(q=>q.d))].sort((a,b)=>a-b);
   $t('tDiff').innerHTML=ds.map(d=>`<option value="${d}">${esc(L(SD.txt.diff[d])||('T'+(d+1)))}</option>`).join('');$t('tDiff').value=ds[ds.length-1];

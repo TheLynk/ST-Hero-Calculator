@@ -1,5 +1,12 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.6.5 — 2026-11-28
+
+- Quêtes éclair : la liste montre le nom du monstre (Golem d'or, Harpie érudite…), le jour du mois et le niveau de départ, dans l'ordre du calendrier.
+- Nouveau calendrier des quêtes éclair avec minuteurs : quête en cours (temps restant) et prochaines quêtes (temps avant le début). Touchez une quête pour la simuler.
+- Jours du mois repris des notes de version 12.0.0 de Kabam. Donjon Parangon et Nullysium : 1 week-end sur 2 (à confirmer). L'heure de début se règle une fois.
+- Icônes du jeu pour chaque quête éclair. Le Donjon Parangon a maintenant un vrai nom (le texte français du jeu était une description).
+
 ## v1.6.4 — 2026-11-28
 
 - Équipe et quêtes : icônes du jeu pour la zone, le champion, sa compétence de chef, l'âme de titan, le familier, le chant d'aura, la qualité, l'élément et l'esprit (icônes extraites des fichiers du jeu, outil tools/teamatlas.py).
