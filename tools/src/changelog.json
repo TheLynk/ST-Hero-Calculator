@@ -1,6 +1,16 @@
 {
- "version": "1.7.6",
+ "version": "1.7.7",
  "entries": [
+  {
+   "v": "1.7.7",
+   "date": "2026-11-28",
+   "fr": [
+    "Champions : correction du niveau de la compétence de chef. Le jeu ne limite pas ce niveau à 3 sans âme de titan (Hero.GetCurrentActiveSkillUid) : il vaut 1 + le nombre d'améliorations « compétence » débloquées. Au rang 11, un champion a donc sa compétence 4/5 (icône dorée), même sans âme de titan. Le simulateur utilise maintenant les bonnes valeurs (exemple Rudo : +50 % crit au lieu de +40 %)."
+   ],
+   "en": [
+    "Champions: leader skill level fixed. The game does not cap this level at 3 without a titan soul (Hero.GetCurrentActiveSkillUid): it is 1 + the number of unlocked skill upgrades. At rank 11 a champion has skill 4/5 (gold icon), even without a titan soul. The simulator now uses the correct values (Rudo example: +50% crit instead of +40%)."
+   ]
+  },
   {
    "v": "1.7.6",
    "date": "2026-11-28",

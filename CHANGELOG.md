@@ -1,5 +1,9 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.7.7 — 2026-11-28
+
+- Champions : correction du niveau de la compétence de chef. Le jeu ne limite pas ce niveau à 3 sans âme de titan (Hero.GetCurrentActiveSkillUid) : il vaut 1 + le nombre d'améliorations « compétence » débloquées. Au rang 11, un champion a donc sa compétence 4/5 (icône dorée), même sans âme de titan. Le simulateur utilise maintenant les bonnes valeurs (exemple Rudo : +50 % crit au lieu de +40 %).
+
 ## v1.7.6 — 2026-11-28
 
 - Champions : le message orange « Le simulateur utilise les stats du jeu » ne s'affiche plus quand l'écart est en vert (moins de 1 %).

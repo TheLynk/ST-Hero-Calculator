@@ -1,5 +1,9 @@
 # Changelog — ST Hero Calculator
 
+## v1.7.7 — 2026-11-28
+
+- Champions: leader skill level fixed. The game does not cap this level at 3 without a titan soul (Hero.GetCurrentActiveSkillUid): it is 1 + the number of unlocked skill upgrades. At rank 11 a champion has skill 4/5 (gold icon), even without a titan soul. The simulator now uses the correct values (Rudo example: +50% crit instead of +40%).
+
 ## v1.7.6 — 2026-11-28
 
 - Champions: the orange message “The simulator uses the game stats” no longer shows when the gap is green (under 1%).

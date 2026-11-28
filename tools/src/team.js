@@ -99,7 +99,8 @@ function champStats(u,lvl,rank,reinf,titan,gear,seeds,par,card){
   if(titan&&c.titan){const m=/stat\+([\d.]+)/.exec(c.titan);if(m) pct+=FX(+m[1])}
   // amélioration Parangon (upgPrgnlvl100) au niveau 100
   if(par&&lvl>=cn0('champion_paragon_soul_skill_unlock_level',100)&&c.prg){const m=/stat\+([\d.]+)/.exec(c.prg);if(m) pct+=+m[1];if(/skl\+1/.test(c.prg)) sk++}
-  sk=Math.min(titan?5:cn0('max_skill_level_non_titan',3),sk);
+  // Hero.GetCurrentActiveSkillUid : compétence = 1 + nombre de skl+1, sans limite liée à l'âme de titan
+  sk=Math.min(5,sk);
   const tm=titan?cn0('champion_titan_soul_story_stat_mult',1.5):1, st=c.st||[0,0,0,0,0];
   // graines (Character.seedsAtk/Def/Hp, communes aux héros et aux champions) : +4 ATQ, +4 DEF, +1 PV par graine
   const sd=k=>Math.max(0,Math.min(80,+((seeds||{})[k])||0));
