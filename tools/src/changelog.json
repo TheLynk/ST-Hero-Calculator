@@ -1,6 +1,16 @@
 {
- "version": "1.9.6",
+ "version": "1.9.7",
  "entries": [
+  {
+   "v": "1.9.7",
+   "date": "2026-11-28",
+   "fr": [
+    "Onglet Équipe et quêtes, emplacements des héros : l'icône de classe s'affiche devant chaque preset choisi, et ses stats (PV, ATK, DEF, esquive, élément) s'affichent dessous. L'outil montre les valeurs du jeu enregistrées dans le preset ; sans elles, il montre le calcul."
+   ],
+   "en": [
+    "Team and quests tab, hero slots: the class icon shows in front of each chosen preset, with its stats (HP, ATK, DEF, evasion, element) below. The tool shows the game values saved in the preset; without them, it shows the computed values."
+   ]
+  },
   {
    "v": "1.9.6",
    "date": "2026-11-28",

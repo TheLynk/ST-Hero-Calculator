@@ -1,5 +1,9 @@
 # Changelog — ST Hero Calculator
 
+## v1.9.7 — 2026-11-28
+
+- Team and quests tab, hero slots: the class icon shows in front of each chosen preset, with its stats (HP, ATK, DEF, evasion, element) below. The tool shows the game values saved in the preset; without them, it shows the computed values.
+
 ## v1.9.6 — 2026-11-28
 
 - Champion summary (Champions tab and Team and quests tab): each icon stays next to its value when the line wraps (before, the DEF icon could stay alone at the end of a line). Skill and aurasong effects are no longer cut in the middle (e.g. “+5 HP/round”).

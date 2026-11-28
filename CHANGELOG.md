@@ -1,5 +1,9 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.9.7 — 2026-11-28
+
+- Onglet Équipe et quêtes, emplacements des héros : l'icône de classe s'affiche devant chaque preset choisi, et ses stats (PV, ATK, DEF, esquive, élément) s'affichent dessous. L'outil montre les valeurs du jeu enregistrées dans le preset ; sans elles, il montre le calcul.
+
 ## v1.9.6 — 2026-11-28
 
 - Résumé des champions (onglet Champions et onglet Équipe et quêtes) : chaque icône reste collée à sa valeur quand la ligne passe à la suivante (avant, l'icône de DEF pouvait rester seule en fin de ligne). Les effets de compétence et de chant d'aura ne sont plus coupés au milieu (ex. « +5 PV/tour »).
