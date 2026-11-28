@@ -72,7 +72,8 @@ function fighterFromPreset(p){
   const sum=k=>sk.reduce((a,s)=>a+(s[k]||0),0);
   const inn=sk.find(s=>s.dmgBuf), nin=sk.find(s=>s.critBuf&&!s.dmgBuf);
   const n=c.name, el=String(c.element||'').toLowerCase();
-  return {pw:R.power,name:p.name||nm(c),cname:nm(c),cls:n,family:c.family,gcls:(GM&&GM.alias&&GM.alias[n])||n.toLowerCase().replace(/\s/g,''),ic:c,
+  const gpw=+(p.game&&String(p.game.gPow||'').replace(/[^\d]/g,''))||0;
+  return {pw:R.power,gpw,name:p.name||nm(c),cname:nm(c),cls:n,family:c.family,gcls:(GM&&GM.alias&&GM.alias[n])||n.toLowerCase().replace(/\s/g,''),ic:c,
     atk:R.atk,def:R.def,hp:R.hp,crit:R.crit/100,cm:R.cm,eva:R.eva/100,aggro:R.threat,el:R.el,elem:el==='any'?'Any':el,
     aBr:R.aBr||1,dBr:R.dBr||1,card:ctx.card||1,
     bossA:(R.T.bossA||0)/100,bossD:1+((R.T.bossD||0)/100)/(R.dBr||1),shark:(R.T.shark||0)/100,dino:(R.T.dino||0)/100,
@@ -351,7 +352,7 @@ function upd(){const q=curQuest();if(!q) return;$t('tAreaI').innerHTML=areaIco(q
   refreshPresets();}
 function champFighter(u){u=u||$t('tChamp').value;if(!u) return null;const c=SD.champs[u],s=cfgStats(u),v=cfg(u);
   const val=(k,d)=>v.tCUse&&v[k]!=null&&v[k]!==''?+v[k]:d;
-  return {name:L(c.n),cname:TT.champ,cls:'champion',family:famOf(c.cls),gcls:c.cls,champ:u,hemma:u==='hemma',
+  return {pw:cfgPower(u),name:L(c.n),cname:TT.champ,cls:'champion',family:famOf(c.cls),gcls:c.cls,champ:u,hemma:u==='hemma',
     atk:val('tCAtk',s.atk),def:val('tCDef',s.def),hp:val('tCHp',s.hp),crit:s.crit,cm:s.cm,eva:val('tCEva',s.eva*100)/100,aggro:c.aggro,el:val('tCEl',s.el),elem:c.el,
     aBr:1,dBr:1,card:1,bossA:0,bossD:1,shark:0,dino:0,maxEva:cn0('quest_evasion_max',0.75),survive:0,regen:0,champB:0,leader:SD.mods[c.sk[s.sk-1]],aura:auraModU(u)}}
 function setup(){const q=curQuest();const mods=[];const ch=champFighter();if(ch&&ch.leader) mods.push(ch.leader);if(ch&&ch.aura) mods.push(ch.aura);
@@ -366,7 +367,7 @@ function show(r,party,q,opts){
   let pw=0;for(const h of party){if(h.elem===opts.bel) pw+=h.el;else if(h.elem==='Any'||h.elem==='all') pw+=Math.round(h.el*0.5)}pw=Math.round(pw*r.mi.bpm);
   const tot=r.dmg.reduce((a,b)=>a+b,0)||1;
   $t('tRes').innerHTML=`<div class="kpi"><div><span>${TT.win}</span><b>${pc(r.win)}</b>${bar(r.win)}</div><div><span>${TT.rounds}</span><b>${r.rounds?r.rounds.toFixed(1).replace('.',EN?'.':','):'—'}</b><span>${r.minR?r.minR+'–'+r.maxR:''}</span></div><div><span>${TT.mhp}</span><b>${fmt(r.mHp)}</b><span>${TT.prog} : ${pc(r.prog)}</span></div>${q.bp?`<div><span>${TT.barrier} (${esc(L(ELN[opts.bel])||'')})</span><b class="${pw>=q.bp?'g5':'g1'}">${fmt(pw)} / ${fmt(q.bp)}</b><span>${pw>=q.bp?TT.shatter:TT.notShatter}</span></div>`:''}</div>
-  <div class="scroll"><table><thead><tr><th>${TT.heroes}</th><th class="n">ATK</th><th class="n">DEF</th><th class="n">${EN?'HP':'PV'}</th><th class="n">${TT.crit}</th><th class="n">${TT.eva}</th><th class="n">${TT.thr}</th><th class="n">${TT.dmg}</th><th class="n">${TT.death}</th><th>${TT.grade}</th></tr></thead><tbody>${party.map((h,k)=>`<tr><td>${h.ic?icoClass(h.ic,28):h.champ?ta('icon_global_'+h.champ,28):''} <b>${esc(h.name)}</b><div class="alt">${esc(h.cname)}</div></td><td class="n">${fmt(h.atk)}</td><td class="n">${fmt(h.def)}</td><td class="n">${fmt(h.hp)}</td><td class="n">${Math.round(h.crit*100)} %</td><td class="n">${Math.round(h.eva*100)} %</td><td class="n">${fmt(h.aggro)}</td><td class="n">${fmt(r.dmg[k])}<div class="alt">${pc(r.dmg[k]/tot)}</div></td><td class="n">${pc(r.death[k])}</td><td>${face(r.grade[k])}</td></tr>`).join('')}</tbody></table></div>
+  <div class="scroll"><table><thead><tr><th>${TT.heroes}</th><th class="n">${ui('power',18)} ${TT.opPow}</th><th class="n">${ui('atk',18)} ATK</th><th class="n">${ui('defense',18)} DEF</th><th class="n">${ui('hp',18)} ${EN?'HP':'PV'}</th><th class="n">${ta('icon_global_critchance',18)} ${TT.crit}</th><th class="n">${ui('eva',18)} ${TT.eva}</th><th class="n">${ta('icon_tomb_modifier_hate',18)} ${TT.thr}</th><th class="n">${ta('icon_tomb_modifier_powerful',18)} ${TT.dmg}</th><th class="n">${ta('icon_global_health_risk_small',18)} ${TT.death}</th><th>${TT.grade}</th></tr></thead><tbody>${party.map((h,k)=>`<tr><td>${h.ic?icoClass(h.ic,28):h.champ?ta('icon_global_'+h.champ,28):''} <b>${esc(h.name)}</b><div class="alt">${esc(h.cname)}</div></td><td class="n" title="${h.gpw?TT.powGame:TT.powCalc}">${(h.gpw||h.pw)?`<b>${h.gpw?'':'≈ '}${fmt(Math.round(h.gpw||h.pw))}</b>`:'—'}</td><td class="n">${fmt(h.atk)}</td><td class="n">${fmt(h.def)}</td><td class="n">${fmt(h.hp)}</td><td class="n">${Math.round(h.crit*100)} %</td><td class="n">${Math.round(h.eva*100)} %</td><td class="n">${fmt(h.aggro)}</td><td class="n">${fmt(r.dmg[k])}<div class="alt">${pc(r.dmg[k]/tot)}</div></td><td class="n">${pc(r.death[k])}</td><td>${face(r.grade[k])}</td></tr>`).join('')}</tbody></table></div>
   <p class="note">${r.n} ${TT.sims.toLowerCase()}. ${TT.note}</p>`;}
 // ----- recherches -----
 const cmpR=(a,b)=>b.r.win-a.r.win||Math.max(...a.r.death)-Math.max(...b.r.death)||(a.r.win?a.r.rounds-b.r.rounds:b.r.prog-a.r.prog);

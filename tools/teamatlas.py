@@ -4,7 +4,7 @@ import UnityPy,sys,io,base64,json,math
 from PIL import Image
 bundle,simf,out=sys.argv[1:4]
 SD=json.load(open(simf,encoding='utf-8'))
-want=['championtitansoul','icon_global_questarea_flashquest_bg','icon_global_flashquest']
+want=['championtitansoul','icon_global_questarea_flashquest_bg','icon_global_flashquest','icon_global_critchance','icon_tomb_modifier_hate','icon_global_health_risk_small','icon_tomb_modifier_powerful']
 for u,c in SD['champs'].items():
     want.append('icon_global_'+u)
     want+=['icon_global_skill_hero_'+s for s in c['sk'] if s]

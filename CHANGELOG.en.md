@@ -1,5 +1,9 @@
 # Changelog — ST Hero Calculator
 
+## v1.8.5 — 2026-11-28
+
+- Team and quests tab, result table: new Power column (saved game power, otherwise computed power with “≈” in front). Each column now has the game icon: power, ATK, DEF, HP, crit, evasion, threat, damage and death risk.
+
 ## v1.8.4 — 2026-11-28
 
 - Team and quests tab: the power of each chosen hero shows next to its preset, with the total team power. The tool shows the game power saved in the preset; without it, it shows the computed power, with “≈” in front.

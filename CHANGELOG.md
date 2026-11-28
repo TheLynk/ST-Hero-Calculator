@@ -1,5 +1,9 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.8.5 — 2026-11-28
+
+- Onglet Équipe et quêtes, tableau du résultat : nouvelle colonne Puissance (puissance du jeu enregistrée, sinon puissance calculée précédée de « ≈ »). Chaque colonne a maintenant l'icône du jeu : puissance, ATK, DEF, PV, crit, esquive, menace, dégâts et risque de mort.
+
 ## v1.8.4 — 2026-11-28
 
 - Onglet Équipe et quêtes : la puissance de chaque héros choisi s'affiche à côté de son preset, avec la puissance totale de l'équipe. L'outil montre la puissance du jeu enregistrée dans le preset ; sans elle, il montre la puissance calculée, précédée de « ≈ ».
