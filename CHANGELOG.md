@@ -1,5 +1,9 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.9.9 — 2026-11-28
+
+- Onglet Équipe et quêtes, bouton « Meilleur champion » : il fonctionne maintenant sans héros choisi. L'outil choisit d'abord la meilleure équipe parmi vos presets (avec le champion affiché, ou votre 1er champion configuré), puis classe les champions pour cette équipe et choisit le meilleur.
+
 ## v1.9.8 — 2026-11-28
 
 - Onglet Équipe et quêtes, bouton « Meilleur champion » : le champion classé 1er est maintenant choisi dans le calculateur, et la simulation se relance avec lui, comme pour « Meilleure équipe ». Le classement reste affiché.

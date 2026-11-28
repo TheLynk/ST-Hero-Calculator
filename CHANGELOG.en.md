@@ -1,5 +1,9 @@
 # Changelog — ST Hero Calculator
 
+## v1.9.9 — 2026-11-28
+
+- Team and quests tab, “Best champion” button: it now works with no hero chosen. The tool first picks the best team from your presets (with the displayed champion, or your first configured champion), then ranks the champions for this team and selects the best one.
+
 ## v1.9.8 — 2026-11-28
 
 - Team and quests tab, “Best champion” button: the top-ranked champion is now selected in the calculator, and the simulation runs again with it, like “Best team”. The ranking stays on screen.

@@ -405,7 +405,11 @@ async function bestTeam(){const {q,mods,opts}=setup();const pre=plist(),ids=pre.
   box.innerHTML=`<h2>${TT.topTeams}</h2><p class="note">${C.length} ${TT.combos} · ${n} ${TT.sims.toLowerCase()}</p><div class="scroll"><table><thead><tr><th>#</th>${ch?`<th>${TT.champ}</th>`:''}<th>${ta('icon_global_heroes',18)} ${TT.heroes}</th><th class="n">${ta('icon_global_trophy_s',18)} ${TT.win}</th><th class="n">${ta('icon_global_clock',18)} ${TT.rounds}</th><th class="n">${ta('icon_global_class_monster',18)} ${TT.prog}</th><th class="n">${ta('icon_global_health_risk_small',18)} ${TT.death} max</th></tr></thead><tbody>${res.slice(0,10).map((x,i)=>`<tr><td>${i+1}</td>${ch?`<td><span class="tmem">${ta('icon_global_'+ch.champ,24)}${esc(ch.name)}</span></td>`:''}<td><span class="tmems">${x.c.map(j=>`<span class="tmem">${F[j].ic?icoClass(F[j].ic,24):''}${esc(F[j].name)}</span>`).join('')}</span></td><td class="n">${pc(x.r.win)}</td><td class="n">${rTxt(x.r)}</td><td class="n">${pc(x.r.prog)}</td><td class="n">${face(gOf(Math.max(...x.r.death)),22)} ${pc(Math.max(...x.r.death))}</td></tr>`).join('')}</tbody></table></div>`;
   // place la meilleure équipe dans les emplacements
   const b=res[0];if(b) tm.querySelectorAll('.tslot select').forEach((s,j)=>s.value=b.c[j]!=null?String(b.c[j]):'');slotPow();go();}
-async function bestChamp(){const {q,opts}=setup();const pre=plist();const heroes=[];tm.querySelectorAll('.tslot select').forEach(s=>{if(s.value==='') return;const f=fighterFromPreset(pre[+s.value]);if(f) heroes.push(f)});
+async function bestChamp(){let pre=plist();const pick=()=>{const h=[];tm.querySelectorAll('.tslot select').forEach(s=>{if(s.value==='') return;const f=fighterFromPreset(pre[+s.value]);if(f) h.push(f)});return h};
+  let heroes=pick();
+  // aucun héros choisi : l'outil choisit d'abord la meilleure équipe de héros (avec le champion affiché, ou le 1er champion), puis classe les champions
+  if(!heroes.length&&pre.some(Boolean)){if(!$t('tChamp').value){$t('tChamp').value=Object.keys(SD.champs).find(isSaved)||Object.keys(SD.champs)[0];tSum();refreshPresets()}await bestTeam();pre=plist();heroes=pick()}
+  const {q,opts}=setup();
   if(!heroes.length){$t('tRes').innerHTML=`<p class="note">${TT.needHero}</p>`;return}
   const box=$t('tExtra');box.hidden=false;box.innerHTML=`<h2>${TT.topChamps}</h2><p class="note">${TT.busy}</p>`;await new Promise(z=>setTimeout(z,0));
   const out=[];for(const u of Object.keys(SD.champs)){const ch=champFighter(u);const mods=[ch.leader,ch.aura].filter(Boolean);
