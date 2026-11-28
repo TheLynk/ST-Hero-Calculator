@@ -1,5 +1,13 @@
 # Changelog — ST Hero Calculator
 
+## v1.7.11 — 2026-11-28
+
+- Champions tab: seed help text fixed. Game version 26.12.0 is not out yet: it is only announced. With it, champions will appear in the seed list opened from the inventory. Until then, the “Find the seeds from the game stats” button is the only way to know their seeds.
+
+## v1.7.10 — 2026-11-28
+
+- Champions tab: seed help text updated. Since game version 26.12.0, champions appear in the seed list opened from the inventory (game bug fix). The seed counter of a champion is visible there.
+
 ## v1.7.9 — 2026-11-28
 
 - Champions tab: new “Find the seeds from the game stats” button. The game does not show the seeds of a champion. The tool deduces them from the game HP, ATK and DEF, then fills the 3 fields. Example: Malady has 80 ATK, 65 DEF and 74 HP seeds.

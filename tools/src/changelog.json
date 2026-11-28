@@ -1,6 +1,26 @@
 {
- "version": "1.7.9",
+ "version": "1.7.11",
  "entries": [
+  {
+   "v": "1.7.11",
+   "date": "2026-11-28",
+   "fr": [
+    "Onglet Champions : texte d'aide des graines corrigé. La version 26.12.0 du jeu n'est pas encore sortie : elle est seulement annoncée. Avec elle, les champions apparaîtront dans la liste des graines ouverte depuis l'inventaire. En attendant, le bouton « Trouver les graines avec les stats du jeu » reste le seul moyen de connaître leurs graines."
+   ],
+   "en": [
+    "Champions tab: seed help text fixed. Game version 26.12.0 is not out yet: it is only announced. With it, champions will appear in the seed list opened from the inventory. Until then, the “Find the seeds from the game stats” button is the only way to know their seeds."
+   ]
+  },
+  {
+   "v": "1.7.10",
+   "date": "2026-11-28",
+   "fr": [
+    "Onglet Champions : texte d'aide des graines mis à jour. Depuis la version 26.12.0 du jeu, les champions apparaissent dans la liste des graines ouverte depuis l'inventaire (correction d'un bug du jeu). Le compteur de graines d'un champion y est donc visible."
+   ],
+   "en": [
+    "Champions tab: seed help text updated. Since game version 26.12.0, champions appear in the seed list opened from the inventory (game bug fix). The seed counter of a champion is visible there."
+   ]
+  },
   {
    "v": "1.7.9",
    "date": "2026-11-28",

@@ -1,5 +1,13 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.7.11 — 2026-11-28
+
+- Onglet Champions : texte d'aide des graines corrigé. La version 26.12.0 du jeu n'est pas encore sortie : elle est seulement annoncée. Avec elle, les champions apparaîtront dans la liste des graines ouverte depuis l'inventaire. En attendant, le bouton « Trouver les graines avec les stats du jeu » reste le seul moyen de connaître leurs graines.
+
+## v1.7.10 — 2026-11-28
+
+- Onglet Champions : texte d'aide des graines mis à jour. Depuis la version 26.12.0 du jeu, les champions apparaissent dans la liste des graines ouverte depuis l'inventaire (correction d'un bug du jeu). Le compteur de graines d'un champion y est donc visible.
+
 ## v1.7.9 — 2026-11-28
 
 - Onglet Champions : nouveau bouton « Trouver les graines avec les stats du jeu ». Le jeu ne montre pas les graines d'un champion. L'outil les déduit des PV, de l'ATQ et de la DEF du jeu, puis remplit les 3 cases. Exemple : Maladie a 80 ATQ, 65 DEF et 74 PV en graines.
