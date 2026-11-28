@@ -1,5 +1,12 @@
 # Changelog — ST Hero Calculator
 
+## v1.6.3 — 2026-11-28
+
+- Champion: real game rank (rank 1 to 11 + reinforcements, for example 11 +18), level and titan soul.
+- Champion: familiar and aurasong can be equipped, with quality, element and spirit. The tool computes HP, ATK, DEF, evasion and element with the game rule (Hero.GetUpgradeForStory code): level base + rank upgrades × story stat (× 1.5 with titan), each reinforcement adds +5%.
+- The aurasong also gives its quest bonus (it replaces the separate aurastone choice).
+- The “Correct the stats” fields are still available and replace the computed values. The tool keeps all the settings of each champion.
+
 ## v1.6.2 — 2026-11-28
 
 - Team & quests: the champion stats (HP, ATK, DEF, evasion, element) are now always visible. Copy the champion Info tab from the game. The tool keeps them for each champion, and “Best champion” uses them.

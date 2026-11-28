@@ -253,6 +253,27 @@ Seule la 3e ligne donne les 2 chiffres. Mais elle utilise 2 règles inconnues, s
 - Les stats estimées des champions étaient fausses (Yami : 7 134 ATK au lieu de 13 546). Elles dépendent des renforcements et du familier. Depuis la 1.6.2, recopiez l'onglet Infos du champion.
 - Encore utile : une quête où un héros a un visage orange, rouge ou violet. Une quête facile (tous verts) et une quête difficile (au moins un héros en danger) sont les plus utiles.
 
+### Test 15 — Stats des champions (v1.6.3)
+
+**Ce que l'outil calcule** (code du jeu, `Hero.GetUpgradeForStory`) :
+
+- base du niveau (même courbe que les héros) ;
+- + somme des améliorations de rang × stat d'histoire du champion, × 1,5 avec l'âme de titan ;
+- au-delà du rang 11, chaque renfort (+N) répète la dernière amélioration (+5 %) ;
+- + familier et chant d'aura, avec qualité, élément et esprit (mêmes règles que les objets des héros) ;
+- élément = valeur du rang (125 dès le rang 20) + éléments des objets.
+
+**Déjà juste :** élément de Lilu (125) et niveau de compétence (4/5 au rang 11 avec titan).
+
+**Étapes :**
+
+1. Ouvrez un champion dans le jeu, onglet Infos.
+2. Touchez le familier et le chant d'aura. Notez l'objet, la qualité, l'élément et l'esprit.
+3. Entrez la même chose dans l'outil (rang, renforts, niveau, titan, familier, chant d'aura).
+4. Comparez la ligne « Calcul » avec PV, ATQ, DEF, ESQ et élément du jeu.
+
+**Ce que je vérifie :** les 5 valeurs doivent être égales à ±1 %. Lilu (Avatar seul) : 887 PV et 8 594 DEF sans le chant d'aura, contre 916 et 10 359 dans le jeu. Il manque donc le chant d'aura et les enchantements.
+
 ## Lecture des captures (import)
 
 | # | Test | Quoi envoyer |

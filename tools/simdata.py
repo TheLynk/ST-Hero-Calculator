@@ -38,7 +38,7 @@ for u,h in H.items():
       'hp':[h['hp'],h['maxHp40'],h['maxHp50'],h['maxHp100']],'atk':[h['atk'],h['maxAtk40'],h['maxAtk50'],h['maxAtk100']],'def':[h['def'],h['maxDef40'],h['maxDef50'],h['maxDef100']],
       'eva':f(h['evasion']),'aggro':h['aggro'],'cr':f(h['critical']),'cm':f(h['critMult']),
       'upg':[h.get('upg%02d'%i) for i in range(1,12)],'titan':h.get('upgTitan'),'prg':h.get('upgPrgnlvl100'),
-      'sk':[h.get('skill%d'%i) for i in range(1,6)],'dm':h.get('dragonMult')}
+      'sk':[h.get('skill%d'%i) for i in range(1,6)],'st':[h.get('storyHp',0),h.get('storyAtk',0),h.get('storyDef',0),f(h.get('storyEva')),f(h.get('storyCrit'))],'dm':h.get('dragonMult')}
 SK=['atkBuf','evaBuf','critBuf','dmgBuf','monsAtkBuf','monsDmgBuf','survive','regen','startHpRatio','championStatBonusMultiplier','elements']
 skills={}
 for u,s in S.items():
@@ -48,7 +48,7 @@ inn={}
 for u,s in S.items():
     if s['family'].startswith('c_') and s.get('tier'): inn.setdefault(s['family'],[]).append([s['tier'],s.get('elements') or 0,u])
 for v in inn.values(): v.sort()
-CK=['quest_def_low_def_mult','quest_def_even_def_mult','quest_def_high_def_mult','quest_def_high_def_mult_curve','quest_def_target_range_effect','quest_evasion_max','adventurer_pathfinder_innate_evasion_bonus','adventurer_conquistador_crit_bonus','adventurer_conquistador_crit_max_stacks','adventurer_sensei_innate_buff_cooldown','quest_darkknight_kill_threshold','monster_anger_threshold','monster_anger_increase_per_round','elemental_barrier_damage_reduction','all_element_barrier_effectiveness','adventurer_shieldhp_regen_turn_count','quest_rating_S_death_chance_threshold','quest_rating_A_death_chance_threshold','quest_rating_B_death_chance_threshold','quest_rating_C_death_chance_threshold','quest_outlook_simulation_amount','quest_chronomancer_redos','hemma_max_attack_multiplier','attack_mult_hemma','character_power_dragon_invasion_curve','quest_event_dragon_dragon_count','quest_event_dragon_adventurer_max','dragon_avg_mult']
+CK=['quest_def_low_def_mult','quest_def_even_def_mult','quest_def_high_def_mult','quest_def_high_def_mult_curve','quest_def_target_range_effect','quest_evasion_max','adventurer_pathfinder_innate_evasion_bonus','adventurer_conquistador_crit_bonus','adventurer_conquistador_crit_max_stacks','adventurer_sensei_innate_buff_cooldown','quest_darkknight_kill_threshold','monster_anger_threshold','monster_anger_increase_per_round','elemental_barrier_damage_reduction','all_element_barrier_effectiveness','adventurer_shieldhp_regen_turn_count','quest_rating_S_death_chance_threshold','quest_rating_A_death_chance_threshold','quest_rating_B_death_chance_threshold','quest_rating_C_death_chance_threshold','quest_outlook_simulation_amount','quest_chronomancer_redos','hemma_max_attack_multiplier','attack_mult_hemma','character_power_dragon_invasion_curve','quest_event_dragon_dragon_count','quest_event_dragon_adventurer_max','dragon_avg_mult','hero_element_rank_and_value','champion_titan_soul_story_stat_mult','max_skill_level_non_titan']
 cons={k:C[k] for k in CK if k in C}
 txt={'diff':[nm('quest_setup_difficulty_'+x+'_short') for x in ('easy','medium','hard','extreme')]}
 json.dump({'quests':quests,'names':names,'mods':mods,'champs':champs,'skills':skills,'innate':inn,'cons':cons,'txt':txt},open(out,'w',encoding='utf-8'),ensure_ascii=False,separators=(',',':'))

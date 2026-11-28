@@ -1,5 +1,12 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.6.3 — 2026-11-28
+
+- Champion : rang réel du jeu (rang 1 à 11 + renforts, par exemple 11 +18), niveau et âme de titan.
+- Champion : familier et chant d'aura équipables, avec qualité, élément et esprit. L'outil calcule PV, ATQ, DEF, esquive et élément avec la règle du jeu (code Hero.GetUpgradeForStory) : base du niveau + améliorations de rang × stat d'histoire (× 1,5 avec titan), chaque renfort ajoute +5 %.
+- Le chant d'aura donne aussi son bonus de quête (il remplace le choix séparé de la pierre d'aura).
+- Les champs « Corriger les stats » restent disponibles et remplacent le calcul. L'outil garde tous les réglages de chaque champion.
+
 ## v1.6.2 — 2026-11-28
 
 - Équipe et quêtes : les stats du champion (PV, ATQ, DEF, esquive, élément) sont maintenant toujours visibles. Recopiez l'onglet Infos du champion dans le jeu. L'outil les garde pour chaque champion, et « Meilleur champion » les utilise.
