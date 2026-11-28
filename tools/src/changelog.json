@@ -1,6 +1,16 @@
 {
- "version": "1.9.5",
+ "version": "1.9.6",
  "entries": [
+  {
+   "v": "1.9.6",
+   "date": "2026-11-28",
+   "fr": [
+    "Résumé des champions (onglet Champions et onglet Équipe et quêtes) : chaque icône reste collée à sa valeur quand la ligne passe à la suivante (avant, l'icône de DEF pouvait rester seule en fin de ligne). Les effets de compétence et de chant d'aura ne sont plus coupés au milieu (ex. « +5 PV/tour »)."
+   ],
+   "en": [
+    "Champion summary (Champions tab and Team and quests tab): each icon stays next to its value when the line wraps (before, the DEF icon could stay alone at the end of a line). Skill and aurasong effects are no longer cut in the middle (e.g. “+5 HP/round”)."
+   ]
+  },
   {
    "v": "1.9.5",
    "date": "2026-11-28",

@@ -1,5 +1,9 @@
 # Changelog — ST Hero Calculator
 
+## v1.9.6 — 2026-11-28
+
+- Champion summary (Champions tab and Team and quests tab): each icon stays next to its value when the line wraps (before, the DEF icon could stay alone at the end of a line). Skill and aurasong effects are no longer cut in the middle (e.g. “+5 HP/round”).
+
 ## v1.9.5 — 2026-11-28
 
 - Team and quests tab: the “Quest booster” menu becomes 3 buttons with the game icon (Power Booster, Super Power Booster, Mega Power Booster), like item quality. A 2nd click on the active button removes the booster. Name and effect show on hover.

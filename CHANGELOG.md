@@ -1,5 +1,9 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.9.6 — 2026-11-28
+
+- Résumé des champions (onglet Champions et onglet Équipe et quêtes) : chaque icône reste collée à sa valeur quand la ligne passe à la suivante (avant, l'icône de DEF pouvait rester seule en fin de ligne). Les effets de compétence et de chant d'aura ne sont plus coupés au milieu (ex. « +5 PV/tour »).
+
 ## v1.9.5 — 2026-11-28
 
 - Onglet Équipe et quêtes : le menu « Bonus de quête » devient 3 boutons avec l'icône du jeu (Bonus d'ATQ, Super bonus d'ATQ, Méga bonus d'ATQ), comme la qualité des objets. Un 2e clic sur le bouton actif retire le bonus. Le nom et l'effet s'affichent au survol.
