@@ -1,5 +1,10 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.11.0 — 2026-11-28
+
+- Onglet Équipe et quêtes : nouveau bloc « Équipe théorique (héros non possédés) ». Vous réglez le niveau, les classes (promues ou de base), la qualité des objets, le tier max des enchantements, les graines, la transcendance et les objets de coffre ou de pack. L'outil crée le meilleur build de chaque classe (comme l'onglet Héros), puis cherche la meilleure combinaison de classes et de champion pour la quête choisie. Le tableau montre les 10 meilleures équipes, et le détail de la 1re s'affiche dans « Résultat ».
+- Le 1er calcul des builds prend environ 2 minutes pour 21 classes ; les builds sont ensuite stockés et les calculs suivants durent quelques secondes.
+
 ## v1.10.1 — 2026-11-28
 
 - Calendrier des quêtes éclair : le réglage de l'heure est maintenant replié sous une ligne « Réglage de l'heure · début à 16:00 chez vous ». Cliquez sur cette ligne pour l'ouvrir ou le fermer. Il reste ouvert tant qu'aucune heure n'a été réglée.

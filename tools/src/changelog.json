@@ -1,6 +1,18 @@
 {
- "version": "1.10.1",
+ "version": "1.11.0",
  "entries": [
+  {
+   "v": "1.11.0",
+   "date": "2026-11-28",
+   "fr": [
+    "Onglet Équipe et quêtes : nouveau bloc « Équipe théorique (héros non possédés) ». Vous réglez le niveau, les classes (promues ou de base), la qualité des objets, le tier max des enchantements, les graines, la transcendance et les objets de coffre ou de pack. L'outil crée le meilleur build de chaque classe (comme l'onglet Héros), puis cherche la meilleure combinaison de classes et de champion pour la quête choisie. Le tableau montre les 10 meilleures équipes, et le détail de la 1re s'affiche dans « Résultat ».",
+    "Le 1er calcul des builds prend environ 2 minutes pour 21 classes ; les builds sont ensuite stockés et les calculs suivants durent quelques secondes."
+   ],
+   "en": [
+    "Team and quests tab: new “Theoretical team (heroes you do not own)” block. You set the level, the classes (promoted or base), item quality, max enchantment tier, seeds, transcendence and chest or pack items. The tool creates the best build of each class (like the Hero tab), then looks for the best combination of classes and champion for the chosen quest. The table shows the top 10 teams, and the details of the 1st one show in “Result”.",
+    "The first build computation takes about 2 minutes for 21 classes; builds are then stored and later runs take a few seconds."
+   ]
+  },
   {
    "v": "1.10.1",
    "date": "2026-11-28",

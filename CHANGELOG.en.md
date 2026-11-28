@@ -1,5 +1,10 @@
 # Changelog — ST Hero Calculator
 
+## v1.11.0 — 2026-11-28
+
+- Team and quests tab: new “Theoretical team (heroes you do not own)” block. You set the level, the classes (promoted or base), item quality, max enchantment tier, seeds, transcendence and chest or pack items. The tool creates the best build of each class (like the Hero tab), then looks for the best combination of classes and champion for the chosen quest. The table shows the top 10 teams, and the details of the 1st one show in “Result”.
+- The first build computation takes about 2 minutes for 21 classes; builds are then stored and later runs take a few seconds.
+
 ## v1.10.1 — 2026-11-28
 
 - Flash quest calendar: the time setting is now folded under a line “Time setting · start at 16:00 your time”. Click this line to open or close it. It stays open until a time has been set.

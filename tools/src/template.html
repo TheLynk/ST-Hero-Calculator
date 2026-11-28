@@ -659,8 +659,16 @@ function run(){
   const key=settingsKey(ctx);
   const saved=(PRE.version===DATA_VERSION&&PRE.builds[key])||storeGet(key);
   if(saved){try{const B=unpackBuild(ctx,saved);lastBuild=saved;render(ctx,B);$('busy').textContent='';$('src').textContent=PRE.builds[key]?'⚡ Résultat stocké (pré-calculé)':'⚡ Résultat stocké (déjà calculé sur cet appareil)';return}catch(e){}}
+  const best=optimiseBuild(ctx);
+  if(!best){$('gear').innerHTML='<tr><td colspan=8 class="warn">Aucun objet disponible pour un emplacement. Élargissez les sources ou le niveau.</td></tr>';$('busy').textContent='';return}
+  render(ctx,best);
+  lastBuild=packBuild(best); storeSet(key,lastBuild);
+  $('busy').textContent='';$('src').textContent='Résultat calculé maintenant, puis stocké sur cet appareil';
+}
+// meilleur build d'une classe pour les réglages de ctx (sans affichage) ; null si un emplacement n'a aucun objet
+function optimiseBuild(ctx){
   const opts=buildOptions(ctx);
-  if(opts.some(o=>!o.length)){$('gear').innerHTML='<tr><td colspan=8 class="warn">Aucun objet disponible pour un emplacement. Élargissez les sources ou le niveau.</td></tr>';$('busy').textContent='';return}
+  if(opts.some(o=>!o.length)) return null;
   // départs multiples : stats brutes, valeur d'élément max, menace max
   const starts=[
     opts.map(o=>o.reduce((a,b)=>(b.st.atk+b.st.def_+b.st.hp*10>a.st.atk+a.st.def_+a.st.hp*10?b:a))),
@@ -674,10 +682,12 @@ function run(){
   let best=null;
   const quick=starts.map(s=>optimise(ctx,opts,s,false,1)).sort((a,b)=>b.score-a.score);
   for(const q of quick.slice(0,2)){const r=optimise(ctx,opts,q.picks,true);if(!best||r.score>best.score)best=r}
-  render(ctx,best);
-  lastBuild=packBuild(best); storeSet(key,lastBuild);
-  $('busy').textContent='';$('src').textContent='Résultat calculé maintenant, puis stocké sur cet appareil';
+  return best;
 }
+// build stocké (pré-calculé ou déjà calculé) ou calculé maintenant, puis stocké ; renvoie le build compact {g,s}
+function buildFor(ctx){const key=settingsKey(ctx);const saved=(PRE.version===DATA_VERSION&&PRE.builds[key])||storeGet(key);
+  if(saved){try{unpackBuild(ctx,saved);return saved}catch(e){}}
+  const best=optimiseBuild(ctx);if(!best) return null;const b=packBuild(best);storeSet(key,b);return b}
 
 function render(ctx,B){
   const {cls,lvl}=ctx, R=evaluate(ctx,B.picks,B.skills);
