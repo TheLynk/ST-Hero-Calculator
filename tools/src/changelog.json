@@ -1,6 +1,16 @@
 {
- "version": "1.7.8",
+ "version": "1.7.9",
  "entries": [
+  {
+   "v": "1.7.9",
+   "date": "2026-11-28",
+   "fr": [
+    "Onglet Champions : nouveau bouton « Trouver les graines avec les stats du jeu ». Le jeu ne montre pas les graines d'un champion. L'outil les déduit des PV, de l'ATQ et de la DEF du jeu, puis remplit les 3 cases. Exemple : Maladie a 80 ATQ, 65 DEF et 74 PV en graines."
+   ],
+   "en": [
+    "Champions tab: new “Find the seeds from the game stats” button. The game does not show the seeds of a champion. The tool deduces them from the game HP, ATK and DEF, then fills the 3 fields. Example: Malady has 80 ATK, 65 DEF and 74 HP seeds."
+   ]
+  },
   {
    "v": "1.7.8",
    "date": "2026-11-28",

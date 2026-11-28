@@ -1,5 +1,9 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.7.9 — 2026-11-28
+
+- Onglet Champions : nouveau bouton « Trouver les graines avec les stats du jeu ». Le jeu ne montre pas les graines d'un champion. L'outil les déduit des PV, de l'ATQ et de la DEF du jeu, puis remplit les 3 cases. Exemple : Maladie a 80 ATQ, 65 DEF et 74 PV en graines.
+
 ## v1.7.8 — 2026-11-28
 
 - Onglet Champions : nouveaux boutons « Exporter tout » et « Importer ». L'export crée un fichier de sauvegarde avec tous les champions, les presets de héros et les réglages. L'import remplace les données du navigateur par celles du fichier, puis recharge la page (il accepte aussi les anciens fichiers de presets).

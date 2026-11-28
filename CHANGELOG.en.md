@@ -1,5 +1,9 @@
 # Changelog — ST Hero Calculator
 
+## v1.7.9 — 2026-11-28
+
+- Champions tab: new “Find the seeds from the game stats” button. The game does not show the seeds of a champion. The tool deduces them from the game HP, ATK and DEF, then fills the 3 fields. Example: Malady has 80 ATK, 65 DEF and 74 HP seeds.
+
 ## v1.7.8 — 2026-11-28
 
 - Champions tab: new “Export all” and “Import” buttons. Export creates a backup file with all champions, hero presets and settings. Import replaces the browser data with the file data, then reloads the page (it also accepts old preset files).
