@@ -1,6 +1,42 @@
 {
- "version": "1.7.1",
+ "version": "1.7.4",
  "entries": [
+  {
+   "v": "1.7.4",
+   "date": "2026-11-28",
+   "fr": [
+    "Champions : ajout de la carte de collection du champion (commune +5 %, rare +10 %, mythique +25 %, comme pour les héros).",
+    "Vérifié sur Argon (rang 11 +20, niveau 50, titan, 80 graines de chaque, Avatar épique + Élément Lumière, Réacteur d'aura épique, carte rare) : 2 053 PV, 7 440 ATQ, 15 575 DEF, élément 135. Le jeu affiche 2 053, 7 438, 15 573 et 135 : écart de 0,0 %. Sans la carte, l'écart était de −9,1 % sur les 3 stats."
+   ],
+   "en": [
+    "Champions: champion collection card added (common +5%, rare +10%, mythic +25%, as for heroes).",
+    "Checked on Argon (rank 11 +20, level 50, titan, 80 seeds of each, epic Avatar + Light Element, epic Aura Reactor, rare card): 2,053 HP, 7,440 ATK, 15,575 DEF, element 135. The game shows 2,053, 7,438, 15,573 and 135: 0.0% gap. Without the card, the gap was −9.1% on the 3 stats."
+   ]
+  },
+  {
+   "v": "1.7.3",
+   "date": "2026-11-28",
+   "fr": [
+    "Champions : case « Âme de Parangon ». Sans elle, le niveau s'arrête à 50. Avec elle, le niveau va jusqu'à 100 (courbe Parangon du jeu) et, au niveau 100, la compétence de chef gagne 1 rang (amélioration upgPrgnlvl100 des données du jeu). Pas encore vérifié dans le jeu.",
+    "Champions : nouveau bloc « Stats affichées dans le jeu ». L'outil compare son calcul avec les valeurs du jeu et affiche l'écart pour PV, ATQ, DEF, esquive et élément (vert sous 1 %, jaune sous 5 %, rouge au-delà). La liste des champions montre l'écart le plus grand.",
+    "Une case choisit si le simulateur utilise les valeurs du jeu ou le calcul. Les valeurs déjà entrées restent utilisées."
+   ],
+   "en": [
+    "Champions: “Paragon soul” box. Without it, the level stops at 50. With it, the level goes up to 100 (game Paragon curve) and, at level 100, the leader skill gains 1 rank (upgPrgnlvl100 upgrade from the game data). Not checked in game yet.",
+    "Champions: new “Stats shown in game” block. The tool compares its result with the game values and shows the gap for HP, ATK, DEF, evasion and element (green under 1%, yellow under 5%, red above). The champion list shows the largest gap.",
+    "A box chooses whether the simulator uses the game values or the computed ones. Values already entered are still used."
+   ]
+  },
+  {
+   "v": "1.7.2",
+   "date": "2026-11-28",
+   "fr": [
+    "Onglets alignés sur le contenu de la page (même largeur et même marge), avec une ligne de séparation sous les onglets."
+   ],
+   "en": [
+    "Tabs aligned with the page content (same width and margin), with a separator line under the tabs."
+   ]
+  },
   {
    "v": "1.7.1",
    "date": "2026-11-28",

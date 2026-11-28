@@ -1,5 +1,20 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.7.4 — 2026-11-28
+
+- Champions : ajout de la carte de collection du champion (commune +5 %, rare +10 %, mythique +25 %, comme pour les héros).
+- Vérifié sur Argon (rang 11 +20, niveau 50, titan, 80 graines de chaque, Avatar épique + Élément Lumière, Réacteur d'aura épique, carte rare) : 2 053 PV, 7 440 ATQ, 15 575 DEF, élément 135. Le jeu affiche 2 053, 7 438, 15 573 et 135 : écart de 0,0 %. Sans la carte, l'écart était de −9,1 % sur les 3 stats.
+
+## v1.7.3 — 2026-11-28
+
+- Champions : case « Âme de Parangon ». Sans elle, le niveau s'arrête à 50. Avec elle, le niveau va jusqu'à 100 (courbe Parangon du jeu) et, au niveau 100, la compétence de chef gagne 1 rang (amélioration upgPrgnlvl100 des données du jeu). Pas encore vérifié dans le jeu.
+- Champions : nouveau bloc « Stats affichées dans le jeu ». L'outil compare son calcul avec les valeurs du jeu et affiche l'écart pour PV, ATQ, DEF, esquive et élément (vert sous 1 %, jaune sous 5 %, rouge au-delà). La liste des champions montre l'écart le plus grand.
+- Une case choisit si le simulateur utilise les valeurs du jeu ou le calcul. Les valeurs déjà entrées restent utilisées.
+
+## v1.7.2 — 2026-11-28
+
+- Onglets alignés sur le contenu de la page (même largeur et même marge), avec une ligne de séparation sous les onglets.
+
 ## v1.7.1 — 2026-11-28
 
 - Nouvel ordre des onglets : Héros, Champions, Équipe et quêtes.

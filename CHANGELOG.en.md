@@ -1,5 +1,20 @@
 # Changelog — ST Hero Calculator
 
+## v1.7.4 — 2026-11-28
+
+- Champions: champion collection card added (common +5%, rare +10%, mythic +25%, as for heroes).
+- Checked on Argon (rank 11 +20, level 50, titan, 80 seeds of each, epic Avatar + Light Element, epic Aura Reactor, rare card): 2,053 HP, 7,440 ATK, 15,575 DEF, element 135. The game shows 2,053, 7,438, 15,573 and 135: 0.0% gap. Without the card, the gap was −9.1% on the 3 stats.
+
+## v1.7.3 — 2026-11-28
+
+- Champions: “Paragon soul” box. Without it, the level stops at 50. With it, the level goes up to 100 (game Paragon curve) and, at level 100, the leader skill gains 1 rank (upgPrgnlvl100 upgrade from the game data). Not checked in game yet.
+- Champions: new “Stats shown in game” block. The tool compares its result with the game values and shows the gap for HP, ATK, DEF, evasion and element (green under 1%, yellow under 5%, red above). The champion list shows the largest gap.
+- A box chooses whether the simulator uses the game values or the computed ones. Values already entered are still used.
+
+## v1.7.2 — 2026-11-28
+
+- Tabs aligned with the page content (same width and margin), with a separator line under the tabs.
+
 ## v1.7.1 — 2026-11-28
 
 - New tab order: Hero, Champions, Team & quests.

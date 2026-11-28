@@ -253,7 +253,7 @@ Seule la 3e ligne donne les 2 chiffres. Mais elle utilise 2 règles inconnues, s
 - Les stats estimées des champions étaient fausses (Yami : 7 134 ATK au lieu de 13 546). Elles dépendent des renforcements et du familier. Depuis la 1.6.2, recopiez l'onglet Infos du champion.
 - Encore utile : une quête où un héros a un visage orange, rouge ou violet. Une quête facile (tous verts) et une quête difficile (au moins un héros en danger) sont les plus utiles.
 
-### Test 15 — Stats des champions (v1.6.3)
+### Test 15 — Stats des champions ✅ VÉRIFIÉ le 28/11/2026 sur Argon (v1.7.4)
 
 **Ce que l'outil calcule** (code du jeu, `Hero.GetUpgradeForStory`) :
 
@@ -262,6 +262,12 @@ Seule la 3e ligne donne les 2 chiffres. Mais elle utilise 2 règles inconnues, s
 - au-delà du rang 11, chaque renfort (+N) répète la dernière amélioration (+5 %) ;
 - + familier et chant d'aura, avec qualité, élément et esprit (mêmes règles que les objets des héros) ;
 - élément = valeur du rang (125 dès le rang 20) + éléments des objets.
+
+**Âme de Parangon (v1.7.3, pas encore testable) :** niveaux 51 à 100 et +1 rang de compétence de chef au niveau 100. À vérifier quand un champion aura l'âme.
+
+**Comparaison :** entrez les stats du jeu dans « Stats affichées dans le jeu » : l'outil affiche l'écart pour chaque stat.
+
+**Résultat (28/11, Argon rang 11 +20, niveau 50, titan, 80/80/80 graines, Avatar épique + Lumière, Réacteur d'aura épique, carte rare) :** outil 2 053 PV / 7 440 ATQ / 15 575 DEF / élément 135 ; jeu 2 053 / 7 438 / 15 573 / 135. ✓ La carte de collection du champion compte comme pour les héros (rare ×1,10).
 
 **Déjà juste :** élément de Lilu (125) et niveau de compétence (4/5 au rang 11 avec titan).
 
