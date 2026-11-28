@@ -1,5 +1,9 @@
 # Changelog — ST Hero Calculator
 
+## v1.9.1 — 2026-11-28
+
+- Flash quest calendar: simpler time setting. Enter the time left shown on the timer of the current flash quest (hours and minutes), then click “Set”: the tool finds the start time by itself. The hour list now shows your local time first, with UTC in brackets.
+
 ## v1.9.0 — 2026-11-28
 
 - Ninja and Sensei power: new formula, taken from the game code (Character.CalculateRawEvasionPower and CalculateCriticalRatePower). The “until damaged” innate skill bonuses count ×0.5 for the Ninja and ×0.75 for the Sensei. Example Sibyle (Sensei): the tool computes 404,753, the game shows 404,730 (before: 455,145, +12%).

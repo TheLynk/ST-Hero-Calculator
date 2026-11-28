@@ -1,6 +1,16 @@
 {
- "version": "1.9.0",
+ "version": "1.9.1",
  "entries": [
+  {
+   "v": "1.9.1",
+   "date": "2026-11-28",
+   "fr": [
+    "Calendrier des quêtes éclair : réglage de l'heure plus simple. Entrez le temps restant affiché sur le minuteur de la quête éclair en cours (heures et minutes), puis cliquez sur « Régler » : l'outil trouve l'heure de début tout seul. La liste des heures affiche maintenant l'heure de chez vous en premier, l'heure UTC entre parenthèses."
+   ],
+   "en": [
+    "Flash quest calendar: simpler time setting. Enter the time left shown on the timer of the current flash quest (hours and minutes), then click “Set”: the tool finds the start time by itself. The hour list now shows your local time first, with UTC in brackets."
+   ]
+  },
   {
    "v": "1.9.0",
    "date": "2026-11-28",

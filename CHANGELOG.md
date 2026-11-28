@@ -1,5 +1,9 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.9.1 — 2026-11-28
+
+- Calendrier des quêtes éclair : réglage de l'heure plus simple. Entrez le temps restant affiché sur le minuteur de la quête éclair en cours (heures et minutes), puis cliquez sur « Régler » : l'outil trouve l'heure de début tout seul. La liste des heures affiche maintenant l'heure de chez vous en premier, l'heure UTC entre parenthèses.
+
 ## v1.9.0 — 2026-11-28
 
 - Puissance des Ninjas et des Senseis : nouvelle formule, reprise du code du jeu (Character.CalculateRawEvasionPower et CalculateCriticalRatePower). Les bonus de la compétence innée « jusqu'à subir des dégâts » comptent à ×0,5 pour le Ninja et ×0,75 pour le Sensei. Exemple Sibyle (Sensei) : l'outil calcule 404 753, le jeu affiche 404 730 (avant : 455 145, +12 %).
