@@ -1,5 +1,9 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.9.2 — 2026-11-28
+
+- Calendrier des quêtes éclair : l'heure de début s'affiche seulement à l'heure de chez vous, avec le nom de votre fuseau (exemple : « Europe/Paris, UTC+1 »). L'heure UTC entre parenthèses, source de confusion, n'est plus affichée.
+
 ## v1.9.1 — 2026-11-28
 
 - Calendrier des quêtes éclair : réglage de l'heure plus simple. Entrez le temps restant affiché sur le minuteur de la quête éclair en cours (heures et minutes), puis cliquez sur « Régler » : l'outil trouve l'heure de début tout seul. La liste des heures affiche maintenant l'heure de chez vous en premier, l'heure UTC entre parenthèses.

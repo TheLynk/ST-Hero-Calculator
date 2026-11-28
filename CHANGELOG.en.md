@@ -1,5 +1,9 @@
 # Changelog — ST Hero Calculator
 
+## v1.9.2 — 2026-11-28
+
+- Flash quest calendar: the start time now shows only in your local time, with your time zone name (example: “Europe/Paris, UTC+1”). The confusing UTC time in brackets is no longer shown.
+
 ## v1.9.1 — 2026-11-28
 
 - Flash quest calendar: simpler time setting. Enter the time left shown on the timer of the current flash quest (hours and minutes), then click “Set”: the tool finds the start time by itself. The hour list now shows your local time first, with UTC in brackets.

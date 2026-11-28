@@ -1,6 +1,16 @@
 {
- "version": "1.9.1",
+ "version": "1.9.2",
  "entries": [
+  {
+   "v": "1.9.2",
+   "date": "2026-11-28",
+   "fr": [
+    "Calendrier des quêtes éclair : l'heure de début s'affiche seulement à l'heure de chez vous, avec le nom de votre fuseau (exemple : « Europe/Paris, UTC+1 »). L'heure UTC entre parenthèses, source de confusion, n'est plus affichée."
+   ],
+   "en": [
+    "Flash quest calendar: the start time now shows only in your local time, with your time zone name (example: “Europe/Paris, UTC+1”). The confusing UTC time in brackets is no longer shown."
+   ]
+  },
   {
    "v": "1.9.1",
    "date": "2026-11-28",
