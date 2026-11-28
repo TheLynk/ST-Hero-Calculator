@@ -1,5 +1,9 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.9.5 — 2026-11-28
+
+- Onglet Équipe et quêtes : le menu « Bonus de quête » devient 3 boutons avec l'icône du jeu (Bonus d'ATQ, Super bonus d'ATQ, Méga bonus d'ATQ), comme la qualité des objets. Un 2e clic sur le bouton actif retire le bonus. Le nom et l'effet s'affichent au survol.
+
 ## v1.9.4 — 2026-11-28
 
 - Onglet Équipe et quêtes : icônes du jeu ajoutées. Les tableaux « Meilleures équipes » et « Meilleurs champions » montrent l'icône de classe de chaque héros et l'icône du champion (nouvelle colonne Champion). Les colonnes Héros, Victoire, Tours, PV du monstre retirés et Risque de mort ont leur icône, comme les cartes du résultat (avec l'icône de barrière de l'élément).

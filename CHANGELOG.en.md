@@ -1,5 +1,9 @@
 # Changelog — ST Hero Calculator
 
+## v1.9.5 — 2026-11-28
+
+- Team and quests tab: the “Quest booster” menu becomes 3 buttons with the game icon (Power Booster, Super Power Booster, Mega Power Booster), like item quality. A 2nd click on the active button removes the booster. Name and effect show on hover.
+
 ## v1.9.4 — 2026-11-28
 
 - Team and quests tab: game icons added. The “Best teams” and “Best champions” tables show each hero's class icon and the champion icon (new Champion column). The Heroes, Win, Rounds, Monster HP removed and Death risk columns have their icon, like the result cards (with the element barrier icon).

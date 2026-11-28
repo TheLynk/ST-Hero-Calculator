@@ -1,6 +1,16 @@
 {
- "version": "1.9.4",
+ "version": "1.9.5",
  "entries": [
+  {
+   "v": "1.9.5",
+   "date": "2026-11-28",
+   "fr": [
+    "Onglet Équipe et quêtes : le menu « Bonus de quête » devient 3 boutons avec l'icône du jeu (Bonus d'ATQ, Super bonus d'ATQ, Méga bonus d'ATQ), comme la qualité des objets. Un 2e clic sur le bouton actif retire le bonus. Le nom et l'effet s'affichent au survol."
+   ],
+   "en": [
+    "Team and quests tab: the “Quest booster” menu becomes 3 buttons with the game icon (Power Booster, Super Power Booster, Mega Power Booster), like item quality. A 2nd click on the active button removes the booster. Name and effect show on hover."
+   ]
+  },
   {
    "v": "1.9.4",
    "date": "2026-11-28",
