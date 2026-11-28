@@ -1,5 +1,11 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.6.4 — 2026-11-28
+
+- Équipe et quêtes : icônes du jeu pour la zone, le champion, sa compétence de chef, l'âme de titan, le familier, le chant d'aura, la qualité, l'élément et l'esprit (icônes extraites des fichiers du jeu, outil tools/teamatlas.py).
+- Champion : les listes ne sont plus coupées. Chaque choix (objet, qualité, élément, esprit) a sa propre ligne, et le rang, les renforts et le niveau sont sur 2 colonnes.
+- Stats calculées du champion affichées avec les icônes PV, ATQ, DEF, esquive et élément.
+
 ## v1.6.3 — 2026-11-28
 
 - Champion : rang réel du jeu (rang 1 à 11 + renforts, par exemple 11 +18), niveau et âme de titan.

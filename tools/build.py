@@ -152,7 +152,7 @@ rd=lambda n:open(os.path.join(src,n),encoding='utf-8').read()
 a=rd('atlas.json'); ua=rd('uiatlas.json'); gm=rd('game.json'); sj=rd('sheet.js'); CL=json.loads(rd('changelog.json')); VER=CL['version']
 print('version de l\'outil',VER)
 sa=rd('scanatlas.json')
-tj=rd('sim.js').replace('/*SIMDATA*/null',rd('sim.json'))+'\n'+rd('team.js').replace('/*FACES*/null',rd('faces.json'))
+tj=rd('sim.js').replace('/*SIMDATA*/null',rd('sim.json'))+'\n'+rd('team.js').replace('/*FACES*/null',rd('faces.json')).replace('/*TEAMATLAS*/null',rd('teamatlas.json'))
 fill=lambda s:s.replace('/*TEAMJS*/',tj).replace('/*SCANATLAS*/null',sa).replace('/*DATA*/null',d).replace('/*ATLAS*/null',a).replace('/*UIATLAS*/null',ua).replace('/*GAME*/null',gm).replace('/*VERSTR*/',VER).replace('/*CHANGELOG*/null',json.dumps(CL,ensure_ascii=False)).replace('/*SHEETJS*/',sj).replace("/*PRECOMP*/{version:'',builds:{}}",json.dumps(P,separators=(',',':')))
 open(os.path.join(outdir,'index.html'),'w',encoding='utf-8').write(fill(t))
 e=t

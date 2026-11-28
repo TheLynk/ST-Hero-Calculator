@@ -1,5 +1,11 @@
 # Changelog — ST Hero Calculator
 
+## v1.6.4 — 2026-11-28
+
+- Team & quests: game icons for the area, the champion, its leader skill, the titan soul, the familiar, the aurasong, the quality, the element and the spirit (icons extracted from the game files, tools/teamatlas.py tool).
+- Champion: the lists are no longer cut. Each choice (item, quality, element, spirit) has its own line, and rank, reinforcements and level are on 2 columns.
+- Computed champion stats shown with the HP, ATK, DEF, evasion and element icons.
+
 ## v1.6.3 — 2026-11-28
 
 - Champion: real game rank (rank 1 to 11 + reinforcements, for example 11 +18), level and titan soul.

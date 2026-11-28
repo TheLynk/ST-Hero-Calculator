@@ -1,6 +1,20 @@
 {
- "version": "1.6.3",
+ "version": "1.6.4",
  "entries": [
+  {
+   "v": "1.6.4",
+   "date": "2026-11-28",
+   "fr": [
+    "Équipe et quêtes : icônes du jeu pour la zone, le champion, sa compétence de chef, l'âme de titan, le familier, le chant d'aura, la qualité, l'élément et l'esprit (icônes extraites des fichiers du jeu, outil tools/teamatlas.py).",
+    "Champion : les listes ne sont plus coupées. Chaque choix (objet, qualité, élément, esprit) a sa propre ligne, et le rang, les renforts et le niveau sont sur 2 colonnes.",
+    "Stats calculées du champion affichées avec les icônes PV, ATQ, DEF, esquive et élément."
+   ],
+   "en": [
+    "Team & quests: game icons for the area, the champion, its leader skill, the titan soul, the familiar, the aurasong, the quality, the element and the spirit (icons extracted from the game files, tools/teamatlas.py tool).",
+    "Champion: the lists are no longer cut. Each choice (item, quality, element, spirit) has its own line, and rank, reinforcements and level are on 2 columns.",
+    "Computed champion stats shown with the HP, ATK, DEF, evasion and element icons."
+   ]
+  },
   {
    "v": "1.6.3",
    "date": "2026-11-28",

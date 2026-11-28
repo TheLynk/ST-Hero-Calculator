@@ -44,6 +44,7 @@ Pour que les utilisateurs reçoivent la mise à jour : poussez sur `main`, puis 
 | `tools/src/ocr.js`, `tools/mkocr.py` | Lecteur de texte et son script de création |
 | `tools/src/game.json`, `atlas.json`, `uiatlas.json` | Données et images extraites du jeu |
 | `tools/src/sim.js`, `tools/src/team.js` | Moteur de combat de quête et onglet « Équipe et quêtes » |
+| `tools/src/teamatlas.json`, `tools/teamatlas.py` | Icônes des champions, compétences de chef et zones de quête, et leur script |
 | `tools/src/faces.json`, `tools/faces.py` | Visages de note de quête du jeu et leur script |
 | `tools/src/sim.json`, `tools/simdata.py` | Données de combat extraites du jeu (quêtes, modificateurs, champions) et leur script |
 | `tools/src/precomp.json` | Meilleurs builds pré-calculés |

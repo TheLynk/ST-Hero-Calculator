@@ -7,7 +7,7 @@ const TT={fr:{tabHero:'Héros',tabTeam:'Équipe et quêtes',quest:'Quête',area:
   aura:'Chant d’aura',booster:'Bonus de quête',heroes:'Héros (presets)',emptyP:'— vide —',pick:'— choisir un preset —',sims:'Simulations',run:'Simuler',
   bestTeam:'Meilleure équipe',bestChamp:'Meilleur champion',res:'Résultat',win:'Victoire',rounds:'Tours (moy.)',mhp:'PV du monstre',death:'Risque de mort',grade:'Note',
   dmg:'Dégâts / combat',noPreset:'Aucun preset enregistré. Créez vos héros dans l’onglet Héros (mode manuel → Mes héros).',needHero:'Choisissez au moins un héros.',
-  busy:'Calcul…',party:'Équipe de',slots:'emplacements',chStats:'Corriger les stats (facultatif)',chHelp:'Si le calcul diffère de l’onglet Infos du jeu, entrez les vraies valeurs. Vide = calcul.',reinf:'Renforts (+)',fam:'Familier',qual:'Qualité',spirit:'Esprit',calc:'Calcul :',ovOn:'Stats corrigées à la main : elles remplacent le calcul.',savedC:'Chaque champion utilise son rang, son familier et son chant d’aura enregistrés (ou les valeurs par défaut).',el:'Élément',eva:'Esq.',crit:'Crit',thr:'Menace',
+  busy:'Calcul…',party:'Équipe de',slots:'emplacements',chStats:'Corriger les stats (facultatif)',chHelp:'Si le calcul diffère de l’onglet Infos du jeu, entrez les vraies valeurs. Vide = calcul.',reinf:'Renforts (+)',fam:'Familier',qual:'Qualité',spirit:'Esprit',calc:'Calcul',noEl:'aucun élément',noSp:'aucun esprit',ovOn:'Stats corrigées à la main : elles remplacent le calcul.',savedC:'Chaque champion utilise son rang, son familier et son chant d’aura enregistrés (ou les valeurs par défaut).',el:'Élément',eva:'Esq.',crit:'Crit',thr:'Menace',
   topTeams:'Meilleures équipes parmi vos presets',topChamps:'Champions classés pour cette équipe',combos:'combinaisons testées',
   note:'Moteur repris du code du jeu (Quest.DoCombat), lu sans lancer le jeu. Note par héros, avec le visage du jeu : SSS = jamais mort, S < 15 %, A < 40 %, B < 60 %, C < 100 %, D = toujours mort. À vérifier avec la note affichée dans le jeu (A_VERIFIER.md, test 14).',
   prog:'PV du monstre retirés',shatter:'Barrière brisée',notShatter:'Barrière NON brisée : −80 % de dégâts',power:'Puissance d’élément'},
@@ -16,12 +16,15 @@ const TT={fr:{tabHero:'Héros',tabTeam:'Équipe et quêtes',quest:'Quête',area:
   aura:'Aurasong',booster:'Quest booster',heroes:'Heroes (presets)',emptyP:'— empty —',pick:'— choose a preset —',sims:'Simulations',run:'Simulate',
   bestTeam:'Best team',bestChamp:'Best champion',res:'Result',win:'Win',rounds:'Rounds (avg.)',mhp:'Monster HP',death:'Death risk',grade:'Rating',
   dmg:'Damage / fight',noPreset:'No saved preset. Create your heroes in the Hero tab (manual mode → My heroes).',needHero:'Choose at least one hero.',
-  busy:'Computing…',party:'Party of',slots:'slots',chStats:'Correct the stats (optional)',chHelp:'If the result differs from the game Info tab, enter the real values. Empty = computed.',reinf:'Reinforcements (+)',fam:'Familiar',qual:'Quality',spirit:'Spirit',calc:'Computed:',ovOn:'Stats corrected by hand: they replace the computed values.',savedC:'Each champion uses its saved rank, familiar and aurasong (or the defaults).',el:'Element',eva:'Eva.',crit:'Crit',thr:'Threat',
+  busy:'Computing…',party:'Party of',slots:'slots',chStats:'Correct the stats (optional)',chHelp:'If the result differs from the game Info tab, enter the real values. Empty = computed.',reinf:'Reinforcements (+)',fam:'Familiar',qual:'Quality',spirit:'Spirit',calc:'Computed',noEl:'no element',noSp:'no spirit',ovOn:'Stats corrected by hand: they replace the computed values.',savedC:'Each champion uses its saved rank, familiar and aurasong (or the defaults).',el:'Element',eva:'Eva.',crit:'Crit',thr:'Threat',
   topTeams:'Best teams among your presets',topChamps:'Champions ranked for this team',combos:'combinations tested',
   note:'Engine taken from the game code (Quest.DoCombat), read without running the game. Hero rating, with the game face: SSS = never dies, S < 15%, A < 40%, B < 60%, C < 100%, D = always dies. To check against the rating shown in game (A_VERIFIER.md, test 14).',
   prog:'Monster HP removed',shatter:'Barrier shattered',notShatter:'Barrier NOT shattered: −80% damage',power:'Element power'}}[EN?'en':'fr'];
 const ELN={fire:['Feu','Fire'],water:['Eau','Water'],air:['Air','Air'],earth:['Terre','Earth'],light:['Lumière','Light'],dark:['Ténèbres','Dark']};
 const GRADE=['D','C','B','A','S','SSS'];
+const TA=/*TEAMATLAS*/null; // icônes du jeu : champions, compétences de chef, zones, âme de titan
+const ta=(n,sz=32)=>{if(!TA) return '';const i=TA.i[n];if(i==null) return '';const c=TA.cols;return `<span class="ui" style="display:inline-block;flex:none;width:${sz}px;height:${sz}px;background-image:url(${TA.img});background-size:${c*sz}px auto;background-position:-${(i%c)*sz}px -${Math.floor(i/c)*sz}px" aria-hidden="true"></span>`};
+const areaIco=(f,sz)=>ta('icon_global_questarea_'+f+'_small',sz)||ta('icon_global_questarea_flashquest_bg',sz);
 const FACES=/*FACES*/null; // visages de note du jeu (icon_shop_face_D…SSS)
 const face=(g,sz=28)=>`<span class="face">${FACES&&FACES[g]?`<img src="${FACES[g]}" width="${sz}" height="${sz}" alt="">`:''}<b class="grade g${g}">${GRADE[g]}</b></span>`;
 const gOf=d=>d<=0?5:d<0.15?4:d<0.4?3:d<0.6?2:d<1?1:0;
@@ -35,7 +38,7 @@ nav.innerHTML=`<button type="button" role="tab" data-t="hero" class="on" aria-se
 main.parentNode.insertBefore(nav,main);
 const tm=document.createElement('main');tm.id='team';tm.hidden=true;main.parentNode.insertBefore(tm,main.nextSibling);
 const st=document.createElement('style');st.textContent=`.tabs{display:flex;gap:6px;padding:0 16px;max-width:1400px;margin:8px auto 0}.tabs button{min-height:44px;padding:0 16px;border-radius:10px 10px 0 0;border:1px solid var(--line);border-bottom:0;background:var(--panel2);color:var(--mut);font:600 15px system-ui,sans-serif;cursor:pointer;display:inline-flex;gap:8px;align-items:center}.tabs button.on{background:var(--panel);color:var(--txt);border-color:var(--acc)}
-#team .tgear{border:1px solid var(--line);border-radius:10px;padding:6px 10px 10px;margin:10px 0 0}#team .tgear legend{font-size:13px;color:var(--mut);padding:0 4px}#team .tgear select{margin-top:6px}#team .tgear .g2{display:grid;grid-template-columns:3fr 2fr;gap:6px}#team .tgear .g2b{display:grid;grid-template-columns:1fr 1fr;gap:6px}#team .tslot{display:grid;grid-template-columns:28px minmax(0,1fr);gap:8px;align-items:center;margin:6px 0}#team .tslot b{font-size:14px;color:var(--mut)}#team select,#team input[type=number]{width:100%}
+#team .tgear{border:1px solid var(--line);border-radius:10px;padding:6px 10px 10px;margin:10px 0 0}#team .tgear legend{font-size:13px;color:var(--mut);padding:0 4px}#team .ti{display:grid;grid-template-columns:38px minmax(0,1fr);gap:8px;align-items:center;margin-top:6px}#team .ti>span{display:flex;justify-content:center}#team .tit{display:flex;align-items:center;gap:6px;margin-top:30px;cursor:pointer}#team .lead{display:flex;gap:8px;align-items:center;margin-top:6px}#team .cstat{display:inline-flex;flex-wrap:wrap;gap:4px 10px;align-items:center;font-weight:600;color:var(--txt)}#team .cstat .ui{vertical-align:middle}#team .sr{position:absolute;left:-9999px}#team .tslot{display:grid;grid-template-columns:28px minmax(0,1fr);gap:8px;align-items:center;margin:6px 0}#team .tslot b{font-size:14px;color:var(--mut)}#team select,#team input[type=number]{width:100%}
 #team .kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:8px 0 14px}#team .kpi div{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px}#team .kpi span{display:block;font-size:12px;color:var(--mut)}#team .kpi b{font-size:22px}
 #team .g5{color:#5cc28a}#team .g4{color:#9bd35c}#team .g3{color:#e6c34a}#team .g2{color:#f59e0b}#team .g1,#team .g0{color:var(--acc2)}#team .grade{font-weight:800}
 #team .face{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}#team .face img{display:block}#team .bar{height:6px;border-radius:3px;background:var(--line);overflow:hidden}#team .bar i{display:block;height:100%;background:var(--acc)}
@@ -116,21 +119,25 @@ function initTeam(){
   const miniOpts=`<option value="">${TT.none}</option>`+['agile','huge','dire','wealthy','epic'].filter(u=>SD.mods[u]).map(u=>`<option value="${u}">${esc((L(SD.mods[u].n)||u).replace('{0}','').trim())}</option>`).join('');
   const QOPT=[[1,EN?'Normal':'Normale'],[1.25,EN?'Superior':'Supérieure'],[1.5,EN?'Flawless':'Impeccable'],[2,EN?'Epic':'Épique'],[3,EN?'Legendary':'Légendaire']];
   const enN=e=>EN?e.name:(e.fr||e.name);
+  const eList=k=>D.enchants.filter(e=>e.kind===k).sort((a,b)=>b.tier-a.tier||enN(a).localeCompare(enN(b))).map(e=>`<option value="${esc(e.name)}">${esc(enN(e))} · T${e.tier}${k==='element'?' · '+esc(EN?e.element:(ELFR[e.element]||e.element)):''}</option>`).join('');
   const eOpts=k=>`<option value="">—</option>`+D.enchants.filter(e=>e.kind===k).sort((a,b)=>b.tier-a.tier||enN(a).localeCompare(enN(b))).map(e=>`<option value="${esc(e.name)}">T${e.tier} ${esc(enN(e))}</option>`).join('');
-  const gearRow=(id,lab,type)=>`<fieldset class="tgear"><legend>${lab}</legend><div class="g2"><select id="t${id}I" aria-label="${lab}"><option value="">${TT.none}</option>${D.items.filter(i=>i.type===type).sort((a,b)=>b.tier-a.tier).map(i=>`<option value="${esc(i.name)}">T${i.tier} ${esc(nm(i))}</option>`).join('')}</select><select id="t${id}Q" aria-label="${TT.qual}">${QOPT.map(([v,n])=>`<option value="${v}"${v===3?' selected':''}>${n}</option>`).join('')}</select></div>
-    <div class="g2b"><select id="t${id}E" aria-label="${TT.el}"><option value="">${TT.el} —</option>${eOpts('element').replace('<option value="">—</option>','')}</select><select id="t${id}S" aria-label="${TT.spirit}"><option value="">${TT.spirit} —</option>${eOpts('spirit').replace('<option value="">—</option>','')}</select></div></fieldset>`;
+  const gearRow=(id,lab,type)=>`<fieldset class="tgear"><legend>${lab}</legend>
+    <div class="ti"><span id="t${id}Ii"></span><select id="t${id}I" aria-label="${lab}"><option value="">${TT.none}</option>${D.items.filter(i=>i.type===type).sort((a,b)=>b.tier-a.tier).map(i=>`<option value="${esc(i.name)}">${esc(nm(i))} · T${i.tier}</option>`).join('')}</select></div>
+    <div class="ti"><span id="t${id}Qi"></span><select id="t${id}Q" aria-label="${TT.qual}">${QOPT.map(([v,n])=>`<option value="${v}"${v===3?' selected':''}>${n}</option>`).join('')}</select></div>
+    <div class="ti"><span id="t${id}Ei"></span><select id="t${id}E" aria-label="${TT.el}"><option value="">— ${TT.noEl} —</option>${eList('element')}</select></div>
+    <div class="ti"><span id="t${id}Si"></span><select id="t${id}S" aria-label="${TT.spirit}"><option value="">— ${TT.noSp} —</option>${eList('spirit')}</select></div></fieldset>`;
   tm.innerHTML=`<aside class="card">
   <h2>${TT.quest}</h2>
-  <label for="tArea">${TT.area}</label><select id="tArea">${og(TT.areas,reg)}${og(TT.flash,fl)}${og(TT.special,oth)}</select>
+  <label for="tArea">${TT.area}</label><div class="ti"><span id="tAreaI"></span><select id="tArea">${og(TT.areas,reg)}${og(TT.flash,fl)}${og(TT.special,oth)}</select></div>
   <label for="tDiff">${TT.diff}</label><select id="tDiff"></select>
   <div class="seg" id="tKind"><button type="button" data-v="0" class="on">${TT.normal}</button><button type="button" data-v="1">${TT.boss}</button></div>
   <div class="row2"><div><label for="tMini">${TT.mini}</label><select id="tMini">${miniOpts}</select></div><div><label for="tBar">${TT.barrier}</label><select id="tBar"></select></div></div>
   <p class="note" id="tQinfo"></p>
   <h2 style="margin-top:18px">${TT.champ}</h2>
-  <select id="tChamp">${champOpts}</select>
-  <div class="row4"><div><label for="tCRank">${TT.rank}</label><select id="tCRank">${Array.from({length:11},(_,i)=>`<option value="${i+1}"${i===10?' selected':''}>${i+1}</option>`).join('')}</select></div>
+  <div class="ti"><span id="tChampI"></span><select id="tChamp" aria-label="${TT.champ}">${champOpts}</select></div>
+  <div class="row2"><div><label for="tCRank">${TT.rank}</label><select id="tCRank">${Array.from({length:11},(_,i)=>`<option value="${i+1}"${i===10?' selected':''}>${i+1}</option>`).join('')}</select></div>
   <div><label for="tCRe">${TT.reinf}</label><input id="tCRe" type="number" min="0" max="999" value="0"></div>
-  <div><label for="tCLvl">${TT.lvl}</label><input id="tCLvl" type="number" min="1" max="100" value="50"></div><div><label class="chk" style="margin-top:28px"><input type="checkbox" id="tCTitan" checked> ${TT.titan}</label></div></div>
+  <div><label for="tCLvl">${TT.lvl}</label><input id="tCLvl" type="number" min="1" max="100" value="50"></div><div><label class="chk tit" for="tCTitan"><input type="checkbox" id="tCTitan" checked>${ta('championtitansoul',28)}<span>${TT.titan}</span></label></div></div>
   ${gearRow('Fam',TT.fam,'Familiar')}${gearRow('Aur',TT.aura,'Aurasong')}
   <p class="note" id="tCInfo"></p>
   <details><summary>${TT.chStats}</summary><p class="note">${TT.chHelp}</p><div class="row4" style="grid-template-columns:repeat(auto-fit,minmax(78px,1fr))"><div><label for="tCHp">${EN?'HP':'PV'}</label><input id="tCHp" type="number" min="0"></div><div><label for="tCAtk">ATK</label><input id="tCAtk" type="number" min="0"></div><div><label for="tCDef">DEF</label><input id="tCDef" type="number" min="0"></div><div><label for="tCEva">${TT.eva} %</label><input id="tCEva" type="number" min="0" max="100"></div><div><label for="tCEl">${TT.el}</label><input id="tCEl" type="number" min="0"></div></div></details>
@@ -160,13 +167,17 @@ function champLoad(u){const v=cGet()[u]||{};CF.forEach(k=>{const e=$t(k),x=v[k]!
 function champSave(){const u=$t('tChamp').value;if(!u) return;const a=cGet();a[u]={};CF.forEach(k=>{const x=fv(k);if(x!=='') a[u][k]=x});try{localStorage.setItem(CSK,JSON.stringify(a))}catch(e){}}
 const gearOf=()=>['Fam','Aur'].map(x=>({i:$t('t'+x+'I').value,q:$t('t'+x+'Q').value,e:$t('t'+x+'E').value,s:$t('t'+x+'S').value}));
 const cStats=u=>champStats(u,Math.max(1,Math.min(100,+$t('tCLvl').value||1)),+$t('tCRank').value,Math.max(0,+$t('tCRe').value||0),$t('tCTitan').checked,gearOf());
-function champFill(){const u=$t('tChamp').value;const on=!!u;CF.forEach(k=>$t(k).disabled=!on);
+const QIC={'1':'q_common','1.25':'q_uncommon','1.5':'q_flawless','2':'q_epic','3':'q_legendary'};
+function gearIcons(){for(const x of ['Fam','Aur']){const it=ITEM[$t('t'+x+'I').value];$t('t'+x+'Ii').innerHTML=it?icoItem(it,36):'';$t('t'+x+'Qi').innerHTML=ui(QIC[$t('t'+x+'Q').value]||'q_legendary',30);
+  for(const k of ['E','S']){const e=ENCH[$t('t'+x+k).value];$t('t'+x+k+'i').innerHTML=e?icoItem(e,36):''}}
+  const u=$t('tChamp').value;$t('tChampI').innerHTML=u?ta('icon_global_'+u,36):''}
+function champFill(){const u=$t('tChamp').value;const on=!!u;CF.forEach(k=>$t(k).disabled=!on);gearIcons();
   if(!on){$t('tCInfo').textContent='';return}
   const s=cStats(u),c=SD.champs[u];
   $t('tCAtk').placeholder=s.atk;$t('tCDef').placeholder=s.def;$t('tCHp').placeholder=s.hp;$t('tCEva').placeholder=Math.round(s.eva*100);$t('tCEl').placeholder=s.el;
   const m=SD.mods[c.sk[s.sk-1]];
   const am=auraMod();const ov=['tCHp','tCAtk','tCDef','tCEva','tCEl'].filter(k=>$t(k).value!=='');if(ov.length) tm.querySelector('#tCInfo+details').open=true;
-  $t('tCInfo').innerHTML=`${ov.length?`<b class="g2">${TT.ovOn}</b><br>`:''}<b>${TT.calc}</b> ${EN?'HP':'PV'} ${fmt(s.hp)} · ATK ${fmt(s.atk)} · DEF ${fmt(s.def)} · ${TT.eva} ${Math.round(s.eva*100)} % · ${TT.el} ${fmt(s.el)}<br>${TT.skill} ${s.sk}/5${m?' · '+esc(L(m.n)||'')+' : '+modTxt(m):''}${am?'<br>'+esc(L(am.n)||'')+' : '+modTxt(am):''}`;}
+  $t('tCInfo').innerHTML=`${ov.length?`<b class="g2">${TT.ovOn}</b><br>`:''}<span class="cstat" title="${TT.calc}"><span class="sr">${TT.calc} :</span>${ui('hp',18)}${fmt(s.hp)} ${ui('atk',18)}${fmt(s.atk)} ${ui('defense',18)}${fmt(s.def)} ${ui('eva',18)}${Math.round(s.eva*100)} % ${ui('icon_global_element_'+SD.champs[u].el,18)}${fmt(s.el)}</span><div class="lead">${ta('icon_global_skill_hero_'+c.sk[s.sk-1],32)}<span>${TT.skill} ${s.sk}/5${m?' · <b>'+esc(L(m.n)||'')+'</b> : '+modTxt(m):''}</span></div>${am?`<div class="lead">${icoItem(ITEM[$t('tAurI').value],32)}<span><b>${esc(L(am.n)||'')}</b> : ${modTxt(am)}</span></div>`:''}`;}
 const auraMod=()=>{const n=$t('tAurI').value;const g=n&&GM&&GM.items&&GM.items[n];const u=g&&g.uid;return u&&SD.mods[u]&&SD.mods[u].isAurastone?SD.mods[u]:null};
 function modTxt(m){const o=[];const P=(k,l)=>{if(m[k]) o.push(`${m[k]>0?'+':''}${Math.round(m[k]*100)} % ${l}`)};
   P('atk','ATK');P('def','DEF');P('hp',EN?'HP':'PV');P('evasion',EN?'evasion':'esquive');P('critical','crit');P('critMult',EN?'crit dmg':'dégâts crit');
@@ -178,7 +189,7 @@ function refreshPresets(){const a=plist(),n=partySize();
   $t('tSlots').innerHTML=a.some(Boolean)?Array.from({length:n},(_,k)=>`<div class="tslot"><b>${k+1}</b><select data-s="${k}" aria-label="${TT.heroes} ${k+1}">${opts}</select></div>`).join(''):`<p class="note">${TT.noPreset}</p>`;
   tm.querySelectorAll('.tslot select').forEach((s,k)=>{if(old[k]!=null) s.value=old[k]});}
 function partySize(){const q=curQuest();return Math.max(1,(q?q.p:4)-($t('tChamp').value?1:0))}
-function upd(){const q=curQuest();if(!q) return;
+function upd(){const q=curQuest();if(!q) return;$t('tAreaI').innerHTML=areaIco(q.f,36);
   const bel=q.el||[];$t('tBar').innerHTML=bel.length?bel.map(e=>`<option value="${e}">${esc(L(ELN[e])||e)}</option>`).join(''):`<option value="">${TT.none}</option>`;$t('tBar').disabled=!bel.length;
   $t('tMini').disabled=!!(q.b||q.fl||!q.mb);if($t('tMini').disabled) $t('tMini').value='';
   $t('tQinfo').innerHTML=`${esc(L(SD.names[q.f]&&(q.b?SD.names[q.f].boss:SD.names[q.f].mob)))} · ${EN?'HP':'PV'} ${fmt(q.hp)} · ${EN?'damage':'dégâts'} ${fmt(q.dmg)} (${EN?'area':'zone'} ${fmt(q.aoe)}, ${pc(q.ao)}) · ${EN?'target DEF':'DEF cible'} ${fmt(q.td)} · crit ${pc(q.cr)} ×${q.cm}${q.acc?` · ${EN?'accuracy':'précision'} ${pc(q.acc)}`:''}${q.bp?` · ${TT.barrier} ${fmt(q.bp)}`:''}`;
@@ -202,7 +213,7 @@ function show(r,party,q,opts){
   let pw=0;for(const h of party){if(h.elem===opts.bel) pw+=h.el;else if(h.elem==='Any'||h.elem==='all') pw+=Math.round(h.el*0.5)}pw=Math.round(pw*r.mi.bpm);
   const tot=r.dmg.reduce((a,b)=>a+b,0)||1;
   $t('tRes').innerHTML=`<div class="kpi"><div><span>${TT.win}</span><b>${pc(r.win)}</b>${bar(r.win)}</div><div><span>${TT.rounds}</span><b>${r.rounds?r.rounds.toFixed(1).replace('.',EN?'.':','):'—'}</b><span>${r.minR?r.minR+'–'+r.maxR:''}</span></div><div><span>${TT.mhp}</span><b>${fmt(r.mHp)}</b><span>${TT.prog} : ${pc(r.prog)}</span></div>${q.bp?`<div><span>${TT.barrier} (${esc(L(ELN[opts.bel])||'')})</span><b class="${pw>=q.bp?'g5':'g1'}">${fmt(pw)} / ${fmt(q.bp)}</b><span>${pw>=q.bp?TT.shatter:TT.notShatter}</span></div>`:''}</div>
-  <div class="scroll"><table><thead><tr><th>${TT.heroes}</th><th class="n">ATK</th><th class="n">DEF</th><th class="n">${EN?'HP':'PV'}</th><th class="n">${TT.crit}</th><th class="n">${TT.eva}</th><th class="n">${TT.thr}</th><th class="n">${TT.dmg}</th><th class="n">${TT.death}</th><th>${TT.grade}</th></tr></thead><tbody>${party.map((h,k)=>`<tr><td>${h.ic?icoClass(h.ic,28):''} <b>${esc(h.name)}</b><div class="alt">${esc(h.cname)}</div></td><td class="n">${fmt(h.atk)}</td><td class="n">${fmt(h.def)}</td><td class="n">${fmt(h.hp)}</td><td class="n">${Math.round(h.crit*100)} %</td><td class="n">${Math.round(h.eva*100)} %</td><td class="n">${fmt(h.aggro)}</td><td class="n">${fmt(r.dmg[k])}<div class="alt">${pc(r.dmg[k]/tot)}</div></td><td class="n">${pc(r.death[k])}</td><td>${face(r.grade[k])}</td></tr>`).join('')}</tbody></table></div>
+  <div class="scroll"><table><thead><tr><th>${TT.heroes}</th><th class="n">ATK</th><th class="n">DEF</th><th class="n">${EN?'HP':'PV'}</th><th class="n">${TT.crit}</th><th class="n">${TT.eva}</th><th class="n">${TT.thr}</th><th class="n">${TT.dmg}</th><th class="n">${TT.death}</th><th>${TT.grade}</th></tr></thead><tbody>${party.map((h,k)=>`<tr><td>${h.ic?icoClass(h.ic,28):h.champ?ta('icon_global_'+h.champ,28):''} <b>${esc(h.name)}</b><div class="alt">${esc(h.cname)}</div></td><td class="n">${fmt(h.atk)}</td><td class="n">${fmt(h.def)}</td><td class="n">${fmt(h.hp)}</td><td class="n">${Math.round(h.crit*100)} %</td><td class="n">${Math.round(h.eva*100)} %</td><td class="n">${fmt(h.aggro)}</td><td class="n">${fmt(r.dmg[k])}<div class="alt">${pc(r.dmg[k]/tot)}</div></td><td class="n">${pc(r.death[k])}</td><td>${face(r.grade[k])}</td></tr>`).join('')}</tbody></table></div>
   <p class="note">${r.n} ${TT.sims.toLowerCase()}. ${TT.note}</p>`;}
 // ----- recherches -----
 const cmpR=(a,b)=>b.r.win-a.r.win||Math.max(...a.r.death)-Math.max(...b.r.death)||(a.r.win?a.r.rounds-b.r.rounds:b.r.prog-a.r.prog);
@@ -228,6 +239,6 @@ async function bestChamp(){const {q,opts}=setup();const pre=plist();const heroes
     const party=[ch].concat(heroes.slice(0,Math.max(1,q.p-1)).map(h=>({...h})));out.push({u,r:S.run(q,mods,party,{...opts,n:Math.min(1000,opts.n)})})}
   $t('tChamp').value=keep;champLoad(keep);champFill();
   out.sort(cmpR);
-  box.innerHTML=`<h2>${TT.topChamps}</h2><p class="note">${TT.savedC}</p><div class="scroll"><table><thead><tr><th>#</th><th>${TT.champ}</th><th class="n">${TT.win}</th><th class="n">${TT.rounds}</th><th class="n">${TT.prog}</th><th class="n">${TT.death} max</th></tr></thead><tbody>${out.map((x,i)=>`<tr><td>${i+1}</td><td>${esc(L(SD.champs[x.u].n))}</td><td class="n">${pc(x.r.win)}</td><td class="n">${rTxt(x.r)}</td><td class="n">${pc(x.r.prog)}</td><td class="n">${face(gOf(Math.max(...x.r.death)),22)} ${pc(Math.max(...x.r.death))}</td></tr>`).join('')}</tbody></table></div>`;}
+  box.innerHTML=`<h2>${TT.topChamps}</h2><p class="note">${TT.savedC}</p><div class="scroll"><table><thead><tr><th>#</th><th>${TT.champ}</th><th class="n">${TT.win}</th><th class="n">${TT.rounds}</th><th class="n">${TT.prog}</th><th class="n">${TT.death} max</th></tr></thead><tbody>${out.map((x,i)=>`<tr><td>${i+1}</td><td>${ta('icon_global_'+x.u,26)} ${esc(L(SD.champs[x.u].n))}</td><td class="n">${pc(x.r.win)}</td><td class="n">${rTxt(x.r)}</td><td class="n">${pc(x.r.prog)}</td><td class="n">${face(gOf(Math.max(...x.r.death)),22)} ${pc(Math.max(...x.r.death))}</td></tr>`).join('')}</tbody></table></div>`;}
 window.STC_team={fighterFromPreset,champStats,setup,run:()=>go()};
 })();
