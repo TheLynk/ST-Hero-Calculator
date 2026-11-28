@@ -1,6 +1,26 @@
 {
- "version": "1.9.9",
+ "version": "1.10.1",
  "entries": [
+  {
+   "v": "1.10.1",
+   "date": "2026-11-28",
+   "fr": [
+    "Calendrier des quêtes éclair : le réglage de l'heure est maintenant replié sous une ligne « Réglage de l'heure · début à 16:00 chez vous ». Cliquez sur cette ligne pour l'ouvrir ou le fermer. Il reste ouvert tant qu'aucune heure n'a été réglée."
+   ],
+   "en": [
+    "Flash quest calendar: the time setting is now folded under a line “Time setting · start at 16:00 your time”. Click this line to open or close it. It stays open until a time has been set."
+   ]
+  },
+  {
+   "v": "1.10.0",
+   "date": "2026-11-28",
+   "fr": [
+    "Onglet Équipe et quêtes : nouveau bouton « Meilleure équipe + champion ». Il teste chaque champion avec chaque combinaison de vos presets, puis simule de nouveau les 10 meilleures avec plus de combats. Le tableau montre le champion et les héros de chaque équipe. La meilleure équipe est ensuite placée dans le calculateur (champion et héros), et la simulation se relance."
+   ],
+   "en": [
+    "Team and quests tab: new “Best team + champion” button. It tests every champion with every combination of your presets, then simulates the top 10 again with more fights. The table shows the champion and the heroes of each team. The best team is then placed in the calculator (champion and heroes), and the simulation runs again."
+   ]
+  },
   {
    "v": "1.9.9",
    "date": "2026-11-28",

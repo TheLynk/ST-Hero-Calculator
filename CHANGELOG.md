@@ -1,5 +1,13 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.10.1 — 2026-11-28
+
+- Calendrier des quêtes éclair : le réglage de l'heure est maintenant replié sous une ligne « Réglage de l'heure · début à 16:00 chez vous ». Cliquez sur cette ligne pour l'ouvrir ou le fermer. Il reste ouvert tant qu'aucune heure n'a été réglée.
+
+## v1.10.0 — 2026-11-28
+
+- Onglet Équipe et quêtes : nouveau bouton « Meilleure équipe + champion ». Il teste chaque champion avec chaque combinaison de vos presets, puis simule de nouveau les 10 meilleures avec plus de combats. Le tableau montre le champion et les héros de chaque équipe. La meilleure équipe est ensuite placée dans le calculateur (champion et héros), et la simulation se relance.
+
 ## v1.9.9 — 2026-11-28
 
 - Onglet Équipe et quêtes, bouton « Meilleur champion » : il fonctionne maintenant sans héros choisi. L'outil choisit d'abord la meilleure équipe parmi vos presets (avec le champion affiché, ou votre 1er champion configuré), puis classe les champions pour cette équipe et choisit le meilleur.

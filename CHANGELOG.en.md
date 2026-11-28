@@ -1,5 +1,13 @@
 # Changelog — ST Hero Calculator
 
+## v1.10.1 — 2026-11-28
+
+- Flash quest calendar: the time setting is now folded under a line “Time setting · start at 16:00 your time”. Click this line to open or close it. It stays open until a time has been set.
+
+## v1.10.0 — 2026-11-28
+
+- Team and quests tab: new “Best team + champion” button. It tests every champion with every combination of your presets, then simulates the top 10 again with more fights. The table shows the champion and the heroes of each team. The best team is then placed in the calculator (champion and heroes), and the simulation runs again.
+
 ## v1.9.9 — 2026-11-28
 
 - Team and quests tab, “Best champion” button: it now works with no hero chosen. The tool first picks the best team from your presets (with the displayed champion, or your first configured champion), then ranks the champions for this team and selects the best one.
