@@ -30,7 +30,7 @@ EN=[
 ("'Cet emplacement est vide.'","'This slot is empty.'"),("'Classe inconnue dans ces données : '","'Unknown class in this data: '"),
 ("`Preset ${i+1} chargé : ${p.name}.`","`Preset ${i+1} loaded: ${p.name}.`"),("'Cet emplacement est déjà vide.'","'This slot is already empty.'"),
 ("`Preset ${i+1} supprimé : ${n}.`","`Preset ${i+1} deleted: ${n}.`"),("`${a.filter(Boolean).length} preset(s) exporté(s).`","`${a.filter(Boolean).length} preset(s) exported.`"),
-("`${a.filter(Boolean).length} preset(s) importé(s)${j.champions?' + '+Object.keys(j.champions).length+' champion(s)':''}.`","`${a.filter(Boolean).length} preset(s) imported${j.champions?' + '+Object.keys(j.champions).length+' champion(s)':''}.`"),("'Fichier de presets invalide.'","'Invalid preset file.'"),
+("`${a.filter(Boolean).length} preset(s) importé(s)${j.champions?' + '+Object.keys(j.champions).length+' champion(s)':''}.`","`${a.filter(Boolean).length} preset(s) imported${j.champions?' + '+Object.keys(j.champions).length+' champion(s)':''}.`"),("'Fichier de presets invalide.'","'Invalid preset file.'"),("pmsg('Import réussi. La page se recharge…')","pmsg('Import done. The page reloads…')"),
 ("'title=\"Relique\"'","'title=\"Artifact\"'"),
 ('aria-label="Qualité">','aria-label="Quality">'),
 ("[['1','q_common','Normale'],['1.25','q_uncommon','Supérieure'],['1.5','q_flawless','Impeccable'],['2','q_epic','Épique'],['3','q_legendary','Légendaire']]","[['1','q_common','Normal'],['1.25','q_uncommon','Superior'],['1.5','q_flawless','Flawless'],['2','q_epic','Epic'],['3','q_legendary','Legendary']]"),

@@ -1,5 +1,10 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.7.8 — 2026-11-28
+
+- Onglet Champions : nouveaux boutons « Exporter tout » et « Importer ». L'export crée un fichier de sauvegarde avec tous les champions, les presets de héros et les réglages. L'import remplace les données du navigateur par celles du fichier, puis recharge la page (il accepte aussi les anciens fichiers de presets).
+- Onglet Héros : le bouton « Importer » des presets accepte aussi ce fichier de sauvegarde complet.
+
 ## v1.7.7 — 2026-11-28
 
 - Champions : correction du niveau de la compétence de chef. Le jeu ne limite pas ce niveau à 3 sans âme de titan (Hero.GetCurrentActiveSkillUid) : il vaut 1 + le nombre d'améliorations « compétence » débloquées. Au rang 11, un champion a donc sa compétence 4/5 (icône dorée), même sans âme de titan. Le simulateur utilise maintenant les bonnes valeurs (exemple Rudo : +50 % crit au lieu de +40 %).

@@ -1,5 +1,10 @@
 # Changelog — ST Hero Calculator
 
+## v1.7.8 — 2026-11-28
+
+- Champions tab: new “Export all” and “Import” buttons. Export creates a backup file with all champions, hero presets and settings. Import replaces the browser data with the file data, then reloads the page (it also accepts old preset files).
+- Heroes tab: the preset “Import” button also accepts this full backup file.
+
 ## v1.7.7 — 2026-11-28
 
 - Champions: leader skill level fixed. The game does not cap this level at 3 without a titan soul (Hero.GetCurrentActiveSkillUid): it is 1 + the number of unlocked skill upgrades. At rank 11 a champion has skill 4/5 (gold icon), even without a titan soul. The simulator now uses the correct values (Rudo example: +50% crit instead of +40%).
