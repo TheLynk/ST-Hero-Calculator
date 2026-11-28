@@ -1,6 +1,16 @@
 {
- "version": "1.7.0",
+ "version": "1.7.1",
  "entries": [
+  {
+   "v": "1.7.1",
+   "date": "2026-11-28",
+   "fr": [
+    "Nouvel ordre des onglets : Héros, Champions, Équipe et quêtes."
+   ],
+   "en": [
+    "New tab order: Hero, Champions, Team & quests."
+   ]
+  },
   {
    "v": "1.7.0",
    "date": "2026-11-28",

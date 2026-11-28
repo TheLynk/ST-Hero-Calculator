@@ -34,7 +34,7 @@ const fmt=n=>Math.round(n).toLocaleString(EN?'en-US':'fr-FR'), pc=x=>(x*100).toF
 // ----- onglets -----
 const main=document.querySelector('main');
 const nav=document.createElement('nav');nav.className='tabs';nav.setAttribute('role','tablist');
-nav.innerHTML=`<button type="button" role="tab" data-t="hero" class="on" aria-selected="true">${ui('power',20)} ${TT.tabHero}</button><button type="button" role="tab" data-t="team" aria-selected="false">${ui('defense',20)} ${TT.tabTeam}</button><button type="button" role="tab" data-t="champs" aria-selected="false">${ta('championtitansoul',22)} ${TT.tabChamps}</button>`;
+nav.innerHTML=`<button type="button" role="tab" data-t="hero" class="on" aria-selected="true">${ui('power',20)} ${TT.tabHero}</button><button type="button" role="tab" data-t="champs" aria-selected="false">${ta('championtitansoul',22)} ${TT.tabChamps}</button><button type="button" role="tab" data-t="team" aria-selected="false">${ui('defense',20)} ${TT.tabTeam}</button>`;
 main.parentNode.insertBefore(nav,main);
 const tm=document.createElement('main');tm.id='team';tm.className='tmx';tm.hidden=true;main.parentNode.insertBefore(tm,main.nextSibling);
 const cm=document.createElement('main');cm.id='champs';cm.className='tmx';cm.hidden=true;main.parentNode.insertBefore(cm,tm.nextSibling);

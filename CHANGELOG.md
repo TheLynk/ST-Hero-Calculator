@@ -1,5 +1,9 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.7.1 — 2026-11-28
+
+- Nouvel ordre des onglets : Héros, Champions, Équipe et quêtes.
+
 ## v1.7.0 — 2026-11-28
 
 - Nouvel onglet « Champions » : configurez chaque champion une seule fois (rang, renforts, niveau, âme de titan, graines, familier, chant d'aura, stats corrigées). Tout est enregistré dans le navigateur.

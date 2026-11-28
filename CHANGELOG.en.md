@@ -1,5 +1,9 @@
 # Changelog — ST Hero Calculator
 
+## v1.7.1 — 2026-11-28
+
+- New tab order: Hero, Champions, Team & quests.
+
 ## v1.7.0 — 2026-11-28
 
 - New “Champions” tab: set each champion once (rank, reinforcements, level, titan soul, seeds, familiar, aurasong, corrected stats). Everything is saved in the browser.
