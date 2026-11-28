@@ -1,6 +1,16 @@
 {
- "version": "1.8.3",
+ "version": "1.8.4",
  "entries": [
+  {
+   "v": "1.8.4",
+   "date": "2026-11-28",
+   "fr": [
+    "Onglet Équipe et quêtes : la puissance de chaque héros choisi s'affiche à côté de son preset, avec la puissance totale de l'équipe. L'outil montre la puissance du jeu enregistrée dans le preset ; sans elle, il montre la puissance calculée, précédée de « ≈ »."
+   ],
+   "en": [
+    "Team and quests tab: the power of each chosen hero shows next to its preset, with the total team power. The tool shows the game power saved in the preset; without it, it shows the computed power, with “≈” in front."
+   ]
+  },
   {
    "v": "1.8.3",
    "date": "2026-11-28",

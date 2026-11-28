@@ -1,5 +1,9 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.8.4 — 2026-11-28
+
+- Onglet Équipe et quêtes : la puissance de chaque héros choisi s'affiche à côté de son preset, avec la puissance totale de l'équipe. L'outil montre la puissance du jeu enregistrée dans le preset ; sans elle, il montre la puissance calculée, précédée de « ≈ ».
+
 ## v1.8.3 — 2026-11-28
 
 - Import de captures (héros) : l'outil trouve maintenant la fiche quand la lecture de l'esquive se trompe sur le signe « % » (exemple : « 48% » lu « 489, »). L'esquive lue est alors marquée en orange, à vérifier.

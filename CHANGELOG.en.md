@@ -1,5 +1,9 @@
 # Changelog — ST Hero Calculator
 
+## v1.8.4 — 2026-11-28
+
+- Team and quests tab: the power of each chosen hero shows next to its preset, with the total team power. The tool shows the game power saved in the preset; without it, it shows the computed power, with “≈” in front.
+
 ## v1.8.3 — 2026-11-28
 
 - Screenshot import (heroes): the tool now finds the sheet when the evasion reading gets the “%” sign wrong (example: “48%” read as “489,”). The evasion is then marked in orange, to check.
