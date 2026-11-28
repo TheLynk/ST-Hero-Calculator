@@ -1,6 +1,16 @@
 {
- "version": "1.6.5",
+ "version": "1.6.6",
  "entries": [
+  {
+   "v": "1.6.6",
+   "date": "2026-11-28",
+   "fr": [
+    "Champion : ajout des graines d'ATQ, de DEF et de PV (+4 ATQ, +4 DEF, +1 PV par graine, comme pour les héros : le jeu range les graines dans la même fiche pour les héros et les champions). L'outil les garde pour chaque champion."
+   ],
+   "en": [
+    "Champion: ATK, DEF and HP seeds added (+4 ATK, +4 DEF, +1 HP per seed, as for heroes: the game stores seeds in the same record for heroes and champions). The tool keeps them for each champion."
+   ]
+  },
   {
    "v": "1.6.5",
    "date": "2026-11-28",

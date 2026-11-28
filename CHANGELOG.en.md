@@ -1,5 +1,9 @@
 # Changelog — ST Hero Calculator
 
+## v1.6.6 — 2026-11-28
+
+- Champion: ATK, DEF and HP seeds added (+4 ATK, +4 DEF, +1 HP per seed, as for heroes: the game stores seeds in the same record for heroes and champions). The tool keeps them for each champion.
+
 ## v1.6.5 — 2026-11-28
 
 - Flash quests: the list shows the monster name (Gold Golem, Scholarly Harpy…), the day of the month and the starting level, in calendar order.

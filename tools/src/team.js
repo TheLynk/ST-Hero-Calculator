@@ -7,7 +7,7 @@ const TT={fr:{tabHero:'Héros',tabTeam:'Équipe et quêtes',quest:'Quête',area:
   aura:'Chant d’aura',booster:'Bonus de quête',heroes:'Héros (presets)',emptyP:'— vide —',pick:'— choisir un preset —',sims:'Simulations',run:'Simuler',
   bestTeam:'Meilleure équipe',bestChamp:'Meilleur champion',res:'Résultat',win:'Victoire',rounds:'Tours (moy.)',mhp:'PV du monstre',death:'Risque de mort',grade:'Note',
   dmg:'Dégâts / combat',noPreset:'Aucun preset enregistré. Créez vos héros dans l’onglet Héros (mode manuel → Mes héros).',needHero:'Choisissez au moins un héros.',
-  busy:'Calcul…',party:'Équipe de',slots:'emplacements',chStats:'Corriger les stats (facultatif)',chHelp:'Si le calcul diffère de l’onglet Infos du jeu, entrez les vraies valeurs. Vide = calcul.',reinf:'Renforts (+)',fam:'Familier',qual:'Qualité',spirit:'Esprit',calc:'Calcul',noEl:'aucun élément',noSp:'aucun esprit',ovOn:'Stats corrigées à la main : elles remplacent le calcul.',savedC:'Chaque champion utilise son rang, son familier et son chant d’aura enregistrés (ou les valeurs par défaut).',el:'Élément',eva:'Esq.',crit:'Crit',thr:'Menace',
+  busy:'Calcul…',party:'Équipe de',slots:'emplacements',chStats:'Corriger les stats (facultatif)',chHelp:'Si le calcul diffère de l’onglet Infos du jeu, entrez les vraies valeurs. Vide = calcul.',reinf:'Renforts (+)',fam:'Familier',qual:'Qualité',spirit:'Esprit',calc:'Calcul',seeds:'Graines utilisées (+4 ATQ, +4 DEF, +1 PV par graine)',noEl:'aucun élément',noSp:'aucun esprit',ovOn:'Stats corrigées à la main : elles remplacent le calcul.',savedC:'Chaque champion utilise son rang, son familier et son chant d’aura enregistrés (ou les valeurs par défaut).',el:'Élément',eva:'Esq.',crit:'Crit',thr:'Menace',
   topTeams:'Meilleures équipes parmi vos presets',topChamps:'Champions classés pour cette équipe',combos:'combinaisons testées',
   note:'Moteur repris du code du jeu (Quest.DoCombat), lu sans lancer le jeu. Note par héros, avec le visage du jeu : SSS = jamais mort, S < 15 %, A < 40 %, B < 60 %, C < 100 %, D = toujours mort. À vérifier avec la note affichée dans le jeu (A_VERIFIER.md, test 14).',
   prog:'PV du monstre retirés',shatter:'Barrière brisée',fqTitle:'Quêtes éclair : calendrier',fqStart:'Début',fqTimer:'Minuteur',fqNow:'En cours',fqLeft:'reste',fqIn:'dans',fqHour:'Heure de début des quêtes éclair (à régler une fois)',fqNote:'Jours du mois : notes de version 12.0.0 (Kabam). Donjon Parangon et Nullysium : 1 week-end sur 2, dès le 14/11/2026 (information à confirmer). Touchez une quête pour la simuler. L’heure de début n’est pas dans les fichiers du jeu : réglez-la avec le minuteur du jeu.',notShatter:'Barrière NON brisée : −80 % de dégâts',power:'Puissance d’élément'},
@@ -16,7 +16,7 @@ const TT={fr:{tabHero:'Héros',tabTeam:'Équipe et quêtes',quest:'Quête',area:
   aura:'Aurasong',booster:'Quest booster',heroes:'Heroes (presets)',emptyP:'— empty —',pick:'— choose a preset —',sims:'Simulations',run:'Simulate',
   bestTeam:'Best team',bestChamp:'Best champion',res:'Result',win:'Win',rounds:'Rounds (avg.)',mhp:'Monster HP',death:'Death risk',grade:'Rating',
   dmg:'Damage / fight',noPreset:'No saved preset. Create your heroes in the Hero tab (manual mode → My heroes).',needHero:'Choose at least one hero.',
-  busy:'Computing…',party:'Party of',slots:'slots',chStats:'Correct the stats (optional)',chHelp:'If the result differs from the game Info tab, enter the real values. Empty = computed.',reinf:'Reinforcements (+)',fam:'Familiar',qual:'Quality',spirit:'Spirit',calc:'Computed',noEl:'no element',noSp:'no spirit',ovOn:'Stats corrected by hand: they replace the computed values.',savedC:'Each champion uses its saved rank, familiar and aurasong (or the defaults).',el:'Element',eva:'Eva.',crit:'Crit',thr:'Threat',
+  busy:'Computing…',party:'Party of',slots:'slots',chStats:'Correct the stats (optional)',chHelp:'If the result differs from the game Info tab, enter the real values. Empty = computed.',reinf:'Reinforcements (+)',fam:'Familiar',qual:'Quality',spirit:'Spirit',calc:'Computed',seeds:'Seeds used (+4 ATK, +4 DEF, +1 HP per seed)',noEl:'no element',noSp:'no spirit',ovOn:'Stats corrected by hand: they replace the computed values.',savedC:'Each champion uses its saved rank, familiar and aurasong (or the defaults).',el:'Element',eva:'Eva.',crit:'Crit',thr:'Threat',
   topTeams:'Best teams among your presets',topChamps:'Champions ranked for this team',combos:'combinations tested',
   note:'Engine taken from the game code (Quest.DoCombat), read without running the game. Hero rating, with the game face: SSS = never dies, S < 15%, A < 40%, B < 60%, C < 100%, D = always dies. To check against the rating shown in game (A_VERIFIER.md, test 14).',
   prog:'Monster HP removed',shatter:'Barrier shattered',fqTitle:'Flash quests: calendar',fqStart:'Start',fqTimer:'Timer',fqNow:'Live',fqLeft:'ends in',fqIn:'in',fqHour:'Flash quest start time (set it once)',fqNote:'Days of the month: version 12.0.0 release notes (Kabam). Paragon Dungeon and Nullysium: every other weekend, from 14/11/2026 (to be confirmed). Tap a quest to simulate it. The start time is not in the game files: set it with the in-game timer.',notShatter:'Barrier NOT shattered: −80% damage',power:'Element power'}}[EN?'en':'fr'];
@@ -85,7 +85,7 @@ const cn0=(k,d)=>SD.cons[k]!=null?+SD.cons[k]:d;
 // stats du champion (Hero.GetUpgradeForStory, lu dans le code du jeu) :
 // base du niveau + Σ améliorations de rang × stat d'histoire (× 1,5 avec l'âme de titan) ; au-delà du rang 11, chaque renforcement répète la dernière amélioration
 // + familier et chant d'aura (objets enchantables, mêmes règles que les héros) ; élément = valeur du rang + éléments des objets
-function champStats(u,lvl,rank,reinf,titan,gear){
+function champStats(u,lvl,rank,reinf,titan,gear,seeds){
   const c=SD.champs[u];if(!c) return null;
   const cur=a=>{const[v1,v40,v50,v100]=a;if(lvl<=40) return v1+(v40-v1)*Math.pow((lvl-1)/39,1.55);if(lvl<=50) return v40+(v50-v40)*(lvl-40)/10;return v50+(v100-v50)*(lvl-50)/50};
   const story=rank+(rank>=11?reinf:0);let pct=0,sk=1;
@@ -94,7 +94,9 @@ function champStats(u,lvl,rank,reinf,titan,gear){
   if(lvl>=100&&c.prg){const m=/stat\+([\d.]+)/.exec(c.prg);if(m) pct+=+m[1];if(/skl\+1/.test(c.prg)) sk++}
   sk=Math.min(titan?5:cn0('max_skill_level_non_titan',3),sk);
   const tm=titan?cn0('champion_titan_soul_story_stat_mult',1.5):1, st=c.st||[0,0,0,0,0];
-  const base={hp:Math.round(cur(c.hp)+pct*st[0]*tm),atk:Math.round(cur(c.atk)+pct*st[1]*tm),def:Math.round(cur(c.def)+pct*st[2]*tm)};
+  // graines (Character.seedsAtk/Def/Hp, communes aux héros et aux champions) : +4 ATQ, +4 DEF, +1 PV par graine
+  const sd=k=>Math.max(0,Math.min(80,+((seeds||{})[k])||0));
+  const base={hp:Math.round(cur(c.hp)+pct*st[0]*tm)+sd('hp'),atk:Math.round(cur(c.atk)+pct*st[1]*tm)+4*sd('atk'),def:Math.round(cur(c.def)+pct*st[2]*tm)+4*sd('def')};
   const elB=String(SD.cons.hero_element_rank_and_value||'').split(';').map(x=>x.split(',').map(Number)).filter(x=>x[0]<=story).pop();
   const Cap=x=>x?x[0].toUpperCase()+x.slice(1):x;
   const cls={name:'Champion',family:famOf(c.cls),element:Cap(c.el),crit:c.cr,critDmg:c.cm,eva:c.eva,threat:c.aggro,slots:[],skillUnlock:[]};
@@ -154,6 +156,7 @@ function initTeam(){
   <div class="row2"><div><label for="tCRank">${TT.rank}</label><select id="tCRank">${Array.from({length:11},(_,i)=>`<option value="${i+1}"${i===10?' selected':''}>${i+1}</option>`).join('')}</select></div>
   <div><label for="tCRe">${TT.reinf}</label><input id="tCRe" type="number" min="0" max="999" value="0"></div>
   <div><label for="tCLvl">${TT.lvl}</label><input id="tCLvl" type="number" min="1" max="100" value="50"></div><div><label class="chk tit" for="tCTitan"><input type="checkbox" id="tCTitan" checked>${ta('championtitansoul',28)}<span>${TT.titan}</span></label></div></div>
+  <p class="note" style="margin:10px 0 0">${TT.seeds}</p><div class="row3"><div><label for="tCSa">${ui('seedattack1',20)} ATK</label><input id="tCSa" type="number" min="0" max="80" value="0"></div><div><label for="tCSd">${ui('seeddef1',20)} DEF</label><input id="tCSd" type="number" min="0" max="80" value="0"></div><div><label for="tCSh">${ui('seedhp1',20)} ${EN?'HP':'PV'}</label><input id="tCSh" type="number" min="0" max="80" value="0"></div></div>
   ${gearRow('Fam',TT.fam,'Familiar')}${gearRow('Aur',TT.aura,'Aurasong')}
   <p class="note" id="tCInfo"></p>
   <details><summary>${TT.chStats}</summary><p class="note">${TT.chHelp}</p><div class="row4" style="grid-template-columns:repeat(auto-fit,minmax(78px,1fr))"><div><label for="tCHp">${EN?'HP':'PV'}</label><input id="tCHp" type="number" min="0"></div><div><label for="tCAtk">ATK</label><input id="tCAtk" type="number" min="0"></div><div><label for="tCDef">DEF</label><input id="tCDef" type="number" min="0"></div><div><label for="tCEva">${TT.eva} %</label><input id="tCEva" type="number" min="0" max="100"></div><div><label for="tCEl">${TT.el}</label><input id="tCEl" type="number" min="0"></div></div></details>
@@ -186,13 +189,13 @@ function fillDiff(){const f=$t('tArea').value,L0=byFam[f]||[],ds=[...new Set(L0.
   $t('tDiff').innerHTML=ds.map(d=>`<option value="${d}">${esc(L(SD.txt.diff[d])||('T'+(d+1)))}</option>`).join('');$t('tDiff').value=ds[ds.length-1];
   const hasB=L0.some(q=>q.b);$t('tKind').hidden=!hasB;if(!hasB) $t('tKind').querySelectorAll('button').forEach((x,i)=>x.classList.toggle('on',i===0))}
 const CSK='sthc:champstats';const cGet=()=>{try{return JSON.parse(localStorage.getItem(CSK))||{}}catch(e){return {}}};
-const CF=['tCRank','tCRe','tCLvl','tCTitan','tFamI','tFamQ','tFamE','tFamS','tAurI','tAurQ','tAurE','tAurS','tCHp','tCAtk','tCDef','tCEva','tCEl'];
+const CF=['tCRank','tCRe','tCLvl','tCTitan','tCSa','tCSd','tCSh','tFamI','tFamQ','tFamE','tFamS','tAurI','tAurQ','tAurE','tAurS','tCHp','tCAtk','tCDef','tCEva','tCEl'];
 const fv=k=>{const e=$t(k);return e.type==='checkbox'?e.checked:e.value};
-const CDEF={tCRank:'11',tCRe:'0',tCLvl:'50',tCTitan:true,tFamQ:'3',tAurQ:'3'};
+const CDEF={tCSa:'0',tCSd:'0',tCSh:'0',tCRank:'11',tCRe:'0',tCLvl:'50',tCTitan:true,tFamQ:'3',tAurQ:'3'};
 function champLoad(u){const v=cGet()[u]||{};CF.forEach(k=>{const e=$t(k),x=v[k]!=null?v[k]:(CDEF[k]!=null?CDEF[k]:'');if(e.type==='checkbox') e.checked=!!x;else e.value=x})}
 function champSave(){const u=$t('tChamp').value;if(!u) return;const a=cGet();a[u]={};CF.forEach(k=>{const x=fv(k);if(x!=='') a[u][k]=x});try{localStorage.setItem(CSK,JSON.stringify(a))}catch(e){}}
 const gearOf=()=>['Fam','Aur'].map(x=>({i:$t('t'+x+'I').value,q:$t('t'+x+'Q').value,e:$t('t'+x+'E').value,s:$t('t'+x+'S').value}));
-const cStats=u=>champStats(u,Math.max(1,Math.min(100,+$t('tCLvl').value||1)),+$t('tCRank').value,Math.max(0,+$t('tCRe').value||0),$t('tCTitan').checked,gearOf());
+const cStats=u=>champStats(u,Math.max(1,Math.min(100,+$t('tCLvl').value||1)),+$t('tCRank').value,Math.max(0,+$t('tCRe').value||0),$t('tCTitan').checked,gearOf(),{atk:$t('tCSa').value,def:$t('tCSd').value,hp:$t('tCSh').value});
 const QIC={'1':'q_common','1.25':'q_uncommon','1.5':'q_flawless','2':'q_epic','3':'q_legendary'};
 function gearIcons(){for(const x of ['Fam','Aur']){const it=ITEM[$t('t'+x+'I').value];$t('t'+x+'Ii').innerHTML=it?icoItem(it,36):'';$t('t'+x+'Qi').innerHTML=ui(QIC[$t('t'+x+'Q').value]||'q_legendary',30);
   for(const k of ['E','S']){const e=ENCH[$t('t'+x+k).value];$t('t'+x+k+'i').innerHTML=e?icoItem(e,36):''}}

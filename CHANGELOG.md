@@ -1,5 +1,9 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.6.6 — 2026-11-28
+
+- Champion : ajout des graines d'ATQ, de DEF et de PV (+4 ATQ, +4 DEF, +1 PV par graine, comme pour les héros : le jeu range les graines dans la même fiche pour les héros et les champions). L'outil les garde pour chaque champion.
+
 ## v1.6.5 — 2026-11-28
 
 - Quêtes éclair : la liste montre le nom du monstre (Golem d'or, Harpie érudite…), le jour du mois et le niveau de départ, dans l'ordre du calendrier.
