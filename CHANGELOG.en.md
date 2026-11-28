@@ -1,5 +1,9 @@
 # Changelog — ST Hero Calculator
 
+## v1.7.6 — 2026-11-28
+
+- Champions: the orange message “The simulator uses the game stats” no longer shows when the gap is green (under 1%).
+
 ## v1.7.5 — 2026-11-28
 
 - Champions: exact computation. The tool uses the exact game level curve (CharacterData.ScaleStatToLevel: +1%, 2%, 3%, 4% per level up to level 40, then linear) with the game fixed-point numbers (0.01 is 0.0099945). Rank upgrades are no longer rounded, and the stats of each item are rounded to a whole number.

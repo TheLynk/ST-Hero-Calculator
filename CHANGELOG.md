@@ -1,5 +1,9 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.7.6 — 2026-11-28
+
+- Champions : le message orange « Le simulateur utilise les stats du jeu » ne s'affiche plus quand l'écart est en vert (moins de 1 %).
+
 ## v1.7.5 — 2026-11-28
 
 - Champions : calcul au point près. L'outil reprend la courbe de niveau exacte du jeu (CharacterData.ScaleStatToLevel : +1 %, 2 %, 3 %, 4 % par niveau jusqu'au niveau 40, puis linéaire) avec la virgule fixe du jeu (0,01 vaut 0,0099945). Les améliorations de rang ne sont plus arrondies, et les stats de chaque objet sont arrondies à l'entier.

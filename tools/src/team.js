@@ -211,7 +211,8 @@ function gearIcons(){for(const x of ['Fam','Aur']){const it=ITEM[$t('t'+x+'I').v
 // résumé d'un champion (stats calculées ou corrigées, compétence de chef, chant d'aura)
 function champSummary(u,big){const c=SD.champs[u],v=cfg(u),s=cfgStats(u),m=SD.mods[c.sk[s.sk-1]],am=auraModU(u);
   const o=k=>!!v.tCUse&&v[k]!=null&&v[k]!=='';const val=(k,d)=>o(k)?+v[k]:d;const ov=['tCHp','tCAtk','tCDef','tCEva','tCEl'].some(o);
-  return `${ov?`<b class="g2">${TT.ovOn}</b><br>`:''}<span class="cstat"><span class="sr">${TT.calc} :</span>${ui('hp',18)}${fmt(val('tCHp',s.hp))} ${ui('atk',18)}${fmt(val('tCAtk',s.atk))} ${ui('defense',18)}${fmt(val('tCDef',s.def))} ${ui('eva',18)}${Math.round(val('tCEva',s.eva*100))} % ${ui('icon_global_element_'+c.el,18)}${fmt(val('tCEl',s.el))}</span>`+
+  const gp=ov?maxGap(u):null;
+  return `${ov&&!(gp!=null&&gp<1)?`<b class="g2">${TT.ovOn}</b><br>`:''}<span class="cstat"><span class="sr">${TT.calc} :</span>${ui('hp',18)}${fmt(val('tCHp',s.hp))} ${ui('atk',18)}${fmt(val('tCAtk',s.atk))} ${ui('defense',18)}${fmt(val('tCDef',s.def))} ${ui('eva',18)}${Math.round(val('tCEva',s.eva*100))} % ${ui('icon_global_element_'+c.el,18)}${fmt(val('tCEl',s.el))}</span>`+
    (big?`<div class="lead">${ta('icon_global_skill_hero_'+c.sk[s.sk-1],32)}<span>${TT.skill} ${s.sk}/5${m?' · <b>'+esc(L(m.n)||'')+'</b> : '+modTxt(m):''}</span></div>${am?`<div class="lead">${icoItem(ITEM[v.tAurI],32)}<span><b>${esc(L(am.n)||'')}</b> : ${modTxt(am)}</span></div>`:''}`:'')}
 function champFill(){const u=edU;gearIcons();
   const s=cfgStats(u);

@@ -1,6 +1,16 @@
 {
- "version": "1.7.5",
+ "version": "1.7.6",
  "entries": [
+  {
+   "v": "1.7.6",
+   "date": "2026-11-28",
+   "fr": [
+    "Champions : le message orange « Le simulateur utilise les stats du jeu » ne s'affiche plus quand l'écart est en vert (moins de 1 %)."
+   ],
+   "en": [
+    "Champions: the orange message “The simulator uses the game stats” no longer shows when the gap is green (under 1%)."
+   ]
+  },
   {
    "v": "1.7.5",
    "date": "2026-11-28",
