@@ -1,6 +1,16 @@
 {
- "version": "1.9.3",
+ "version": "1.9.4",
  "entries": [
+  {
+   "v": "1.9.4",
+   "date": "2026-11-28",
+   "fr": [
+    "Onglet Équipe et quêtes : icônes du jeu ajoutées. Les tableaux « Meilleures équipes » et « Meilleurs champions » montrent l'icône de classe de chaque héros et l'icône du champion (nouvelle colonne Champion). Les colonnes Héros, Victoire, Tours, PV du monstre retirés et Risque de mort ont leur icône, comme les cartes du résultat (avec l'icône de barrière de l'élément)."
+   ],
+   "en": [
+    "Team and quests tab: game icons added. The “Best teams” and “Best champions” tables show each hero's class icon and the champion icon (new Champion column). The Heroes, Win, Rounds, Monster HP removed and Death risk columns have their icon, like the result cards (with the element barrier icon)."
+   ]
+  },
   {
    "v": "1.9.3",
    "date": "2026-11-28",

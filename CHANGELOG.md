@@ -1,5 +1,9 @@
 # Journal des modifications — ST Hero Calculator
 
+## v1.9.4 — 2026-11-28
+
+- Onglet Équipe et quêtes : icônes du jeu ajoutées. Les tableaux « Meilleures équipes » et « Meilleurs champions » montrent l'icône de classe de chaque héros et l'icône du champion (nouvelle colonne Champion). Les colonnes Héros, Victoire, Tours, PV du monstre retirés et Risque de mort ont leur icône, comme les cartes du résultat (avec l'icône de barrière de l'élément).
+
 ## v1.9.3 — 2026-11-28
 
 - Calendrier des quêtes éclair : l'heure de début affichée suit maintenant l'heure d'été et l'heure d'hiver. Avant, la liste des heures utilisait toujours l'heure d'hiver ; en été, elle aurait affiché 1 heure de moins. Les dates du calendrier et les minuteurs étaient déjà justes.

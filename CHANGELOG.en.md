@@ -1,5 +1,9 @@
 # Changelog — ST Hero Calculator
 
+## v1.9.4 — 2026-11-28
+
+- Team and quests tab: game icons added. The “Best teams” and “Best champions” tables show each hero's class icon and the champion icon (new Champion column). The Heroes, Win, Rounds, Monster HP removed and Death risk columns have their icon, like the result cards (with the element barrier icon).
+
 ## v1.9.3 — 2026-11-28
 
 - Flash quest calendar: the displayed start time now follows daylight saving time. Before, the hour list always used winter time; in summer it would have shown 1 hour less. Calendar dates and timers were already correct.
